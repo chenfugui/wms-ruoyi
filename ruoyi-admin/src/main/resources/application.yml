@@ -20,7 +20,8 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
-  port: 8080
+  #port: 8080
+  port: 6080
   servlet:
     # 应用的访问路径
     context-path: /wms
@@ -164,13 +165,13 @@ scheduling:
   enabled: true
 gen:
   # 作者
-  author: zcc
+  author: chenfg
   # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
-  packageName: com.cyl.wms
+  packageName: com.cfg.base
   # 自动去除表前缀，默认是false
   autoRemovePre: true
   # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
-  tablePrefix: wms_
+  tablePrefix: bas_
   # 一级权限名
   rootPermission: wms
   # 模板根路径
@@ -180,15 +181,15 @@ gen:
     # 后端根目录
     backPath: D:\workspace\riskcontrol\wms-ruoyi\
     # 后端 service 模块名
-    serviceModule: wms
+    serviceModule: bas
     # 后端 api 模块名, 默认与 service 一致
-    apiModule: wms
+    apiModule: bas
     # 前端根目录
     frontPath: D:\workspace\riskcontrol\RuoYi-WMS-VUE\
     # 前端 api 目录
-    frontApiPath: src/api/wms
+    frontApiPath: src/api/bas
     # 前端 view 目录
-    frontViewPath: src/views/wms
+    frontViewPath: src/views/bas
     # sql 目录
     sql: sql
   # 环境变量

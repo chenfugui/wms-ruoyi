@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.CommonStepMapper">
+    
+    <resultMap type="com.cfg.base.domain.CommonStep" id="CommonStepResult">
+        <result property="stepId" column="step_id"/>
+        <result property="stepCode" column="step_code"/>
+        <result property="stepName" column="step_name"/>
+        <result property="stepPrice" column="step_price"/>
+        <result property="empCode" column="emp_code"/>
+        <result property="stepSort" column="step_sort"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectCommonStepVo">
+        select step_id, step_code, step_name, step_price, emp_code, step_sort, status, del_flag, create_by, create_time, update_by, update_time   from bas_common_step
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.CommonStep" resultMap="CommonStepResult">
+        <include refid="selectCommonStepVo"/>
+        <where>  
+            <if test="stepCode != null  and stepCode != ''"> and step_code = #{stepCode}</if>
+            <if test="stepName != null  and stepName != ''"> and step_name like concat('%', #{stepName}, '%')</if>
+            <if test="stepPrice != null "> and step_price = #{stepPrice}</if>
+            <if test="empCode != null  and empCode != ''"> and emp_code = #{empCode}</if>
+            <if test="stepSort != null "> and step_sort = #{stepSort}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update bas_common_step set del_flag='1'
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>

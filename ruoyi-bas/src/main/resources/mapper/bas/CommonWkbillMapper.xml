@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.CommonWkbillMapper">
+    
+    <resultMap type="com.cfg.base.domain.CommonWkbill" id="CommonWkbillResult">
+        <result property="wkbillId" column="wkbill_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="stepId" column="step_id"/>
+        <result property="mknum" column="mknum"/>
+        <result property="stepPrice" column="step_price"/>
+        <result property="payable" column="payable"/>
+        <result property="actPay" column="act_pay"/>
+        <result property="inputType" column="input_type"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectCommonWkbillVo">
+        select wkbill_id, user_id, step_id, mknum, step_price, payable, act_pay, input_type, create_by, create_time, update_by, update_time   from bas_common_wkbill
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.CommonWkbill" resultMap="CommonWkbillResult">
+        <include refid="selectCommonWkbillVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="stepId != null "> and step_id = #{stepId}</if>
+            <if test="mknum != null "> and mknum = #{mknum}</if>
+            <if test="stepPrice != null "> and step_price = #{stepPrice}</if>
+            <if test="payable != null "> and payable = #{payable}</if>
+            <if test="actPay != null "> and act_pay = #{actPay}</if>
+            <if test="inputType != null  and inputType != ''"> and input_type = #{inputType}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update bas_common_wkbill set del_flag='1'
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>

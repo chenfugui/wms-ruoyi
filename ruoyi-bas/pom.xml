@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.cfg</groupId>
-    <artifactId>ruoyi-idgen</artifactId>
+    <artifactId>ruoyi-bas</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -20,12 +20,26 @@
 <dependencies>
     <dependency>
         <groupId>com.ruoyi</groupId>
+        <artifactId>ruoyi-common</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.ruoyi</groupId>
         <artifactId>ruoyi-framework</artifactId>
     </dependency>
     <dependency>
         <groupId>cn.hutool</groupId>
         <artifactId>hutool-all</artifactId>
         <version>5.8.26</version>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>1.6.2</version>
+        <scope>compile</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct</artifactId>
     </dependency>
 
 </dependencies>
