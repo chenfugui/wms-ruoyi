@@ -36,14 +36,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-
-
     <update id="updateDelFlagByIds">
         update wms_supplier_transaction set del_flag=1
         <where>
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
     </update>
-
-
 </mapper>

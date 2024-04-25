@@ -2,6 +2,7 @@ package com.cyl.wms.controller;
 
 import java.util.List;
 
+import com.cyl.wms.domain.entity.CustomerTransaction;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.PageImpl;
@@ -22,18 +23,17 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.enums.BusinessType;
 import com.cyl.wms.convert.CustomerTransactionConvert;
-import com.cyl.wms.domain.entity.CustomerTransaction;
-import com.cyl.wms.domain.query.CustomerTransactionQuery;
+import com.cyl.wms.pojo.query.CustomerTransactionQuery;
 import com.cyl.wms.service.CustomerTransactionService;
-import com.cyl.wms.domain.vo.CustomerTransactionVO;
+import com.cyl.wms.pojo.vo.CustomerTransactionVO;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 /**
  * 客户账户流水Controller
- * 
+ *
  * @author zcc
- * @date 2023-05-04
+ * @date 2024-03-15
  */
-@Api(description ="客户账户流水接口列表")
+@Api("客户账户流水接口列表")
 @RestController
 @RequestMapping("/wms/customerTransaction")
 public class CustomerTransactionController extends BaseController {
@@ -87,7 +87,7 @@ public class CustomerTransactionController extends BaseController {
     @PreAuthorize("@ss.hasPermi('wms:customerTransaction:remove')")
     @Log(title = "客户账户流水", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public ResponseEntity<Integer> remove(@PathVariable Long[] ids) {
+    public ResponseEntity<Integer> remove(@PathVariable Integer[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
     }
 }

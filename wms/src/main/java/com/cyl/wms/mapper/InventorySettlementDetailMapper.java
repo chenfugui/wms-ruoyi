@@ -1,14 +1,13 @@
 package com.cyl.wms.mapper;
 
+import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cyl.wms.domain.entity.InventorySettlementDetail;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 /**
  * 库存结算明细Mapper接口
- * 
+ *
  * @author zcc
  */
 public interface InventorySettlementDetailMapper extends BaseMapper<InventorySettlementDetail> {
@@ -26,11 +25,4 @@ public interface InventorySettlementDetailMapper extends BaseMapper<InventorySet
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
-
-    /**
-     * 批量插入
-     * @param inventorySettlementDetails 库存结算单据详情
-     * @return 插入结果
-     */
-    int batchInsert(List<InventorySettlementDetail> inventorySettlementDetails);
 }

@@ -1,10 +1,9 @@
 package com.cyl.wms.mapper;
 
+import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cyl.wms.domain.entity.InventorySettlement;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * 库存结算单Mapper接口

@@ -1,8 +1,8 @@
 package com.cyl.wms.convert;
 
-import org.mapstruct.Mapper;
 import com.cyl.wms.domain.entity.CustomerTransaction;
-import com.cyl.wms.domain.vo.CustomerTransactionVO;
+import org.mapstruct.Mapper;
+import com.cyl.wms.pojo.vo.CustomerTransactionVO;
 import java.util.List;
 /**
  * 客户账户流水  ENTITY <=> VO / Form / Query

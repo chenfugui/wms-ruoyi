@@ -6,7 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="InventorySettlement" id="InventorySettlementResult">
         <result property="id" column="id"/>
+        <result property="inventorySettlementNo" column="inventory_settlement_no"/>
         <result property="inventorySettlementStatus" column="inventory_settlement_status"/>
+        <result property="inventorySettlementStartTime" column="inventory_settlement_start_time"/>
+        <result property="inventorySettlementEndTime" column="inventory_settlement_end_time"/>
         <result property="settlementType" column="settlement_type"/>
         <result property="delFlag" column="del_flag"/>
         <result property="remark" column="remark"/>
@@ -14,7 +17,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
-        <result property="inventorySettlementNo" column="inventory_settlement_no"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
@@ -22,15 +24,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectInventorySettlementVo">
-        select id, inventory_settlement_status, settlement_type, del_flag, remark, create_by, create_time, update_by, update_time, inventory_settlement_no   from wms_inventory_settlement
+        select id, inventory_settlement_no, inventory_settlement_status, inventory_settlement_start_time, inventory_settlement_end_time, settlement_type, del_flag, remark, create_by, create_time, update_by, update_time   from wms_inventory_settlement
     </sql>
 
     <select id="selectByEntity" parameterType="InventorySettlement" resultMap="InventorySettlementResult">
         <include refid="selectInventorySettlementVo"/>
         <where>  
-            <if test="inventorySettlementStatus != null "> and inventory_settlement_status = #{inventorySettlementStatus}</if>
-            <if test="settlementType != null "> and settlement_type = #{settlementType}</if>
             <if test="inventorySettlementNo != null  and inventorySettlementNo != ''"> and inventory_settlement_no = #{inventorySettlementNo}</if>
+            <if test="inventorySettlementStatus != null "> and inventory_settlement_status = #{inventorySettlementStatus}</if>
+            <if test="inventorySettlementStartTime != null "> and inventory_settlement_start_time = #{inventorySettlementStartTime}</if>
+            <if test="inventorySettlementEndTime != null "> and inventory_settlement_end_time = #{inventorySettlementEndTime}</if>
+            <if test="settlementType != null "> and settlement_type = #{settlementType}</if>
         </where>
     </select>
 

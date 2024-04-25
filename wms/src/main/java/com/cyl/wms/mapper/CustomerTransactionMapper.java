@@ -2,12 +2,12 @@ package com.cyl.wms.mapper;
 
 import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
 import com.cyl.wms.domain.entity.CustomerTransaction;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 客户账户流水Mapper接口
- * 
+ *
  * @author zcc
  */
 public interface CustomerTransactionMapper extends BaseMapper<CustomerTransaction> {
@@ -24,5 +24,5 @@ public interface CustomerTransactionMapper extends BaseMapper<CustomerTransactio
      * @param ids
      * @return
     */
-    int updateDelFlagByIds(@Param("ids") Long[] ids);
+    int updateDelFlagByIds(@Param("ids") Integer[] ids);
 }

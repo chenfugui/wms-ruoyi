@@ -37,27 +37,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectInventorySettlementDetailVo">
         select id, settlement_id, settlement_type, item_id, item_no, item_name, warehouse_id, warehouse_no, warehouse_name, area_id, area_no, area_name, previous_balance, current_enter, current_out, current_check, current_balance, del_flag, remark, create_by, create_time, update_by, update_time   from wms_inventory_settlement_detail
     </sql>
-    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
-
-        insert into wms_inventory_settlement_detail
-        (settlement_id, settlement_type, item_id, item_no, item_name,
-        warehouse_id, warehouse_no, warehouse_name,area_id, area_no, area_name,
-        previous_balance, current_enter, current_out, current_check, current_balance,
-        remark, create_by, create_time, update_by, update_time
-        )
-        values
-        <foreach collection="list" item="item" separator=",">
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                #{item.settlementId,jdbcType=BIGINT},#{item.settlementType,jdbcType=BIGINT},#{item.itemId,jdbcType=BIGINT},#{item.itemNo,jdbcType=VARCHAR},#{item.itemName,jdbcType=VARCHAR},
-                #{item.warehouseId,jdbcType=BIGINT},#{item.warehouseNo,jdbcType=VARCHAR},#{item.warehouseName,jdbcType=VARCHAR},
-                #{item.areaId,jdbcType=BIGINT},#{item.areaNo,jdbcType=VARCHAR},#{item.areaName,jdbcType=VARCHAR},
-                #{item.previousBalance,jdbcType=DECIMAL},#{item.currentEnter,jdbcType=DECIMAL},#{item.currentOut,jdbcType=DECIMAL},#{item.currentCheck,jdbcType=DECIMAL},#{item.currentBalance,jdbcType=DECIMAL},
-                #{item.remark,jdbcType=VARCHAR},#{item.createBy,jdbcType=BIGINT},#{item.createTime,jdbcType=TIMESTAMP},
-                #{item.updateBy,jdbcType=BIGINT},#{item.updateTime,jdbcType=TIMESTAMP},
-            </trim>
-        </foreach>
-
-    </insert>
 
     <select id="selectByEntity" parameterType="InventorySettlementDetail" resultMap="InventorySettlementDetailResult">
         <include refid="selectInventorySettlementDetailVo"/>

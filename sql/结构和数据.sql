@@ -1752,3 +1752,17 @@ CREATE TABLE `wms_wave`  (
 
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- 公共id生成服务,id信息表
+CREATE TABLE bas_common_id (
+    id bigint(20),
+    max_id bigint(20),
+    step bigint(20),
+    biz_type VARCHAR(100),
+    version bigint(20),
+    id_type VARCHAR(2),
+    seg_flag VARCHAR(100),
+    crte_time datetime(0),
+    updt_time datetime(0),
+    PRIMARY KEY (id) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 559 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'ID' ROW_FORMAT = Dynamic;

@@ -9,7 +9,7 @@ ruoyi:
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
-  profile: C:/ruoyi/uploadPath
+  profile: /tmp/wms/uploadPath
   # 获取ip地址开关
   addressEnabled: true
   # 验证码类型 math 数组计算 char 字符验证
@@ -23,7 +23,7 @@ server:
   port: 8080
   servlet:
     # 应用的访问路径
-    context-path: /
+    context-path: /wms
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8
@@ -40,6 +40,8 @@ logging:
 
 # Spring配置
 spring:
+  application:
+    name: wms
   # 资源信息
   messages:
     # 国际化资源文件路径
@@ -124,7 +126,7 @@ token:
 # mybatis-plus 配置
 mybatis-plus:
   # 搜索指定包别名
-  typeAliasesPackage: com.cyl.**.domain, com.ruoyi.common.core.domain.entity,  com.ruoyi.**.domain
+  typeAliasesPackage: com.cyl.**.domain, com.ruoyi.common.core.domain.entity,  com.ruoyi.**.domain, com.cfg.**.entity,com.cfg.**.dao
   # 配置mapper的扫描，找到所有的mapper.xml映射文件
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   # 加载全局的配置文件
@@ -176,13 +178,13 @@ gen:
   # 路径
   path:
     # 后端根目录
-    backPath: D:\java_project\wms\wms-ruoyi
+    backPath: D:\workspace\riskcontrol\wms-ruoyi\
     # 后端 service 模块名
     serviceModule: wms
     # 后端 api 模块名, 默认与 service 一致
     apiModule: wms
     # 前端根目录
-    frontPath: D:\java_project\wms\ruoyi-wms-vue2
+    frontPath: D:\workspace\riskcontrol\RuoYi-WMS-VUE\
     # 前端 api 目录
     frontApiPath: src/api/wms
     # 前端 view 目录

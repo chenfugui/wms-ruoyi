@@ -36,7 +36,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-
     <update id="updateDelFlagByIds">
         update wms_customer_transaction set del_flag=1
         <where>

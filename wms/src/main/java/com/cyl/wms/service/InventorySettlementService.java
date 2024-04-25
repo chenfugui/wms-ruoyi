@@ -1,29 +1,22 @@
 package com.cyl.wms.service;
 
-import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.cyl.wms.convert.InventorySettlementConvert;
-import com.cyl.wms.convert.InventorySettlementDetailConvert;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cyl.wms.domain.entity.InventorySettlement;
-import com.cyl.wms.domain.entity.InventorySettlementDetail;
-import com.cyl.wms.mapper.InventorySettlementDetailMapper;
-import com.cyl.wms.mapper.InventorySettlementMapper;
-import com.cyl.wms.domain.query.InventorySettlementQuery;
-import com.cyl.wms.domain.vo.InventorySettlementDetailVO;
-import com.cyl.wms.domain.form.InventoryCheckFrom;
-import com.cyl.wms.domain.form.InventorySettlementFrom;
 import com.github.pagehelper.PageHelper;
-import com.ruoyi.common.utils.SecurityUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import com.cyl.wms.mapper.InventorySettlementMapper;
+import com.cyl.wms.pojo.query.InventorySettlementQuery;
 
 /**
  * 库存结算单Service业务层处理
+ *
  *
  * @author zcc
  */
@@ -31,12 +24,6 @@ import java.util.List;
 public class InventorySettlementService {
     @Autowired
     private InventorySettlementMapper inventorySettlementMapper;
-    @Autowired
-    private InventorySettlementDetailMapper inventorySettlementDetailMapper;
-    @Autowired
-    private InventorySettlementDetailConvert detailConvert;
-    @Autowired
-    private InventorySettlementConvert convert;
 
     /**
      * 查询库存结算单
@@ -44,47 +31,42 @@ public class InventorySettlementService {
      * @param id 库存结算单主键
      * @return 库存结算单
      */
-    public InventorySettlementFrom selectById(Long id) {
-        InventorySettlement inventorySettlement = inventorySettlementMapper.selectById(id);
-        if (inventorySettlement == null) {
-            return null;
-        }
-        InventorySettlementFrom from = convert.do2form(inventorySettlement);
-
-        //注入 详情单
-        LambdaQueryWrapper<InventorySettlementDetail> inventoryCheckDetailQuery = new LambdaQueryWrapper<>();
-        inventoryCheckDetailQuery.eq(InventorySettlementDetail::getSettlementId, id);
-        List<InventorySettlementDetail> inventoryCheckDetails = inventorySettlementDetailMapper.selectList(inventoryCheckDetailQuery);
-        List<InventorySettlementDetailVO> inventoryCheckDetailsVos = detailConvert.toVos(inventoryCheckDetails);
-        from.setDetails(inventoryCheckDetailsVos);
-        return from;
+    public InventorySettlement selectById(Long id) {
+        return inventorySettlementMapper.selectById(id);
     }
 
     /**
      * 查询库存结算单列表
      *
      * @param query 查询条件
-     * @param page  分页条件
+     * @param page 分页条件
      * @return 库存结算单
      */
     public List<InventorySettlement> selectList(InventorySettlementQuery query, Pageable page) {
         if (page != null) {
             PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize());
         }
-        LambdaQueryWrapper<InventorySettlement> qw = new LambdaQueryWrapper<>();
-        qw.eq(InventorySettlement::getDelFlag, 0);
-        qw.orderByDesc(InventorySettlement::getId);
+        QueryWrapper<InventorySettlement> qw = new QueryWrapper<>();
+        qw.eq("del_flag",0);
+        String inventorySettlementNo = query.getInventorySettlementNo();
+        if (!StringUtils.isEmpty(inventorySettlementNo)) {
+            qw.eq("inventory_settlement_no", inventorySettlementNo);
+        }
         Integer inventorySettlementStatus = query.getInventorySettlementStatus();
         if (inventorySettlementStatus != null) {
-            qw.eq(InventorySettlement::getInventorySettlementStatus, inventorySettlementStatus);
+            qw.eq("inventory_settlement_status", inventorySettlementStatus);
+        }
+        LocalDateTime inventorySettlementStartTime = query.getInventorySettlementStartTime();
+        if (inventorySettlementStartTime != null) {
+            qw.eq("inventory_settlement_start_time", inventorySettlementStartTime);
+        }
+        LocalDateTime inventorySettlementEndTime = query.getInventorySettlementEndTime();
+        if (inventorySettlementEndTime != null) {
+            qw.eq("inventory_settlement_end_time", inventorySettlementEndTime);
         }
         Integer settlementType = query.getSettlementType();
         if (settlementType != null) {
-            qw.eq(InventorySettlement::getSettlementType, settlementType);
-        }
-        String inventorySettlementNo = query.getInventorySettlementNo();
-        if (!StringUtils.isEmpty(inventorySettlementNo)) {
-            qw.eq(InventorySettlement::getInventorySettlementNo, inventorySettlementNo);
+            qw.eq("settlement_type", settlementType);
         }
         return inventorySettlementMapper.selectList(qw);
     }
@@ -130,71 +112,5 @@ public class InventorySettlementService {
     public int deleteById(Long id) {
         Long[] ids = {id};
         return inventorySettlementMapper.updateDelFlagByIds(ids);
-    }
-
-    /**
-     * 新增或更新结算单据以及结算单据明细
-     *
-     * @param inventorySettlementFrom 库存结算单
-     * @return 结果
-     */
-    public int addOrUpdate(InventorySettlementFrom inventorySettlementFrom) {
-        int res;
-        // 1. 新增
-        if (inventorySettlementFrom.getId() == null) {
-            inventorySettlementFrom.setDelFlag(0);
-            inventorySettlementFrom.setCreateTime(LocalDateTime.now());
-            res = inventorySettlementMapper.insert(inventorySettlementFrom);
-        } else {
-            // 2.编辑
-            // 2.1 更新结算单
-            res = inventorySettlementMapper.updateById(inventorySettlementFrom);
-        }
-
-        if (InventoryCheckFrom.CREATED.equals(String.valueOf(inventorySettlementFrom.getInventorySettlementStatus())) || InventoryCheckFrom.FINISH.equals(String.valueOf(inventorySettlementFrom.getInventorySettlementStatus()))) {
-            // 3.暂存
-            // 3.1 删除明细单
-            deleteDetails(inventorySettlementFrom);
-
-            // 3.2 保存明细单
-            saveDetails(inventorySettlementFrom);
-        }
-
-        return res;
-
-    }
-
-    /**
-     * 删除明细单
-     *
-     * @param inventorySettlementFrom 库存结算单
-     */
-    private void deleteDetails(InventorySettlementFrom inventorySettlementFrom) {
-        LambdaQueryWrapper<InventorySettlementDetail> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(InventorySettlementDetail::getSettlementId, inventorySettlementFrom.getId());
-        inventorySettlementDetailMapper.delete(queryWrapper);
-    }
-
-    /**
-     * 保存单据明细
-     *
-     * @param inventorySettlementFrom 库存结算单
-     */
-    private void saveDetails(InventorySettlementFrom inventorySettlementFrom) {
-        Long settlementId = inventorySettlementFrom.getId();
-        List<InventorySettlementDetailVO> details = inventorySettlementFrom.getDetails();
-        Integer settlementType = inventorySettlementFrom.getSettlementType();
-        if (!CollUtil.isEmpty(details)) {
-            List<InventorySettlementDetail> inventoryCheckDetails = detailConvert.vos2dos(details);
-            Long userId = SecurityUtils.getUserId();
-            inventoryCheckDetails.forEach(it -> {
-                it.setSettlementId(settlementId);
-                it.setSettlementType(settlementType);
-                it.setDelFlag(0);
-                it.setCreateTime(LocalDateTime.now());
-                it.setCreateBy(userId);
-            });
-            inventorySettlementDetailMapper.batchInsert(inventoryCheckDetails);
-        }
     }
 }

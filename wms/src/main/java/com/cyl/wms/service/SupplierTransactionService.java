@@ -1,23 +1,23 @@
 package com.cyl.wms.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.cyl.wms.domain.entity.Supplier;
-import com.cyl.wms.domain.entity.SupplierTransaction;
-import com.cyl.wms.mapper.SupplierTransactionMapper;
-import com.cyl.wms.domain.query.SupplierTransactionQuery;
-import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cyl.wms.domain.entity.SupplierTransaction;
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import com.cyl.wms.mapper.SupplierTransactionMapper;
+import com.cyl.wms.pojo.query.SupplierTransactionQuery;
 
 /**
  * 供应商账户流水Service业务层处理
+ *
  *
  * @author zcc
  */
@@ -25,9 +25,6 @@ import java.util.Optional;
 public class SupplierTransactionService {
     @Autowired
     private SupplierTransactionMapper supplierTransactionMapper;
-
-    @Autowired
-    private SupplierService supplierService;
 
     /**
      * 查询供应商账户流水
@@ -43,29 +40,43 @@ public class SupplierTransactionService {
      * 查询供应商账户流水列表
      *
      * @param query 查询条件
-     * @param page  分页条件
+     * @param page 分页条件
      * @return 供应商账户流水
      */
     public List<SupplierTransaction> selectList(SupplierTransactionQuery query, Pageable page) {
         if (page != null) {
-            PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize(), "create_time desc");
+            PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize());
         }
-        LambdaQueryWrapper<SupplierTransaction> qw = new LambdaQueryWrapper<>();
-        if (!StringUtils.isEmpty(query.getSupplierId())) {
-            qw.eq(SupplierTransaction::getSupplierId, query.getSupplierId());
+        QueryWrapper<SupplierTransaction> qw = new QueryWrapper<>();
+        qw.eq("del_flag",0);
+        String transactionCode = query.getTransactionCode();
+        if (!StringUtils.isEmpty(transactionCode)) {
+            qw.eq("transaction_code", transactionCode);
         }
-        if (!StringUtils.isEmpty(query.getTransactionCode())) {
-            qw.eq(SupplierTransaction::getTransactionCode, query.getTransactionCode());
+        String supplierId = query.getSupplierId();
+        if (!StringUtils.isEmpty(supplierId)) {
+            qw.eq("supplier_id", supplierId);
         }
-        if (!StringUtils.isEmpty(query.getTransactionType())) {
-            qw.eq(SupplierTransaction::getTransactionType, query.getTransactionType());
+        String transactionType = query.getTransactionType();
+        if (!StringUtils.isEmpty(transactionType)) {
+            qw.eq("transaction_type", transactionType);
         }
-        Optional.ofNullable(query.getStartTime()).ifPresent(
-                startTime -> qw.ge(SupplierTransaction::getCreateTime, query.getStartTime())
-        );
-        Optional.ofNullable(query.getEndTime()).ifPresent(
-                startTime -> qw.le(SupplierTransaction::getCreateTime, query.getEndTime())
-        );
+        BigDecimal transactionAmount = query.getTransactionAmount();
+        if (transactionAmount != null) {
+            qw.eq("transaction_amount", transactionAmount);
+        }
+        BigDecimal previousBalance = query.getPreviousBalance();
+        if (previousBalance != null) {
+            qw.eq("previous_balance", previousBalance);
+        }
+        BigDecimal currentBalance = query.getCurrentBalance();
+        if (currentBalance != null) {
+            qw.eq("current_balance", currentBalance);
+        }
+        Long receiptOrderId = query.getReceiptOrderId();
+        if (receiptOrderId != null) {
+            qw.eq("receipt_order_id", receiptOrderId);
+        }
         return supplierTransactionMapper.selectList(qw);
     }
 
@@ -76,47 +87,8 @@ public class SupplierTransactionService {
      * @return 结果
      */
     public int insert(SupplierTransaction supplierTransaction) {
-        Supplier supplier = supplierService.selectById(Long.valueOf(supplierTransaction.getSupplierId()));
-        if (supplier == null) {
-            return 0;
-        }
+        supplierTransaction.setDelFlag(0);
         supplierTransaction.setCreateTime(LocalDateTime.now());
-        supplierTransaction.setPreviousBalance(supplier.getPayableAmount());
-        BigDecimal duePay = supplier.getPayableAmount();
-        BigDecimal after = supplier.getPayableAmount();
-        if (SupplierTransaction.ENTER.equals(supplierTransaction.getTransactionType())) {
-            after = duePay.subtract(supplierTransaction.getTransactionAmount());
-        } else if (SupplierTransaction.EXIT.equals(supplierTransaction.getTransactionType())) {
-            after = duePay.add(supplierTransaction.getTransactionAmount());
-        } else if (SupplierTransaction.RECEIPT.equals(supplierTransaction.getTransactionType())) {
-
-            //查询 该入库单是否已经添加
-            LambdaQueryWrapper<SupplierTransaction> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(SupplierTransaction::getReceiptOrderId, supplierTransaction.getReceiptOrderId());
-            queryWrapper.orderByDesc(SupplierTransaction::getId);
-            List<SupplierTransaction> supplierTransactions = supplierTransactionMapper.selectList(queryWrapper);
-            if (supplierTransactions.size() > 0) {
-                //更新入库单金额
-                SupplierTransaction supplierTransaction1 = supplierTransactions.get(0);
-                if (supplierTransaction1.getTransactionAmount().compareTo(supplierTransaction.getTransactionAmount()) != 0) {
-                    //发生金额变化
-                    after = duePay.add(supplierTransaction.getTransactionAmount().subtract(supplierTransaction1.getTransactionAmount()));
-                } else {
-                    //无金额变化
-                    return 0;
-                }
-            } else {
-                //新增
-                after = duePay.add(supplierTransaction.getTransactionAmount());
-            }
-
-        }
-        supplierTransaction.setCurrentBalance(after);
-
-        //更新供应商 应付款
-        supplier.setPayableAmount(after);
-        supplierService.update(supplier);
-
         return supplierTransactionMapper.insert(supplierTransaction);
     }
 
@@ -136,7 +108,7 @@ public class SupplierTransactionService {
      * @param ids 需要删除的供应商账户流水主键
      * @return 结果
      */
-    public int deleteByIds(Long[] ids) {
+    public int deleteByIds(Integer[] ids) {
         return supplierTransactionMapper.updateDelFlagByIds(ids);
     }
 
@@ -146,8 +118,8 @@ public class SupplierTransactionService {
      * @param id 供应商账户流水主键
      * @return 结果
      */
-    public int deleteById(Long id) {
-        Long[] ids = {id};
+    public int deleteById(Integer id) {
+        Integer[] ids = {id};
         return supplierTransactionMapper.updateDelFlagByIds(ids);
     }
 }

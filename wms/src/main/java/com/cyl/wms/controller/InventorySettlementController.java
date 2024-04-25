@@ -1,31 +1,37 @@
 package com.cyl.wms.controller;
 
-import com.cyl.wms.convert.InventorySettlementConvert;
+import java.util.List;
+
 import com.cyl.wms.domain.entity.InventorySettlement;
-import com.cyl.wms.domain.query.InventorySettlementQuery;
-import com.cyl.wms.domain.vo.InventorySettlementVO;
-import com.cyl.wms.domain.form.InventorySettlementFrom;
-import com.cyl.wms.service.InventorySettlementService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.enums.BusinessType;
+import com.cyl.wms.convert.InventorySettlementConvert;
+import com.cyl.wms.pojo.query.InventorySettlementQuery;
+import com.cyl.wms.service.InventorySettlementService;
+import com.cyl.wms.pojo.vo.InventorySettlementVO;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 /**
  * 库存结算单Controller
- * 
+ *
  * @author zcc
- * @date 2023-04-18
+ * @date 2024-03-15
  */
 @Api(description ="库存结算单接口列表")
 @RestController
@@ -57,7 +63,7 @@ public class InventorySettlementController extends BaseController {
     @ApiOperation("获取库存结算单详细信息")
     @PreAuthorize("@ss.hasPermi('wms:inventorySettlement:query')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<InventorySettlementFrom> getInfo(@PathVariable("id") Long id) {
+    public ResponseEntity<InventorySettlement> getInfo(@PathVariable("id") Long id) {
         return ResponseEntity.ok(service.selectById(id));
     }
 
@@ -83,12 +89,5 @@ public class InventorySettlementController extends BaseController {
 	@DeleteMapping("/{ids}")
     public ResponseEntity<Integer> remove(@PathVariable Long[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
-    }
-    @ApiOperation("新增或更新结算单据以及结算单据明细")
-    @PreAuthorize("@ss.hasPermi('wms:inventorySettlement:edit')")
-    @Log(title = "库存结算单据", businessType = BusinessType.INSERT)
-    @PostMapping("add-or-update")
-    public ResponseEntity<Integer> addOrUpdate(@RequestBody InventorySettlementFrom inventorySettlementFrom) {
-        return ResponseEntity.ok(service.addOrUpdate(inventorySettlementFrom));
     }
 }

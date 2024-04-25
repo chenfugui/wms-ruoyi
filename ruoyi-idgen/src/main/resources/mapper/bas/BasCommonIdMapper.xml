@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.idgen.dao.BasCommonIdDAO">
+
+    <resultMap id="BaseResultMap" type="com.cfg.idgen.entity.BasCommonIdDO">
+        <result property="id" column="id" />
+        <result property="maxId" column="max_id" />
+        <result property="step" column="step" />
+        <result property="bizType" column="biz_type" />
+        <result property="version" column="version" />
+        <result property="idType" column="id_type" />
+        <result property="segFlag" column="seg_flag" />
+        <result property="crteTime" column="crte_time" />
+        <result property="updtTime" column="updt_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,max_id,step,
+        biz_type,version,id_type,
+        seg_flag,crte_time,updt_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from bas_common_id
+        where id=#{id,jdbcType=DECIMAL}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from bas_common_id
+        where id=#{id,jdbcType=DECIMAL}
+    </delete>
+    <insert id="insert">
+        insert into bas_common_id
+        ( id,max_id,step,
+          biz_type,version,id_type,
+          seg_flag,crte_time,updt_time
+        )
+        values (#{id,jdbcType=DECIMAL},#{maxId,jdbcType=OTHER},#{step,jdbcType=DECIMAL}
+               ,#{bizType,jdbcType=VARCHAR},#{version,jdbcType=DECIMAL},#{idType,jdbcType=VARCHAR}
+               ,#{segFlag,jdbcType=VARCHAR},#{crteTime,jdbcType=TIMESTAMP},#{updtTime,jdbcType=TIMESTAMP}
+               )
+    </insert>
+    <insert id="insertSelective">
+        insert into bas_common_id
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="maxId != null">max_id,</if>
+            <if test="step != null">step,</if>
+            <if test="bizType != null">biz_type,</if>
+            <if test="version != null">version,</if>
+            <if test="idType != null">id_type,</if>
+            <if test="segFlag != null">seg_flag,</if>
+            <if test="crteTime != null">crte_time,</if>
+            <if test="updtTime != null">updt_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=DECIMAL},</if>
+            <if test="maxId != null">#{maxId,jdbcType=OTHER},</if>
+            <if test="step != null">#{step,jdbcType=DECIMAL},</if>
+            <if test="bizType != null">#{bizType,jdbcType=VARCHAR},</if>
+            <if test="version != null">#{version,jdbcType=DECIMAL},</if>
+            <if test="idType != null">#{idType,jdbcType=VARCHAR},</if>
+            <if test="segFlag != null">#{segFlag,jdbcType=VARCHAR},</if>
+            <if test="crteTime != null">#{crteTime,jdbcType=TIMESTAMP},</if>
+            <if test="updtTime != null">#{updtTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cfg.idgen.entity.BasCommonIdDO">
+        update bas_common_id
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="maxId != null">
+                max_id = #{maxId,jdbcType=OTHER},
+            </if>
+            <if test="step != null">
+                step = #{step,jdbcType=DECIMAL},
+            </if>
+            <if test="bizType != null">
+                biz_type = #{bizType,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=DECIMAL},
+            </if>
+            <if test="idType != null">
+                id_type = #{idType,jdbcType=VARCHAR},
+            </if>
+            <if test="segFlag != null">
+                seg_flag = #{segFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="crteTime != null">
+                crte_time = #{crteTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updtTime != null">
+                updt_time = #{updtTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where  id=#{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cfg.idgen.entity.BasCommonIdDO">
+        update bas_common_id
+        set
+            id =  #{id,jdbcType=DECIMAL},
+            max_id =  #{maxId,jdbcType=OTHER},
+            step =  #{step,jdbcType=DECIMAL},
+            biz_type =  #{bizType,jdbcType=VARCHAR},
+            version =  #{version,jdbcType=DECIMAL},
+            id_type =  #{idType,jdbcType=VARCHAR},
+            seg_flag =  #{segFlag,jdbcType=VARCHAR},
+            crte_time =  #{crteTime,jdbcType=TIMESTAMP},
+            updt_time =  #{updtTime,jdbcType=TIMESTAMP}
+        where  id=#{id,jdbcType=DECIMAL}
+    </update>
+    <!-- 更新段信息 -->
+    <update id="updateMaxId" >
+        update bas_common_id
+        set
+            max_id = max_id+step ,
+            version =  version+1,
+            updt_time =  #{updtTime,jdbcType=TIMESTAMP}
+        where  id=#{id,jdbcType=DECIMAL} and version=#{version,jdbcType=DECIMAL}
+    </update>
+
+    <!-- 更新段信息 -->
+    <update id="updateMaxIdWithMaxId" >
+        update bas_common_id
+        set
+            max_id = #{maxId,jdbcType=DECIMAL} ,
+            version =  version+1,
+            updt_time =  #{updtTime,jdbcType=TIMESTAMP}
+        where  id=#{id,jdbcType=DECIMAL} and version=#{version,jdbcType=DECIMAL}
+    </update>
+
+    <!-- 查询短信息 -->
+    <select id="selectSegment"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from bas_common_id
+        where biz_type=#{bizType,jdbcType=VARCHAR}
+        and id_type=#{idType,jdbcType=VARCHAR}
+        <if test="segFlag != null">
+            and seg_flag = #{segFlag,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 查询短信息 -->
+    <select id="selectSegmentByIdList"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from bas_common_id
+        where id IN
+        <foreach collection="idList"  item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 查询短信息 -->
+    <select id="selectSegSelective"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from bas_common_id
+        where biz_type=#{bizType,jdbcType=VARCHAR}
+        <if test="idType != null">
+            and id_type=#{idType,jdbcType=VARCHAR}
+        </if>
+        <if test="segFlag != null">
+            and seg_flag = #{segFlag,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

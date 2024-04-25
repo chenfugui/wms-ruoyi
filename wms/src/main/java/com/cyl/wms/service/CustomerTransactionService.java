@@ -2,19 +2,18 @@ package com.cyl.wms.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.cyl.wms.domain.entity.Customer;
+import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cyl.wms.domain.entity.CustomerTransaction;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.cyl.wms.mapper.CustomerTransactionMapper;
-import com.cyl.wms.domain.entity.CustomerTransaction;
-import com.cyl.wms.domain.query.CustomerTransactionQuery;
+import com.cyl.wms.pojo.query.CustomerTransactionQuery;
 
 /**
  * 客户账户流水Service业务层处理
@@ -26,9 +25,6 @@ import com.cyl.wms.domain.query.CustomerTransactionQuery;
 public class CustomerTransactionService {
     @Autowired
     private CustomerTransactionMapper customerTransactionMapper;
-
-    @Autowired
-    private CustomerService customerService;
 
     /**
      * 查询客户账户流水
@@ -49,24 +45,38 @@ public class CustomerTransactionService {
      */
     public List<CustomerTransaction> selectList(CustomerTransactionQuery query, Pageable page) {
         if (page != null) {
-            PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize(), "create_time desc");
+            PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize());
         }
-        LambdaQueryWrapper<CustomerTransaction> qw = new LambdaQueryWrapper<>();
-        if (!StringUtils.isEmpty(query.getCustomerId())){
-            qw.eq(CustomerTransaction::getCustomerId, query.getCustomerId());
+        QueryWrapper<CustomerTransaction> qw = new QueryWrapper<>();
+        qw.eq("del_flag",0);
+        String transactionCode = query.getTransactionCode();
+        if (!StringUtils.isEmpty(transactionCode)) {
+            qw.eq("transaction_code", transactionCode);
         }
-        if (!StringUtils.isEmpty(query.getTransactionCode())){
-            qw.eq(CustomerTransaction::getTransactionCode, query.getTransactionCode());
+        String customerId = query.getCustomerId();
+        if (!StringUtils.isEmpty(customerId)) {
+            qw.eq("customer_id", customerId);
         }
-        if (!StringUtils.isEmpty(query.getTransactionType())){
-            qw.eq(CustomerTransaction::getTransactionType, query.getTransactionType());
+        String transactionType = query.getTransactionType();
+        if (!StringUtils.isEmpty(transactionType)) {
+            qw.eq("transaction_type", transactionType);
         }
-        Optional.ofNullable(query.getStartTime()).ifPresent(
-                startTime -> qw.ge(CustomerTransaction::getCreateTime, query.getStartTime())
-        );
-        Optional.ofNullable(query.getEndTime()).ifPresent(
-                startTime -> qw.le(CustomerTransaction::getCreateTime, query.getEndTime())
-        );
+        BigDecimal transactionAmount = query.getTransactionAmount();
+        if (transactionAmount != null) {
+            qw.eq("transaction_amount", transactionAmount);
+        }
+        BigDecimal previousBalance = query.getPreviousBalance();
+        if (previousBalance != null) {
+            qw.eq("previous_balance", previousBalance);
+        }
+        BigDecimal currentBalance = query.getCurrentBalance();
+        if (currentBalance != null) {
+            qw.eq("current_balance", currentBalance);
+        }
+        Long shipmentOrderId = query.getShipmentOrderId();
+        if (shipmentOrderId != null) {
+            qw.eq("shipment_order_id", shipmentOrderId);
+        }
         return customerTransactionMapper.selectList(qw);
     }
 
@@ -77,45 +87,8 @@ public class CustomerTransactionService {
      * @return 结果
      */
     public int insert(CustomerTransaction customerTransaction) {
-        Customer customer = customerService.selectById(Long.valueOf(customerTransaction.getCustomerId()));
-        if (customer == null){
-            return 0;
-        }
+        customerTransaction.setDelFlag(0);
         customerTransaction.setCreateTime(LocalDateTime.now());
-        customerTransaction.setPreviousBalance(customer.getReceivableAmount());
-        BigDecimal duePay = customer.getReceivableAmount();
-        BigDecimal after = customer.getReceivableAmount();
-        if (CustomerTransaction.ENTER.equals(customerTransaction.getTransactionType())){
-            after = duePay.subtract(customerTransaction.getTransactionAmount());
-        }else if (CustomerTransaction.EXIT.equals(customerTransaction.getTransactionType())){
-            after = duePay.add(customerTransaction.getTransactionAmount());
-        }else if (CustomerTransaction.SHIPMENT.equals(customerTransaction.getTransactionType())){
-            //查询该出库单是否已经添加
-            LambdaQueryWrapper<CustomerTransaction> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(CustomerTransaction::getShipmentOrderId, customerTransaction.getShipmentOrderId());
-            queryWrapper.orderByDesc(CustomerTransaction::getId);
-            List<CustomerTransaction> customerTransactions = customerTransactionMapper.selectList(queryWrapper);
-            if (customerTransactions.size() > 0){
-                //更新出库单金额
-                CustomerTransaction customerTransaction1 = customerTransactions.get(0);
-                if (customerTransaction1.getTransactionAmount().compareTo(customerTransaction.getTransactionAmount()) != 0){
-                    //发生金额变化
-                    after = duePay.add(customerTransaction.getTransactionAmount().subtract(customerTransaction1.getTransactionAmount()));
-                }else {
-                    //无金额变化
-                    return 0;
-                }
-            }else {
-                //新增
-                after = duePay.add(customerTransaction.getTransactionAmount());
-            }
-        }
-        customerTransaction.setCurrentBalance(after);
-
-        //更新客户 应收款
-        customer.setReceivableAmount(after);
-        customerService.update(customer);
-
         return customerTransactionMapper.insert(customerTransaction);
     }
 
@@ -135,7 +108,7 @@ public class CustomerTransactionService {
      * @param ids 需要删除的客户账户流水主键
      * @return 结果
      */
-    public int deleteByIds(Long[] ids) {
+    public int deleteByIds(Integer[] ids) {
         return customerTransactionMapper.updateDelFlagByIds(ids);
     }
 
@@ -145,8 +118,8 @@ public class CustomerTransactionService {
      * @param id 客户账户流水主键
      * @return 结果
      */
-    public int deleteById(Long id) {
-        Long[] ids = {id};
+    public int deleteById(Integer id) {
+        Integer[] ids = {id};
         return customerTransactionMapper.updateDelFlagByIds(ids);
     }
 }

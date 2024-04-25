@@ -5,9 +5,9 @@ spring:
     #    schema: classpath*:sql/init.sql
     #    data: classpath:sql/data.sql
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wms?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
-    username:
-    password:
+    url: jdbc:mysql://81.70.101.247:3306/wms?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    username: chenfg
+    password: Qwer1234#
   jpa:
     properties:
       hibernate:
@@ -39,13 +39,13 @@ gen:
   # 路径
   path:
     # 后端根目录
-    backPath: C:\Users\zccbbg\ichengle\ruoyi-vue-fork\
+    backPath: D:\workspace\riskcontrol\wms-ruoyi\
     # 后端 service 模块名
     serviceModule: wms
     # 后端 api 模块名, 默认与 service 一致
     apiModule: wms
     # 前端根目录
-    frontPath: C:\Users\zccbbg\ichengle\ruoyi-ui\
+    frontPath: D:\workspace\riskcontrol\RuoYi-WMS-VUE\
     # 前端 api 目录
     frontApiPath: src/api/wms
     # 前端 view 目录

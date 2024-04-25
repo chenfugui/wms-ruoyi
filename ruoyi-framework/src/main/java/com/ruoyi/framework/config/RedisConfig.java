@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -45,6 +46,52 @@ public class RedisConfig extends CachingConfigurerSupport
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(serializer);
 
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/4/25 13:48
+     * @description:
+     * @param connectionFactory
+     * @return: RedisTemplate<java.lang.String,java.lang.String>
+     */
+/*    @Bean
+    public RedisTemplate<String, String> StringRedisTemplate(RedisConnectionFactory connectionFactory)
+    {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        // 使用StringRedisSerializer来序列化和反序列化redis的key值
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
+
+        // Hash的key也采用StringRedisSerializer的序列化方式
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new StringRedisSerializer());
+        template.afterPropertiesSet();
+        return template;
+    }*/
+
+    /***
+     * @author chenfg
+     * @date: 2024/4/25 13:51
+     * @description:
+     * @param connectionFactory
+     * @return:RedisTemplate<java.lang.String,java.lang.Long>
+     */
+    @Bean
+    public RedisTemplate<String, Long> longRedisTemplate(RedisConnectionFactory connectionFactory)
+    {
+        RedisTemplate<String, Long> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        // 使用StringRedisSerializer来序列化和反序列化redis的key值
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericToStringSerializer<>(Long.class));
+
+        // Hash的key也采用StringRedisSerializer的序列化方式
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new GenericToStringSerializer<>(Long.class));
         template.afterPropertiesSet();
         return template;
     }
