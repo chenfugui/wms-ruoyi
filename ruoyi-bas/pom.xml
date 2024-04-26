@@ -20,7 +20,7 @@
 <dependencies>
     <dependency>
         <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common</artifactId>
+        <artifactId>ruoyi-system</artifactId>
     </dependency>
     <dependency>
         <groupId>com.ruoyi</groupId>

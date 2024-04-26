@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<resultMap type="SysUser" id="SysUserResult">
 		<id     property="userId"       column="user_id"      />
+		<result property="empId"       column="emp_id"      />
 		<result property="deptId"       column="dept_id"      />
 		<result property="userName"     column="user_name"    />
 		<result property="nickName"     column="nick_name"    />
@@ -23,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="updateBy"     column="update_by"    />
 		<result property="updateTime"   column="update_time"  />
 		<result property="remark"       column="remark"       />
+		<association property="emp" column="emp_id" javaType="com.ruoyi.common.core.domain.entity.CommonEmp" resultMap="empResult" />
 		<association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
 		<collection  property="roles"   javaType="java.util.List"        resultMap="RoleResult" />
 	</resultMap>
@@ -35,6 +37,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="leader"   column="leader"      />
 		<result property="status"   column="dept_status" />
 	</resultMap>
+
+	<resultMap id="empResult" type="com.ruoyi.common.core.domain.entity.CommonEmp">
+		<id     property="empId"   column="t_emp_id"     />
+		<result property="parentId" column="parent_id"   />
+		<result property="empName" column="emp_name"   />
+		<result property="orderNum" column="emp_order_num"   />
+		<result property="empCode"   column="emp_code"      />
+		<result property="status"   column="emp_status" />
+	</resultMap>
 	
 	<resultMap id="RoleResult" type="SysRole">
 		<id     property="roleId"       column="role_id"        />
@@ -46,13 +57,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectUserVo">
-        select u.user_id, u.dept_id, u.user_name, u.nick_name, u.email, u.avatar, u.phonenumber, u.password, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, 
+        select u.user_id, u.dept_id,u.emp_id, u.user_name, u.nick_name, u.email, u.avatar, u.phonenumber, u.password, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,
         d.dept_id, d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
         r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
+        ,t.emp_id as t_emp_id,t.emp_code,t.emp_name,t.parent_id as emp_pid,t.status as emp_status,t.order_num as emp_order_num
         from sys_user u
 		    left join sys_dept d on u.dept_id = d.dept_id
 		    left join sys_user_role ur on u.user_id = ur.user_id
 		    left join sys_role r on r.role_id = ur.role_id
+            left join bas_common_emp t on u.emp_id = t.emp_id
     </sql>
     
     <select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
@@ -145,6 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		insert into sys_user(
  			<if test="userId != null and userId != 0">user_id,</if>
  			<if test="deptId != null and deptId != 0">dept_id,</if>
+ 			<if test="empId != null and empId != 0">emp_id,</if>
  			<if test="userName != null and userName != ''">user_name,</if>
  			<if test="nickName != null and nickName != ''">nick_name,</if>
  			<if test="email != null and email != ''">email,</if>
@@ -159,6 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
  			<if test="deptId != null and deptId != ''">#{deptId},</if>
+		    <if test="empId != null and empId != 0">#{empId},</if>
  			<if test="userName != null and userName != ''">#{userName},</if>
  			<if test="nickName != null and nickName != ''">#{nickName},</if>
  			<if test="email != null and email != ''">#{email},</if>
@@ -177,6 +192,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		update sys_user
  		<set>
  			<if test="deptId != null and deptId != 0">dept_id = #{deptId},</if>
+ 			<if test="empId != null and empId != 0">emp_id = #{empId},</if>
  			<if test="userName != null and userName != ''">user_name = #{userName},</if>
  			<if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
  			<if test="email != null ">email = #{email},</if>

@@ -29,6 +29,10 @@ public class SysUser extends BaseEntity
     private Long userId;
 
     /** 部门ID */
+    @Excel(name = "单位编号", type = Type.IMPORT)
+    private Long empId;
+
+    /** 部门ID */
     @Excel(name = "部门编号", type = Type.IMPORT)
     private Long deptId;
 
@@ -82,6 +86,8 @@ public class SysUser extends BaseEntity
         @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
     })
     private SysDept dept;
+
+    private CommonEmp emp;
 
     /** 角色对象 */
     private List<SysRole> roles;
@@ -317,6 +323,7 @@ public class SysUser extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("userId", getUserId())
+            .append("empId", getEmpId())
             .append("deptId", getDeptId())
             .append("userName", getUserName())
             .append("nickName", getNickName())
@@ -337,5 +344,21 @@ public class SysUser extends BaseEntity
             .append("remark", getRemark())
             .append("dept", getDept())
             .toString();
+    }
+
+    public Long getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Long empId) {
+        this.empId = empId;
+    }
+
+    public CommonEmp getEmp() {
+        return emp;
+    }
+
+    public void setEmp(CommonEmp emp) {
+        this.emp = emp;
     }
 }
