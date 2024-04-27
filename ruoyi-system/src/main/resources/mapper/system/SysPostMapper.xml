@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<resultMap type="SysPost" id="SysPostResult">
 		<id     property="postId"        column="post_id"       />
+		<result property="empId"        column="emp_id"     />
 		<result property="postCode"      column="post_code"     />
 		<result property="postName"      column="post_name"     />
 		<result property="postSort"      column="post_sort"     />
@@ -18,13 +19,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectPostVo">
-        select post_id, post_code, post_name, post_sort, status, create_by, create_time, remark 
+        select post_id,emp_id, post_code, post_name, post_sort, status, create_by, create_time, remark
 		from sys_post
     </sql>
 	
 	<select id="selectPostList" parameterType="SysPost" resultMap="SysPostResult">
 	    <include refid="selectPostVo"/>
 		<where>
+			<if test="empId != null and empId != 0">
+				AND emp_id = #{empId}
+			</if>
 			<if test="postCode != null and postCode != ''">
 				AND post_code like concat('%', #{postCode}, '%')
 			</if>
@@ -75,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updatePost" parameterType="SysPost">
  		update sys_post
  		<set>
+			<if test="empId != null and empId != 0">emp_id = #{empId},</if>
  			<if test="postCode != null and postCode != ''">post_code = #{postCode},</if>
  			<if test="postName != null and postName != ''">post_name = #{postName},</if>
  			<if test="postSort != null and postSort != ''">post_sort = #{postSort},</if>
@@ -98,6 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			create_time
  		)values(
  			<if test="postId != null and postId != 0">#{postId},</if>
+		    <if test="postId != null and postId != 0">#{empId},</if>
  			<if test="postCode != null and postCode != ''">#{postCode},</if>
  			<if test="postName != null and postName != ''">#{postName},</if>
  			<if test="postSort != null and postSort != ''">#{postSort},</if>
@@ -118,5 +124,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			#{postId}
         </foreach> 
  	</delete>
+
+
+	<select id="selectPostByEmpId" parameterType="Long" resultMap="SysPostResult">
+		<include refid="selectPostVo"/>
+		where 1=1
+		<if test="postId != null and postId != 0">
+			AND emp_id = #{empId}
+		</if>
+	</select>
 
 </mapper> 

@@ -41,4 +41,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
     </update>
+
+    <insert id="insertEmp" parameterType="com.ruoyi.common.core.domain.entity.CommonEmp" useGeneratedKeys="true" keyProperty="empId">
+        insert into bas_common_emp(
+        <if test="empId != null and empId != 0">emp_id,</if>
+        <if test="empCode != null and empCode != ''">emp_code,</if>
+        <if test="empName != null and empName != ''">emp_name,</if>
+        <if test="empType != null and empType != ''">emp_type,</if>
+        <if test="parentId != null and parentId != 0">parent_id,</if>
+        <if test="ancestors != null and ancestors != '' ">ancestors,</if>
+        <if test="orderNum != null and orderNum != 0">order_num,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="delFlag != null and delFlag != ''">del_flag,</if>
+        <if test="createBy != null">create_by,</if>
+        create_time
+        )values(
+        <if test="empId != null and empId != 0">#{empId},</if>
+        <if test="empCode != null and empCode != ''">#{empCode},</if>
+        <if test="empName != null and empName != ''">#{empName},</if>
+        <if test="empType != null and empType != ''">#{empType},</if>
+        <if test="parentId != null and parentId != 0">#{parentId},</if>
+        <if test="ancestors != null and ancestors != '' ">#{ancestors},</if>
+        <if test="orderNum != null and orderNum != 0">#{orderNum},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+        <if test="createBy != null">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
 </mapper>

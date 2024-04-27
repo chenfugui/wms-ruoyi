@@ -21,6 +21,8 @@ public class SysPost extends BaseEntity
     @Excel(name = "岗位序号", cellType = ColumnType.NUMERIC)
     private Long postId;
 
+    private Long empId;
+
     /** 岗位编码 */
     @Excel(name = "岗位编码")
     private String postCode;
@@ -119,5 +121,13 @@ public class SysPost extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
             .toString();
+    }
+
+    public Long getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Long empId) {
+        this.empId = empId;
     }
 }

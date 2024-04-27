@@ -37,7 +37,7 @@ public class CommonEmp extends BaseAudit {
     @Excel(name = "排序号")
     private Long orderNum;
 
-    private String status;
+    private String status="0";
 
     private String delFlag;
 

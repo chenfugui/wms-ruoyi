@@ -96,4 +96,13 @@ public interface SysPostMapper
      * @return 结果
      */
     public SysPost checkPostCodeUnique(String postCode);
+
+
+    /**
+     * 通过单位ID查询岗位信息
+     *
+     * @param empId 单位ID
+     * @return 角色对象信息
+     */
+    public List<SysPost> selectPostByEmpId(Long empId);
 }

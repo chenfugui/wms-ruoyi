@@ -25,4 +25,12 @@ public interface CommonEmpMapper extends BaseMapper<CommonEmp> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+
+    /**
+     * 新增单位
+     * @param commonEmp
+     * @return
+     */
+    int insertEmp(CommonEmp commonEmp);
 }

@@ -21,6 +21,9 @@ public class SysDept extends BaseEntity
     /** 部门ID */
     private Long deptId;
 
+    /** 单位ID */
+    private Long empId;
+
     /** 父部门ID */
     private Long parentId;
 
@@ -43,7 +46,7 @@ public class SysDept extends BaseEntity
     private String email;
 
     /** 部门状态:0正常,1停用 */
-    private String status;
+    private String status= "0";
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
@@ -184,6 +187,7 @@ public class SysDept extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("deptId", getDeptId())
+            .append("empId", getEmpId())
             .append("parentId", getParentId())
             .append("ancestors", getAncestors())
             .append("deptName", getDeptName())
@@ -198,5 +202,13 @@ public class SysDept extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .toString();
+    }
+
+    public Long getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Long empId) {
+        this.empId = empId;
     }
 }

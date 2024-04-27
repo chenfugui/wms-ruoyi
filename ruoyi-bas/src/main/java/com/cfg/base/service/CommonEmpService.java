@@ -4,6 +4,9 @@ import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.common.core.domain.entity.SysDept;
+import com.ruoyi.system.domain.SysPost;
+import com.ruoyi.system.mapper.SysDeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.cfg.base.mapper.CommonEmpMapper;
 import com.ruoyi.common.core.domain.entity.CommonEmp;
 import com.cfg.base.pojo.query.CommonEmpQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 单位信息Service业务层处理
@@ -22,6 +26,9 @@ import com.cfg.base.pojo.query.CommonEmpQuery;
 public class CommonEmpService {
     @Autowired
     private CommonEmpMapper commonEmpMapper;
+
+    @Autowired
+    private SysDeptMapper deptMapper;
 
     /**
      * 查询单位信息
@@ -79,10 +86,27 @@ public class CommonEmpService {
      * @param commonEmp 单位信息
      * @return 结果
      */
+    @Transactional(rollbackFor = Exception.class)
     public int insert(CommonEmp commonEmp) {
         commonEmp.setDelFlag("0");
         commonEmp.setCreateTime(LocalDateTime.now());
-        return commonEmpMapper.insert(commonEmp);
+        //return commonEmpMapper.insert(commonEmp);
+        int i = commonEmpMapper.insertEmp(commonEmp);
+        if(null==commonEmp.getParentId()||0==commonEmp.getParentId()){
+            SysDept dept = new SysDept();
+            dept.setEmpId(commonEmp.getEmpId());
+            dept.setDeptName(commonEmp.getEmpName());
+            dept.setOrderNum("0");
+            dept.setAncestors("0");
+            dept.setDelFlag(commonEmp.getDelFlag());
+            deptMapper.insertDept(dept);
+        }
+
+        /*SysPost sysPost = new SysPost();
+        sysPost.setEmpId(commonEmp.getEmpId());
+        sysPost.setPostCode(StringUtils.leftPad(String.valueOf(commonEmp.getEmpId()),6,"0"));
+        sysPost.setPostName(commonEmp.getEmpName());*/
+         return i;
     }
 
     /**
