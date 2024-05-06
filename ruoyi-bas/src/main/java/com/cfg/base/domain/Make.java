@@ -54,5 +54,7 @@ public class Make {
     @ApiModelProperty("产品ID")
     @Excel(name = "产品ID")
     private Long proId;
+    @ApiModelProperty("产品名称")
+    private String proName;
 
 }

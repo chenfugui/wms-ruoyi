@@ -95,4 +95,12 @@ public class MakeController extends BaseController {
     public ResponseEntity<Integer> remove(@PathVariable Long[] makeIds) {
         return ResponseEntity.ok(service.deleteByMakeIds(makeIds));
     }
+
+    @ApiOperation("批量插入产品生产表")
+    @PostMapping(value = "/gen")
+    public ResponseEntity<List<Make>> addBatch(@RequestBody MakeQuery query) {
+        query.setEmpId(SecurityUtils.getEmpId());
+        return ResponseEntity.ok(service.insertBatch(query));
+    }
+
 }

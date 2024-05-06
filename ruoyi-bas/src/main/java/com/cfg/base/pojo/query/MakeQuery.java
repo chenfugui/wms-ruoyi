@@ -28,4 +28,10 @@ public class MakeQuery {
     @ApiModelProperty("产品ID 精确匹配")
     private Long proId;
 
+    @ApiModelProperty("数量")
+    private Long genNum;
+
+    @ApiModelProperty("产品名称")
+    private String proName;
+
 }
