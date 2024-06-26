@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.MakeMapper">
+    
+    <resultMap type="com.cfg.base.domain.Make" id="MakeResult">
+        <result property="makeId" column="make_id"/>
+        <result property="makeCode" column="make_code"/>
+        <result property="makeNum" column="make_num"/>
+        <result property="empId" column="emp_id"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="proId" column="pro_id"/>
+    </resultMap>
+
+    <sql id="selectMakeVo">
+        select make_id, make_code, make_num, emp_id, status, del_flag, create_by, create_time, update_by, update_time, pro_id  from bas_make
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.Make" resultMap="MakeResult">
+        <include refid="selectMakeVo"/>
+        <where>  
+            <if test="makeCode != null  and makeCode != ''"> and make_code = #{makeCode}</if>
+            <if test="makeNum != null "> and make_num = #{makeNum}</if>
+            <if test="empId != null "> and emp_id = #{empId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="proId != null "> and pro_id = #{proId}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update bas_make set del_flag='1'
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>

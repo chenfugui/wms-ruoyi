@@ -143,9 +143,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectUserById" parameterType="Long" resultMap="SysUserResult">
 		<include refid="selectUserVo"/>
 		where u.user_id = #{userId}
-		<if test="empId != null and empId != 0">
-			AND u.emp_id = #{empId}
-		</if>
 	</select>
 	
 	<select id="checkUserNameUnique" parameterType="String" resultType="int">

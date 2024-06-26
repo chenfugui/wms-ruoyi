@@ -2,6 +2,10 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.cfg.idgen.util.ConvertUtils;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.framework.web.domain.server.Sys;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -226,5 +230,21 @@ public class SysUserController extends BaseController
     {
         userService.insertUserAuth(userId, roleIds);
         return success();
+    }
+
+    @GetMapping(value = "/current")
+    public AjaxResult getCurrentInfo()
+    {
+        SysUser user = SecurityUtils.getLoginSysUser();
+        SysUser currentUser = ConvertUtils.convert(user, SysUser.class);
+        currentUser.setPassword(null);
+        Long userId = currentUser.getUserId();
+        userService.checkUserDataScope(userId);
+        AjaxResult ajax = AjaxResult.success();
+        if (StringUtils.isNotNull(userId))
+        {
+            ajax.put(AjaxResult.DATA_TAG, userService.selectUserById(userId));
+        }
+        return ajax;
     }
 }
