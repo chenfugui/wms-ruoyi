@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.PageImpl;
@@ -46,6 +47,7 @@ public class CommonStepController extends BaseController {
     @PreAuthorize("@ss.hasPermi('base:commonStep:list')")
     @PostMapping("/list")
     public ResponseEntity<Page<CommonStep>> list(@RequestBody CommonStepQuery query, Pageable page) {
+        query.setEmpCode(SecurityUtils.getEmpCode());
         List<CommonStep> list = service.selectList(query, page);
         return ResponseEntity.ok(new PageImpl<>(list, page, ((com.github.pagehelper.Page)list).getTotal()));
     }
@@ -55,6 +57,7 @@ public class CommonStepController extends BaseController {
     @Log(title = "工序信息", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public ResponseEntity<String> export(CommonStepQuery query) {
+        query.setEmpCode(SecurityUtils.getEmpCode());
         List<CommonStep> list = service.selectList(query, null);
         ExcelUtil<CommonStepVO> util = new ExcelUtil<>(CommonStepVO.class);
         return ResponseEntity.ok(util.writeExcel(convert.dos2vos(list), "工序信息数据"));
@@ -72,6 +75,7 @@ public class CommonStepController extends BaseController {
     @Log(title = "工序信息", businessType = BusinessType.INSERT)
     @PostMapping
     public ResponseEntity<Integer> add(@RequestBody CommonStep commonStep) {
+        commonStep.setEmpCode(SecurityUtils.getEmpCode());
         return ResponseEntity.ok(service.insert(commonStep));
     }
 

@@ -1,5 +1,6 @@
 package com.ruoyi.common.utils;
 
+import com.ruoyi.common.core.domain.entity.CommonEmp;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -68,11 +69,49 @@ public class SecurityUtils
     {
         try
         {
-            return getLoginUser().getUser().getEmpId();
+            CommonEmp emp=getLoginUser().getUser().getEmp();
+            if(null!=emp){
+                return emp.getEmpId();
+            }
+            return null;
         }
         catch (Exception e)
         {
             throw new ServiceException("获取用户异常", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    /**
+     * 获取单位编码
+     **/
+    public static String getEmpCode()
+    {
+        try
+        {
+            CommonEmp emp=getLoginUser().getUser().getEmp();
+            if(null!=emp){
+                return emp.getEmpCode();
+            }
+            return null;
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException("获取单位编码异常", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    /**
+     * 获取用户单位
+     **/
+    public static CommonEmp getEmp()
+    {
+        try
+        {
+            return getLoginUser().getUser().getEmp();
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException("获取用户单位异常", HttpStatus.UNAUTHORIZED);
         }
     }
     
