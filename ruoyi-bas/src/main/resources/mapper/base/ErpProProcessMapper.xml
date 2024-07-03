@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.ErpProProcessMapper">
+    
+    <resultMap type="com.cfg.base.domain.ErpProProcess" id="ErpProProcessResult">
+        <result property="id" column="id"/>
+        <result property="proId" column="pro_id"/>
+        <result property="empId" column="emp_id"/>
+        <result property="stepId" column="step_id"/>
+        <result property="stepCode" column="step_code"/>
+        <result property="stepName" column="step_name"/>
+        <result property="price" column="price"/>
+        <result property="seqNo" column="seq_no"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectErpProProcessVo">
+        select id, pro_id, emp_id, step_id, step_code, step_name, price, seq_no, status, create_by, create_time, update_by, update_time, del_flag   from erp_pro_process
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpProProcess" resultMap="ErpProProcessResult">
+        <include refid="selectErpProProcessVo"/>
+        <where>  
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="empId != null  and empId != ''"> and emp_id = #{empId}</if>
+            <if test="stepId != null "> and step_id = #{stepId}</if>
+            <if test="stepCode != null  and stepCode != ''"> and step_code = #{stepCode}</if>
+            <if test="stepName != null  and stepName != ''"> and step_name like concat('%', #{stepName}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="seqNo != null "> and seq_no = #{seqNo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update erp_pro_process set del_flag=1
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>

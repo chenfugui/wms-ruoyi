@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.ErpColorMapper">
+    
+    <resultMap type="com.cfg.base.domain.ErpColor" id="ErpColorResult">
+        <result property="id" column="id"/>
+        <result property="colorCode" column="color_code"/>
+        <result property="colorName" column="color_name"/>
+        <result property="empId" column="emp_id"/>
+        <result property="seqNo" column="seq_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectErpColorVo">
+        select id, color_code, color_name, emp_id, seq_no, create_by, create_time, update_by, update_time, del_flag   from erp_color
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpColor" resultMap="ErpColorResult">
+        <include refid="selectErpColorVo"/>
+        <where>  
+            <if test="colorCode != null  and colorCode != ''"> and color_code = #{colorCode}</if>
+            <if test="colorName != null  and colorName != ''"> and color_name like concat('%', #{colorName}, '%')</if>
+            <if test="empId != null "> and emp_id = #{empId}</if>
+            <if test="seqNo != null "> and seq_no = #{seqNo}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update erp_color set del_flag=1
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>
