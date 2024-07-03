@@ -1,5 +1,6 @@
 package com.cfg.base.domain;
 
+import com.cfg.api.DelFlagSetterApi;
 import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -44,8 +45,8 @@ public class ErpProSize extends BaseAudit {
     @Excel(name = "排序号")
     private Long seqNo;
 
-    @ApiModelProperty("dr 1 正常  2  删除")
-    @Excel(name = "dr 1 正常  2  删除")
-    private Integer dr;
+    @ApiModelProperty("delFlag 0 正常  1  删除")
+    @Excel(name = "delFlag 0 正常  1  删除")
+    private Integer delFlag;
 
 }

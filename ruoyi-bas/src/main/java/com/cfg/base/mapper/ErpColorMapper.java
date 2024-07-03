@@ -4,12 +4,14 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import com.cfg.base.domain.ErpColor;
+import org.springframework.stereotype.Component;
 
 /**
  * 服装颜色管理Mapper接口
  * 
  * @author chenfg
  */
+@Component
 public interface ErpColorMapper extends BaseMapper<ErpColor> {
     /**
      * 查询服装颜色管理列表

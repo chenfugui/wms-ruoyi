@@ -1,6 +1,8 @@
 package com.cfg.base.domain;
 
 import java.math.BigDecimal;
+
+import com.cfg.api.DelFlagSetterApi;
 import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -45,9 +47,9 @@ public class ErpProc extends BaseAudit {
     @Excel(name = "工序状态")
     private String status;
 
-    @ApiModelProperty("dr 1 正常  2  删除")
-    @Excel(name = "dr 1 正常  2  删除")
-    private Integer dr;
+    @ApiModelProperty("delFlag 0 正常  1  删除")
+    @Excel(name = "delFlag 0 正常  1  删除")
+    private Integer delFlag;
 
     @ApiModelProperty("单位id")
     @Excel(name = "单位id")

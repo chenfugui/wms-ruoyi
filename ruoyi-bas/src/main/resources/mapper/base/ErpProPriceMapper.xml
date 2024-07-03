@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
-        <result property="dr" column="dr"/>
+        <result property="delFlag" column="del_flag"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectErpProPriceVo">
-        select id, pro_id, step_id, size_id, emp_id, price, create_by, create_time, update_by, update_time, dr   from erp_pro_price
+        select id, pro_id, step_id, size_id, emp_id, price, create_by, create_time, update_by, update_time, del_flag   from erp_pro_price
     </sql>
 
     <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpProPrice" resultMap="ErpProPriceResult">
@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sizeId != null "> and size_id = #{sizeId}</if>
             <if test="empId != null "> and emp_id = #{empId}</if>
             <if test="price != null "> and price = #{price}</if>
-            <if test="dr != null "> and dr = #{dr}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
         </where>
     </select>
 

@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
-        <result property="dr" column="dr"/>
+        <result property="delFlag" column="del_flag"/>
         <result property="seqNo" column="seq_no"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectErpProMakeBatchVo">
-        select id, pro_make_id, pro_make_no, pro_id, size_id, batch_no, size_name, size_code, color_id, color_code, color_name, make_num, bed_no, pkg_start_no, pkg_end_no, emp_id, create_by, create_time, update_by, update_time, dr, seq_no   from erp_pro_make_batch
+        select id, pro_make_id, pro_make_no, pro_id, size_id, batch_no, size_name, size_code, color_id, color_code, color_name, make_num, bed_no, pkg_start_no, pkg_end_no, emp_id, create_by, create_time, update_by, update_time, del_flag, seq_no   from erp_pro_make_batch
     </sql>
 
     <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpProMakeBatch" resultMap="ErpProMakeBatchResult">
@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pkgStartNo != null "> and pkg_start_no = #{pkgStartNo}</if>
             <if test="pkgEndNo != null "> and pkg_end_no = #{pkgEndNo}</if>
             <if test="empId != null "> and emp_id = #{empId}</if>
-            <if test="dr != null "> and dr = #{dr}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
             <if test="seqNo != null "> and seq_no = #{seqNo}</if>
         </where>
     </select>
