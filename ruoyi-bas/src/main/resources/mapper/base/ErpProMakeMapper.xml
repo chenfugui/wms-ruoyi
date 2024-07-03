@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.ErpProMakeMapper">
+    
+    <resultMap type="com.cfg.base.domain.ErpProMake" id="ErpProMakeResult">
+        <result property="id" column="id"/>
+        <result property="proId" column="pro_id"/>
+        <result property="proMakeNo" column="pro_make_no"/>
+        <result property="makeStartTime" column="make_start_time"/>
+        <result property="makeEndTime" column="make_end_time"/>
+        <result property="deliverTime" column="deliver_time"/>
+        <result property="status" column="status"/>
+        <result property="empId" column="emp_id"/>
+        <result property="seqNo" column="seq_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="dr" column="dr"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectErpProMakeVo">
+        select id, pro_id, pro_make_no, make_start_time, make_end_time, deliver_time, status, emp_id, seq_no, create_by, create_time, update_by, update_time, dr   from erp_pro_make
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpProMake" resultMap="ErpProMakeResult">
+        <include refid="selectErpProMakeVo"/>
+        <where>  
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="proMakeNo != null  and proMakeNo != ''"> and pro_make_no = #{proMakeNo}</if>
+            <if test="makeStartTime != null "> and make_start_time = #{makeStartTime}</if>
+            <if test="makeEndTime != null "> and make_end_time = #{makeEndTime}</if>
+            <if test="deliverTime != null "> and deliver_time = #{deliverTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="empId != null "> and emp_id = #{empId}</if>
+            <if test="seqNo != null "> and seq_no = #{seqNo}</if>
+            <if test="dr != null "> and dr = #{dr}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update erp_pro_make set del_flag=1
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>

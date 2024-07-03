@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.ErpProMakeDetailMapper">
+    
+    <resultMap type="com.cfg.base.domain.ErpProMakeDetail" id="ErpProMakeDetailResult">
+        <result property="id" column="id"/>
+        <result property="proMakeId" column="pro_make_id"/>
+        <result property="proMakeNo" column="pro_make_no"/>
+        <result property="proId" column="pro_id"/>
+        <result property="sizeId" column="size_id"/>
+        <result property="colorId" column="color_id"/>
+        <result property="clothId" column="cloth_id"/>
+        <result property="clothCode" column="cloth_code"/>
+        <result property="clothName" column="cloth_name"/>
+        <result property="makeNum" column="make_num"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="dr" column="dr"/>
+        <result property="empId" column="emp_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectErpProMakeDetailVo">
+        select id, pro_make_id, pro_make_no, pro_id, size_id, color_id, cloth_id, cloth_code, cloth_name, make_num, create_by, create_time, update_by, update_time, dr, emp_id   from erp_pro_make_detail
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpProMakeDetail" resultMap="ErpProMakeDetailResult">
+        <include refid="selectErpProMakeDetailVo"/>
+        <where>  
+            <if test="proMakeId != null "> and pro_make_id = #{proMakeId}</if>
+            <if test="proMakeNo != null  and proMakeNo != ''"> and pro_make_no = #{proMakeNo}</if>
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="sizeId != null "> and size_id = #{sizeId}</if>
+            <if test="colorId != null "> and color_id = #{colorId}</if>
+            <if test="clothId != null "> and cloth_id = #{clothId}</if>
+            <if test="clothCode != null  and clothCode != ''"> and cloth_code = #{clothCode}</if>
+            <if test="clothName != null  and clothName != ''"> and cloth_name like concat('%', #{clothName}, '%')</if>
+            <if test="makeNum != null "> and make_num = #{makeNum}</if>
+            <if test="dr != null "> and dr = #{dr}</if>
+            <if test="empId != null "> and emp_id = #{empId}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update erp_pro_make_detail set del_flag=1
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>
