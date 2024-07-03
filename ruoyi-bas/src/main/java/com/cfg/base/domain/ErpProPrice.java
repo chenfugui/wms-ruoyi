@@ -23,24 +23,24 @@ public class ErpProPrice extends BaseAudit {
     @ApiModelProperty("ID")
     private Long id;
 
-    @ApiModelProperty("PRO_ID")
-    @Excel(name = "PRO_ID")
+    @ApiModelProperty("产品")
+    @Excel(name = "产品")
     private Long proId;
 
-    @ApiModelProperty("STEP_ID")
-    @Excel(name = "STEP_ID")
+    @ApiModelProperty("工序")
+    @Excel(name = "工序")
     private Long stepId;
 
-    @ApiModelProperty("SIZE_ID")
-    @Excel(name = "SIZE_ID")
+    @ApiModelProperty("尺码")
+    @Excel(name = "尺码")
     private Long sizeId;
 
-    @ApiModelProperty("EMP_ID")
-    @Excel(name = "EMP_ID")
+    @ApiModelProperty("单位")
+    @Excel(name = "单位")
     private Long empId;
 
-    @ApiModelProperty("PRICE")
-    @Excel(name = "PRICE")
+    @ApiModelProperty("工价")
+    @Excel(name = "工价")
     private BigDecimal price;
 
     @ApiModelProperty("delFlag 0 正常  1  删除")
