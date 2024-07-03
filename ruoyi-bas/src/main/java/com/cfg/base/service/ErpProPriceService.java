@@ -68,9 +68,9 @@ public class ErpProPriceService {
         if (price != null) {
             qw.eq("price", price);
         }
-        Integer dr = query.getDr();
-        if (dr != null) {
-            qw.eq("dr", dr);
+        Integer delFlag = query.getDelFlag();
+        if (delFlag != null) {
+            qw.eq("del_flag", delFlag);
         }
         return erpProPriceMapper.selectList(qw);
     }

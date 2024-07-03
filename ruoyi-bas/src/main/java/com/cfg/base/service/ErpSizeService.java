@@ -63,9 +63,9 @@ public class ErpSizeService {
         if (seqNo != null) {
             qw.eq("seq_no", seqNo);
         }
-        Integer dr = query.getDr();
-        if (dr != null) {
-            qw.eq("dr", dr);
+        Integer delFlag = query.getDelFlag();
+        if (delFlag != null) {
+            qw.eq("del_flag", delFlag);
         }
         return erpSizeMapper.selectList(qw);
     }

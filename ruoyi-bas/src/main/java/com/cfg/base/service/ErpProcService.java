@@ -72,9 +72,9 @@ public class ErpProcService {
         if (!StringUtils.isEmpty(status)) {
             qw.eq("status", status);
         }
-        Integer dr = query.getDr();
-        if (dr != null) {
-            qw.eq("dr", dr);
+        Integer delFlag = query.getDelFlag();
+        if (delFlag != null) {
+            qw.eq("del_flag", delFlag);
         }
         Long empId = query.getEmpId();
         if (empId != null) {

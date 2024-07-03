@@ -81,9 +81,9 @@ public class ErpProBatchExeService {
         if (salary != null) {
             qw.eq("salary", salary);
         }
-        Integer dr = query.getDr();
-        if (dr != null) {
-            qw.eq("dr", dr);
+        Integer delFlag = query.getDelFlag();
+        if (delFlag != null) {
+            qw.eq("del_flag", delFlag);
         }
         return erpProBatchExeMapper.selectList(qw);
     }
