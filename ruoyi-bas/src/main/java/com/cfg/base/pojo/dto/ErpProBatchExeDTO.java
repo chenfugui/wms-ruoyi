@@ -20,5 +20,5 @@ public class ErpProBatchExeDTO extends BaseAudit {
     private Long scanBy;
     private LocalDateTime scanTime;
     private BigDecimal salary;
-    private Integer dr;
+    private Integer delFlag;
 }

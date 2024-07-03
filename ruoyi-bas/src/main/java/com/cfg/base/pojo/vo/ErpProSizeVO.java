@@ -31,7 +31,7 @@ public class ErpProSizeVO extends BaseAudit {
    /** 排序号 */
     @Excel(name = "排序号")
     private Long seqNo;
-   /** dr 1 正常  2  删除 */
-    @Excel(name = "dr 1 正常  2  删除")
-    private Integer dr;
+    /** 数据状态 1 正常  2  删除 */
+    @Excel(name = "delFlag 0 正常  1  删除")
+    private Integer delFlag;
 }

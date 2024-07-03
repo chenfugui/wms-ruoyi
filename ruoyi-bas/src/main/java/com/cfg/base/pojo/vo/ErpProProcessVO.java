@@ -38,7 +38,7 @@ public class ErpProProcessVO extends BaseAudit {
    /** 工序状态 */
     @Excel(name = "工序状态")
     private String status;
-   /** dr 1 正常  2  删除 */
-    @Excel(name = "dr 1 正常  2  删除")
-    private Integer dr;
+    /** 数据状态 1 正常  2  删除 */
+    @Excel(name = "delFlag 0 正常  1  删除")
+    private Integer delFlag;
 }

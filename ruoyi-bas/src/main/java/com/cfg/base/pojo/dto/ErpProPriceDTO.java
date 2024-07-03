@@ -16,5 +16,5 @@ public class ErpProPriceDTO extends BaseAudit {
     private Long sizeId;
     private Long empId;
     private BigDecimal price;
-    private Integer dr;
+    private Integer delFlag;
 }

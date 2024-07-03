@@ -16,5 +16,5 @@ public class ErpProSizeDTO extends BaseAudit {
     private String sizeCode;
     private String sizeName;
     private Long seqNo;
-    private Integer dr;
+    private Integer delFlag;
 }

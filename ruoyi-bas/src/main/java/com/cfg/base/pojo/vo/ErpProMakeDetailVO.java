@@ -40,9 +40,9 @@ public class ErpProMakeDetailVO extends BaseAudit {
    /** 生产数量 */
     @Excel(name = "生产数量")
     private Long makeNum;
-   /** dr 1 正常  2  删除 */
-    @Excel(name = "dr 1 正常  2  删除")
-    private Integer dr;
+    /** 数据状态 1 正常  2  删除 */
+    @Excel(name = "delFlag 0 正常  1  删除")
+    private Integer delFlag;
    /** 单位id */
     @Excel(name = "单位id")
     private Long empId;

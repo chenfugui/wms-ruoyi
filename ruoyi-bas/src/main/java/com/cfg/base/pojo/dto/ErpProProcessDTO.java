@@ -19,5 +19,5 @@ public class ErpProProcessDTO extends BaseAudit {
     private BigDecimal price;
     private Long seqNo;
     private String status;
-    private Integer dr;
+    private Integer delFlag;
 }

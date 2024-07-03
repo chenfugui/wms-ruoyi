@@ -38,7 +38,7 @@ public class ErpProBatchExeQuery {
     @ApiModelProperty("工资 精确匹配")
     private BigDecimal salary;
 
-    @ApiModelProperty("dr 1 正常  2  删除 精确匹配")
-    private Integer dr;
+    @ApiModelProperty("delFlag 0 正常  1  删除 精确匹配")
+    private Integer delFlag;
 
 }

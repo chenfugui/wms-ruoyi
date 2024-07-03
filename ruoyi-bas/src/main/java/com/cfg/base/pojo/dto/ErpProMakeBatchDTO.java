@@ -25,6 +25,6 @@ public class ErpProMakeBatchDTO extends BaseAudit {
     private Long pkgStartNo;
     private Long pkgEndNo;
     private Long empId;
-    private Integer dr;
+    private Integer delFlag;
     private Long seqNo;
 }

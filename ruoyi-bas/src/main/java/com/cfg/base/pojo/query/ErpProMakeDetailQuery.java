@@ -39,8 +39,8 @@ public class ErpProMakeDetailQuery {
     @ApiModelProperty("生产数量 精确匹配")
     private Long makeNum;
 
-    @ApiModelProperty("dr 1 正常  2  删除 精确匹配")
-    private Integer dr;
+    @ApiModelProperty("delFlag 0 正常  1  删除 精确匹配")
+    private Integer delFlag;
 
     @ApiModelProperty("单位id 精确匹配")
     private Long empId;

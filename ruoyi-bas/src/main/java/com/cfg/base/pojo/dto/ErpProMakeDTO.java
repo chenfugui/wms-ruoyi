@@ -19,5 +19,5 @@ public class ErpProMakeDTO extends BaseAudit {
     private String status;
     private Long empId;
     private Long seqNo;
-    private Integer dr;
+    private Integer delFlag;
 }

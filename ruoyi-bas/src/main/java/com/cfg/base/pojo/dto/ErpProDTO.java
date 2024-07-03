@@ -18,5 +18,5 @@ public class ErpProDTO extends BaseAudit {
     private String status;
     private Long empid;
     private Long seqNo;
-    private Integer dr;
+    private Integer delFlag;
 }

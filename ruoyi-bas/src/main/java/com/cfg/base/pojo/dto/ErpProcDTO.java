@@ -17,6 +17,6 @@ public class ErpProcDTO extends BaseAudit {
     private String empCode;
     private Long seqNo;
     private String status;
-    private Integer dr;
+    private Integer delFlag;
     private Long empId;
 }

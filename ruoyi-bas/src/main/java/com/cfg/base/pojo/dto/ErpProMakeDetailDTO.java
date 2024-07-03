@@ -19,6 +19,6 @@ public class ErpProMakeDetailDTO extends BaseAudit {
     private String clothCode;
     private String clothName;
     private Long makeNum;
-    private Integer dr;
+    private Integer delFlag;
     private Long empId;
 }

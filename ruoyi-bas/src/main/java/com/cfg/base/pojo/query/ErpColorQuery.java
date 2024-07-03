@@ -24,7 +24,7 @@ public class ErpColorQuery {
     @ApiModelProperty("顺序号 精确匹配")
     private Long seqNo;
 
-    @ApiModelProperty("dr 1 正常  2  删除 精确匹配")
-    private Integer dr;
+    @ApiModelProperty("delFlag 0 正常  1  删除 精确匹配")
+    private Integer delFlag;
 
 }
