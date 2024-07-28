@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiModelProperty;
 import com.ruoyi.common.core.domain.BaseAudit;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.util.List;
+
 /**
  * 服装产品管理对象 erp_pro
  * 
@@ -56,5 +59,14 @@ public class ErpPro extends BaseAudit {
     @ApiModelProperty("delFlag 0 正常  1  删除")
     @Excel(name = "delFlag 0 正常  1  删除")
     private Integer delFlag;
+
+    @ApiModelProperty("颜色列表")
+    private List<ErpProColor> colorList;
+    @ApiModelProperty("尺码列表")
+    private List<ErpProSize> sizeList;
+    @ApiModelProperty("工序列表")
+    private List<ErpProProcess> procList;
+    @ApiModelProperty("工价列表")
+    private List<ErpProPrice> priceList;
 
 }
