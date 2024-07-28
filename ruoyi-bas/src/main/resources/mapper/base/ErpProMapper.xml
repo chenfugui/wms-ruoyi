@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="proType != null  and proType != ''"> and pro_type = #{proType}</if>
             <if test="proMemo != null  and proMemo != ''"> and pro_memo = #{proMemo}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="empid != null "> and emp_id = #{empId}</if>
+            <if test="empId != null "> and emp_id = #{empId}</if>
             <if test="seqNo != null "> and seq_no = #{seqNo}</if>
             <if test="delFlag != null "> and del_flag = #{delFlag}</if>
         </where>
