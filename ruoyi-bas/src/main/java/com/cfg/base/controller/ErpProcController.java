@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.PageImpl;
@@ -55,6 +56,7 @@ public class ErpProcController extends BaseController {
     @Log(title = "服装工序管理", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public ResponseEntity<String> export(ErpProcQuery query) {
+        query.setEmpId(SecurityUtils.getEmpId());
         List<ErpProc> list = service.selectList(query, null);
         ExcelUtil<ErpProcVO> util = new ExcelUtil<>(ErpProcVO.class);
         return ResponseEntity.ok(util.writeExcel(convert.dos2vos(list), "服装工序管理数据"));

@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.PageImpl;
@@ -46,6 +47,7 @@ public class ErpProController extends BaseController {
     @PreAuthorize("@ss.hasPermi('base:erpPro:list')")
     @PostMapping("/list")
     public ResponseEntity<Page<ErpPro>> list(@RequestBody ErpProQuery query, Pageable page) {
+        query.setEmpid(SecurityUtils.getEmpId());
         List<ErpPro> list = service.selectList(query, page);
         return ResponseEntity.ok(new PageImpl<>(list, page, ((com.github.pagehelper.Page)list).getTotal()));
     }
@@ -55,6 +57,7 @@ public class ErpProController extends BaseController {
     @Log(title = "服装产品管理", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public ResponseEntity<String> export(ErpProQuery query) {
+        query.setEmpid(SecurityUtils.getEmpId());
         List<ErpPro> list = service.selectList(query, null);
         ExcelUtil<ErpProVO> util = new ExcelUtil<>(ErpProVO.class);
         return ResponseEntity.ok(util.writeExcel(convert.dos2vos(list), "服装产品管理数据"));

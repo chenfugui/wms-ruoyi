@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.PageImpl;
@@ -46,6 +47,7 @@ public class ErpColorController extends BaseController {
     @PreAuthorize("@ss.hasPermi('base:erpColor:list')")
     @PostMapping("/list")
     public ResponseEntity<Page<ErpColor>> list(@RequestBody ErpColorQuery query, Pageable page) {
+        query.setEmpId(SecurityUtils.getEmpId());
         List<ErpColor> list = service.selectList(query, page);
         return ResponseEntity.ok(new PageImpl<>(list, page, ((com.github.pagehelper.Page)list).getTotal()));
     }

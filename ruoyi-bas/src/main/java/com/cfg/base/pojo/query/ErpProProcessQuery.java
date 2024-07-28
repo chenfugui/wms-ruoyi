@@ -17,7 +17,7 @@ public class ErpProProcessQuery {
     private Long proId;
 
     @ApiModelProperty("单位ID 精确匹配")
-    private String empId;
+    private Long empId;
 
     @ApiModelProperty("工序id 精确匹配")
     private Long stepId;

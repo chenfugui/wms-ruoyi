@@ -4,13 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.domain.*;
+import com.cfg.base.mapper.*;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.PropertyResolver;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import com.cfg.base.mapper.ErpProMapper;
-import com.cfg.base.domain.ErpPro;
 import com.cfg.base.pojo.query.ErpProQuery;
 
 /**
@@ -24,6 +25,20 @@ public class ErpProService {
     @Autowired
     private ErpProMapper erpProMapper;
 
+    @Autowired
+    private ErpProProcessMapper proProcessMapper;
+
+    @Autowired
+    private ErpProSizeMapper proSizeMapper;
+
+    @Autowired
+    private ErpProColorMapper proColorMapper;
+
+    @Autowired
+    private ErpProPriceMapper proPriceMapper;
+
+    private PropertyResolver propertyResolver;
+
     /**
      * 查询服装产品管理
      *
@@ -31,7 +46,26 @@ public class ErpProService {
      * @return 服装产品管理
      */
     public ErpPro selectByProId(Long proId) {
-        return erpProMapper.selectById(proId);
+        ErpPro product =  erpProMapper.selectById(proId);
+        if (null != product) {
+            ErpProProcess proProcess = proProcessMapper.selectById(proId);
+            proProcess.setProId(proId);
+            List<ErpProProcess> proProcesseList = proProcessMapper.selectByEntity(proProcess);
+            product.setProcList(proProcesseList);
+            ErpProColor proColor = new ErpProColor();
+            proColor.setProId(proId);
+            List<ErpProColor> proColorList = proColorMapper.selectByEntity(proColor);
+            product.setColorList(proColorList);
+            ErpProSize proSize = new ErpProSize();
+            proSize.setProId(proId);
+            List<ErpProSize> proSizeList = proSizeMapper.selectByEntity(proSize);
+            product.setSizeList(proSizeList);
+            ErpProPrice proPrice = new ErpProPrice();
+            proPrice.setProId(proId);
+            List<ErpProPrice> proPriceList = proPriceMapper.selectByEntity(proPrice);
+            product.setPriceList(proPriceList);
+        }
+        return product;
     }
 
     /**

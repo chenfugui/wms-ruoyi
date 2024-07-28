@@ -5,6 +5,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +47,10 @@ public class ErpProColorService {
             PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize());
         }
         QueryWrapper<ErpProColor> qw = new QueryWrapper<>();
+       Long empId =SecurityUtils.getEmpId();
+       if (empId != null) {
+           qw.eq("emp_id",empId);
+       }
         qw.eq("del_flag",0);
         Long proId = query.getProId();
         if (proId != null) {

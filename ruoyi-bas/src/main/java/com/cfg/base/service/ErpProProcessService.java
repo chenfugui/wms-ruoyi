@@ -52,8 +52,8 @@ public class ErpProProcessService {
         if (proId != null) {
             qw.eq("pro_id", proId);
         }
-        String empId = query.getEmpId();
-        if (!StringUtils.isEmpty(empId)) {
+        Long empId = query.getEmpId();
+        if (null!=empId) {
             qw.eq("emp_id", empId);
         }
         Long stepId = query.getStepId();

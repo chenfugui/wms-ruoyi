@@ -29,7 +29,7 @@ public class ErpProProcess extends BaseAudit {
 
     @ApiModelProperty("单位ID")
     @Excel(name = "单位ID")
-    private String empId;
+    private Long empId;
 
     @ApiModelProperty("工序id")
     @Excel(name = "工序id")

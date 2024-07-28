@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.PageImpl;
@@ -46,6 +47,7 @@ public class ErpProMakeBatchController extends BaseController {
     @PreAuthorize("@ss.hasPermi('base:erpProMakeBatch:list')")
     @PostMapping("/list")
     public ResponseEntity<Page<ErpProMakeBatch>> list(@RequestBody ErpProMakeBatchQuery query, Pageable page) {
+        query.setEmpId(SecurityUtils.getEmpId());
         List<ErpProMakeBatch> list = service.selectList(query, page);
         return ResponseEntity.ok(new PageImpl<>(list, page, ((com.github.pagehelper.Page)list).getTotal()));
     }
