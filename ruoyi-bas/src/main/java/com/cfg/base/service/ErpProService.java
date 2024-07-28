@@ -4,9 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.convert.ErpProConvert;
+import com.cfg.base.convert.ErpProConvertImpl;
 import com.cfg.base.domain.*;
 import com.cfg.base.mapper.*;
+import com.cfg.base.pojo.dto.ErpProDTO;
 import com.cfg.idgen.service.IdGenService;
+import com.cfg.idgen.util.CommonUtils;
+import com.cfg.idgen.util.ConvertUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,27 +54,28 @@ public class ErpProService {
      * @param proId 服装产品管理主键
      * @return 服装产品管理
      */
-    public ErpPro selectByProId(Long proId) {
+    public ErpProDTO selectByProId(Long proId) {
         ErpPro product =  erpProMapper.selectById(proId);
+        ErpProDTO erpProDTO= ConvertUtils.convert(product, ErpProDTO.class);
         if (null != product) {
             ErpProProcess proProcess = proProcessMapper.selectById(proId);
             proProcess.setProId(proId);
             List<ErpProProcess> proProcesseList = proProcessMapper.selectByEntity(proProcess);
-            product.setProcList(proProcesseList);
+            erpProDTO.setProcList(proProcesseList);
             ErpProColor proColor = new ErpProColor();
             proColor.setProId(proId);
             List<ErpProColor> proColorList = proColorMapper.selectByEntity(proColor);
-            product.setColorList(proColorList);
+            erpProDTO.setColorList(proColorList);
             ErpProSize proSize = new ErpProSize();
             proSize.setProId(proId);
             List<ErpProSize> proSizeList = proSizeMapper.selectByEntity(proSize);
-            product.setSizeList(proSizeList);
+            erpProDTO.setSizeList(proSizeList);
             ErpProPrice proPrice = new ErpProPrice();
             proPrice.setProId(proId);
             List<ErpProPrice> proPriceList = proPriceMapper.selectByEntity(proPrice);
-            product.setPriceList(proPriceList);
+            erpProDTO.setPriceList(proPriceList);
         }
-        return product;
+        return erpProDTO;
     }
 
     /**

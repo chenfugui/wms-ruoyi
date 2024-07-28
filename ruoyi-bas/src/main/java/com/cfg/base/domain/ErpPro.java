@@ -60,13 +60,4 @@ public class ErpPro extends BaseAudit {
     @Excel(name = "delFlag 0 正常  1  删除")
     private Integer delFlag;
 
-    @ApiModelProperty("颜色列表")
-    private List<ErpProColor> colorList;
-    @ApiModelProperty("尺码列表")
-    private List<ErpProSize> sizeList;
-    @ApiModelProperty("工序列表")
-    private List<ErpProProcess> procList;
-    @ApiModelProperty("工价列表")
-    private List<ErpProPrice> priceList;
-
 }

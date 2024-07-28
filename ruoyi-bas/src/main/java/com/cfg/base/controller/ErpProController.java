@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.cfg.base.pojo.dto.ErpProDTO;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -66,7 +67,7 @@ public class ErpProController extends BaseController {
     @ApiOperation("获取服装产品管理详细信息")
     @PreAuthorize("@ss.hasPermi('base:erpPro:query')")
     @GetMapping(value = "/{proId}")
-    public ResponseEntity<ErpPro> getInfo(@PathVariable("proId") Long proId) {
+    public ResponseEntity<ErpProDTO> getInfo(@PathVariable("proId") Long proId) {
         return ResponseEntity.ok(service.selectByProId(proId));
     }
 
