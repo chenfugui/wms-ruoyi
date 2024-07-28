@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.service.IdGenService;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ import com.cfg.base.pojo.query.ErpProColorQuery;
 public class ErpProColorService {
     @Autowired
     private ErpProColorMapper erpProColorMapper;
+
+    @Autowired
+    private IdGenService idGenService;
 
     /**
      * 查询产品颜色管理
@@ -76,6 +80,7 @@ public class ErpProColorService {
     public int insert(ErpProColor erpProColor) {
         erpProColor.setDelFlag(0);
         erpProColor.setCreateTime(LocalDateTime.now());
+        erpProColor.setId(idGenService.getSeqId("color_id"));
         return erpProColorMapper.insert(erpProColor);
     }
 

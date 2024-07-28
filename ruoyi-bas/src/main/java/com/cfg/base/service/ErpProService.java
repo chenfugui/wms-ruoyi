@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.base.domain.*;
 import com.cfg.base.mapper.*;
+import com.cfg.idgen.service.IdGenService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.PropertyResolver;
@@ -38,6 +39,8 @@ public class ErpProService {
     private ErpProPriceMapper proPriceMapper;
 
     private PropertyResolver propertyResolver;
+    @Autowired
+    private IdGenService idGenService;
 
     /**
      * 查询服装产品管理
@@ -129,6 +132,7 @@ public class ErpProService {
     public int insert(ErpPro erpPro) {
         erpPro.setDelFlag(0);
         erpPro.setCreateTime(LocalDateTime.now());
+        erpPro.setProId(idGenService.getSeqId("pro_id"));
         return erpProMapper.insert(erpPro);
     }
 

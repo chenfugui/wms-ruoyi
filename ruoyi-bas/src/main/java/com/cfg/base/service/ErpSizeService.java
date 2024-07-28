@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.service.IdGenService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,9 @@ import com.cfg.base.pojo.query.ErpSizeQuery;
 public class ErpSizeService {
     @Autowired
     private ErpSizeMapper erpSizeMapper;
+
+    @Autowired
+    private IdGenService idGenService;
 
     /**
      * 查询服装尺码管理
@@ -79,6 +83,7 @@ public class ErpSizeService {
     public int insert(ErpSize erpSize) {
         erpSize.setDelFlag(0);
         erpSize.setCreateTime(LocalDateTime.now());
+        erpSize.setId(idGenService.getSeqId("size_id"));
         return erpSizeMapper.insert(erpSize);
     }
 

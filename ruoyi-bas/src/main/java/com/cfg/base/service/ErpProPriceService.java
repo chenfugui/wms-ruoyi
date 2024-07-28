@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.service.IdGenService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,9 @@ import com.cfg.base.pojo.query.ErpProPriceQuery;
 public class ErpProPriceService {
     @Autowired
     private ErpProPriceMapper erpProPriceMapper;
+
+    @Autowired
+    private IdGenService idGenService;
 
     /**
      * 查询服装工价信息
@@ -84,6 +88,7 @@ public class ErpProPriceService {
     public int insert(ErpProPrice erpProPrice) {
         erpProPrice.setDelFlag(0);
         erpProPrice.setCreateTime(LocalDateTime.now());
+        erpProPrice.setId(idGenService.getSeqId("price_id"));
         return erpProPriceMapper.insert(erpProPrice);
     }
 

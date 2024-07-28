@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.service.IdGenService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,9 @@ import com.cfg.base.pojo.query.ErpProBatchExeQuery;
 public class ErpProBatchExeService {
     @Autowired
     private ErpProBatchExeMapper erpProBatchExeMapper;
+
+    @Autowired
+    private IdGenService idGenService;
 
     /**
      * 查询服装生产进度
@@ -97,6 +101,7 @@ public class ErpProBatchExeService {
     public int insert(ErpProBatchExe erpProBatchExe) {
         erpProBatchExe.setDelFlag(0);
         erpProBatchExe.setCreateTime(LocalDateTime.now());
+        erpProBatchExe.setId(idGenService.getSeqId("exe_id"));
         return erpProBatchExeMapper.insert(erpProBatchExe);
     }
 
