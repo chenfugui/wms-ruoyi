@@ -111,7 +111,7 @@ public class ErpProService {
         }
         Long empid = query.getEmpid();
         if (empid != null) {
-            qw.eq("empId", empid);
+            qw.eq("emp_id", empid);
         }
         Long seqNo = query.getSeqNo();
         if (seqNo != null) {
