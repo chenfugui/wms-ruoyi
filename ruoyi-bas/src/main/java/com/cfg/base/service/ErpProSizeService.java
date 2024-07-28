@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.idgen.service.IdGenService;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
@@ -92,6 +93,7 @@ public class ErpProSizeService {
         erpProSize.setDelFlag(0);
         erpProSize.setCreateTime(LocalDateTime.now());
         erpProSize.setId(idGenService.getSeqId("size_id"));
+        erpProSize.setEmpId(SecurityUtils.getEmpId());
         return erpProSizeMapper.insert(erpProSize);
     }
 

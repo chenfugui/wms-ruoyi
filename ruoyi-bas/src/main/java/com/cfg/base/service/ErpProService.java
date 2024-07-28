@@ -8,6 +8,7 @@ import com.cfg.base.domain.*;
 import com.cfg.base.mapper.*;
 import com.cfg.idgen.service.IdGenService;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.PropertyResolver;
 import org.springframework.data.domain.Pageable;
@@ -133,6 +134,7 @@ public class ErpProService {
         erpPro.setDelFlag(0);
         erpPro.setCreateTime(LocalDateTime.now());
         erpPro.setProId(idGenService.getSeqId("pro_id"));
+        erpPro.setEmpId(SecurityUtils.getEmpId());
         return erpProMapper.insert(erpPro);
     }
 

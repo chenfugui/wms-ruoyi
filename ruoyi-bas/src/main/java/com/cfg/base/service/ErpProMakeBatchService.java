@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.idgen.service.IdGenService;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
@@ -132,6 +133,7 @@ public class ErpProMakeBatchService {
         erpProMakeBatch.setDelFlag(0);
         erpProMakeBatch.setCreateTime(LocalDateTime.now());
         erpProMakeBatch.setId(idGenService.getSeqId("batch_id"));
+        erpProMakeBatch.setEmpId(SecurityUtils.getEmpId());
         return erpProMakeBatchMapper.insert(erpProMakeBatch);
     }
 

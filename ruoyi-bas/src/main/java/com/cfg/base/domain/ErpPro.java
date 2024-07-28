@@ -50,7 +50,7 @@ public class ErpPro extends BaseAudit {
 
     @ApiModelProperty("单位ID")
     @Excel(name = "单位ID")
-    private Long empid;
+    private Long empId;
 
     @ApiModelProperty("顺序号")
     @Excel(name = "顺序号")

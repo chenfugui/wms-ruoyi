@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="proType" column="pro_type"/>
         <result property="proMemo" column="pro_memo"/>
         <result property="status" column="status"/>
-        <result property="empid" column="empId"/>
+        <result property="empId" column="emp_id"/>
         <result property="seqNo" column="seq_no"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectErpProVo">
-        select pro_id, pro_code, pro_name, pro_desc, pro_type, pro_memo, status, empId, seq_no, create_by, create_time, update_by, update_time, del_flag   from erp_pro
+        select pro_id, pro_code, pro_name, pro_desc, pro_type, pro_memo, status, emp_id, seq_no, create_by, create_time, update_by, update_time, del_flag   from erp_pro
     </sql>
 
     <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpPro" resultMap="ErpProResult">
@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="proType != null  and proType != ''"> and pro_type = #{proType}</if>
             <if test="proMemo != null  and proMemo != ''"> and pro_memo = #{proMemo}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="empid != null "> and empId = #{empid}</if>
+            <if test="empid != null "> and emp_id = #{empId}</if>
             <if test="seqNo != null "> and seq_no = #{seqNo}</if>
             <if test="delFlag != null "> and del_flag = #{delFlag}</if>
         </where>

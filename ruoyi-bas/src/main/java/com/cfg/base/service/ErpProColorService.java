@@ -81,6 +81,7 @@ public class ErpProColorService {
         erpProColor.setDelFlag(0);
         erpProColor.setCreateTime(LocalDateTime.now());
         erpProColor.setId(idGenService.getSeqId("color_id"));
+        erpProColor.setEmpId(SecurityUtils.getEmpId());
         return erpProColorMapper.insert(erpProColor);
     }
 
