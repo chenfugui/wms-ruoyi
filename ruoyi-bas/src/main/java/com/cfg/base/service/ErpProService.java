@@ -1,25 +1,22 @@
 package com.cfg.base.service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.cfg.base.convert.ErpProConvert;
-import com.cfg.base.convert.ErpProConvertImpl;
 import com.cfg.base.domain.*;
 import com.cfg.base.mapper.*;
 import com.cfg.base.pojo.dto.ErpProDTO;
+import com.cfg.base.pojo.query.ErpProQuery;
 import com.cfg.idgen.service.IdGenService;
-import com.cfg.idgen.util.CommonUtils;
 import com.cfg.idgen.util.ConvertUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.PropertyResolver;
 import org.springframework.data.domain.Pageable;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import com.cfg.base.pojo.query.ErpProQuery;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 服装产品管理Service业务层处理
