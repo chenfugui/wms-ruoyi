@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.PropertyResolver;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,6 +45,14 @@ public class ErpProService {
     private PropertyResolver propertyResolver;
     @Autowired
     private IdGenService idGenService;
+    @Autowired
+    private ErpProSizeService proSizeService;
+    @Autowired
+    private ErpProColorService proColorService;
+    @Autowired
+    private ErpProPriceService proPriceService;
+    @Autowired
+    private ErpProProcessService proProcessService;
 
     /**
      * 查询服装产品管理
@@ -140,6 +149,50 @@ public class ErpProService {
         erpPro.setEmpId(SecurityUtils.getEmpId());
         return erpProMapper.insert(erpPro);
     }
+
+    /**
+     * 新增服装产品管理
+     * @param erpProDTO 服装产品管理
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public int insertAll(ErpProDTO erpProDTO) {
+        ErpPro erpPro = ConvertUtils.convert(erpProDTO, ErpPro.class);
+        erpPro.setDelFlag(0);
+        erpPro.setCreateTime(LocalDateTime.now());
+        erpPro.setProId(idGenService.getSeqId("pro_id"));
+        erpPro.setEmpId(SecurityUtils.getEmpId());
+        int num =erpProMapper.insert(erpPro);
+        List<ErpProColor> proColorList = erpProDTO.getColorList();
+        List<ErpProSize> proSizeList = erpProDTO.getSizeList();
+        List<ErpProProcess> proProcList = erpProDTO.getProcList();
+        if(null!=proColorList&& !proColorList.isEmpty()){
+            for (int i = 0; i < proColorList.size(); i++) {
+                ErpProColor  proColor = proColorList.get(i);
+                proColor.setProId(erpPro.getProId());
+                proColor.setSeqno((long) (i + 1));
+                proColorService.insert(proColor);
+            }
+        }
+        if(null!=proSizeList&& !proSizeList.isEmpty()){
+            for (int i = 0; i < proSizeList.size(); i++) {
+                ErpProSize  proSize = proSizeList.get(i);
+                proSize.setProId(erpPro.getProId());
+                proSize.setSeqNo((long) (i + 1));
+                proSizeService.insert(proSize);
+            }
+        }
+        if(null!=proProcList&& !proProcList.isEmpty()){
+            for (int i = 0; i < proProcList.size(); i++) {
+                ErpProProcess  proProcess = proProcList.get(i);
+                proProcess.setProId(erpPro.getProId());
+                proProcess.setSeqNo((long) (i + 1));
+                proProcessService.insert(proProcess);
+            }
+        }
+        return num;
+    }
+
 
     /**
      * 修改服装产品管理

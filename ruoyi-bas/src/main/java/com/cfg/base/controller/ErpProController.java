@@ -94,4 +94,13 @@ public class ErpProController extends BaseController {
     public ResponseEntity<Integer> remove(@PathVariable Long[] proIds) {
         return ResponseEntity.ok(service.deleteByProIds(proIds));
     }
+
+    @ApiOperation("新增服装产品管理")
+    @PreAuthorize("@ss.hasPermi('base:erpPro:add')")
+    @Log(title = "服装产品管理", businessType = BusinessType.INSERT)
+    @PostMapping("/insertall")
+    public ResponseEntity<Integer> addProInfo(@RequestBody ErpProDTO erpProDTO) {
+        return ResponseEntity.ok(service.insertAll(erpProDTO));
+    }
+
 }

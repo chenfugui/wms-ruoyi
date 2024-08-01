@@ -1,6 +1,8 @@
 package com.cfg.base.mapper;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import com.cfg.base.domain.ErpProProcess;
@@ -25,4 +27,14 @@ public interface ErpProProcessMapper extends BaseMapper<ErpProProcess> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+
+    /***
+     * @author chenfg
+     * @date: 2024/8/1 20:58
+     * @description:  查询工序列表
+     * @param queryWrapper
+     * @return: java.util.List<java.lang.String>
+     */
+    List<String> selectProcessNameList(@Param("ew") Wrapper<String> queryWrapper);
 }

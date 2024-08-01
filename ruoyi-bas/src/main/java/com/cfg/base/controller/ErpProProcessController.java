@@ -92,4 +92,13 @@ public class ErpProProcessController extends BaseController {
     public ResponseEntity<Integer> remove(@PathVariable Long[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
     }
+
+    @ApiOperation("查询服装工序信息列表")
+    @PreAuthorize("@ss.hasPermi('base:erpProProcess:list')")
+    @PostMapping("/listName")
+    public ResponseEntity<List<String>> listName(@RequestBody ErpProProcessQuery query) {
+        query.setEmpId(SecurityUtils.getEmpId());
+        List<String> processList = service.selectProcessNameList(query);
+        return ResponseEntity.ok(processList);
+    }
 }

@@ -51,4 +51,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
     </update>
+
+
+    <select id="selectProcessNameList" parameterType="com.cfg.base.domain.ErpProProcess" resultMap="ErpProProcessResult">
+        select distinct step_name  from erp_pro_process
+        <where>
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="empId != null  and empId != ''"> and emp_id = #{empId}</if>
+            <if test="stepId != null "> and step_id = #{stepId}</if>
+            <if test="stepCode != null  and stepCode != ''"> and step_code = #{stepCode}</if>
+            <if test="stepName != null  and stepName != ''"> and step_name like concat('%', #{stepName}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="seqNo != null "> and seq_no = #{seqNo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+        </where>
+        order by step_name
+    </select>
 </mapper>

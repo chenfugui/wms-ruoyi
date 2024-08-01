@@ -92,6 +92,54 @@ public class ErpProProcessService {
         return erpProProcessMapper.selectList(qw);
     }
 
+
+    /**
+     * 查询服装工序名称列表
+     * @param query 查询条件
+     * @return 服装工序信息
+     */
+    public List<String> selectProcessNameList(ErpProProcessQuery query) {
+        QueryWrapper<String> qw = new QueryWrapper<>();
+        qw.eq("del_flag",0);
+        Long proId = query.getProId();
+        if (proId != null) {
+            qw.eq("pro_id", proId);
+        }
+        Long empId = query.getEmpId();
+        if (null!=empId) {
+            qw.eq("emp_id", empId);
+        }
+        Long stepId = query.getStepId();
+        if (stepId != null) {
+            qw.eq("step_id", stepId);
+        }
+        String stepCode = query.getStepCode();
+        if (!StringUtils.isEmpty(stepCode)) {
+            qw.eq("step_code", stepCode);
+        }
+        String stepNameLike = query.getStepNameLike();
+        if (!StringUtils.isEmpty(stepNameLike)) {
+            qw.like("step_name", stepNameLike);
+        }
+        BigDecimal price = query.getPrice();
+        if (price != null) {
+            qw.eq("price", price);
+        }
+        Long seqNo = query.getSeqNo();
+        if (seqNo != null) {
+            qw.eq("seq_no", seqNo);
+        }
+        String status = query.getStatus();
+        if (!StringUtils.isEmpty(status)) {
+            qw.eq("status", status);
+        }
+        Integer delFlag = query.getDelFlag();
+        if (delFlag != null) {
+            qw.eq("del_flag", delFlag);
+        }
+        return erpProProcessMapper.selectProcessNameList(qw);
+    }
+
     /**
      * 新增服装工序信息
      *
