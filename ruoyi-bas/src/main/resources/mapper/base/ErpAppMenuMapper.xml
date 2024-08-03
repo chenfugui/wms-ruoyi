@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.ErpAppMenuMapper">
+    
+    <resultMap type="com.cfg.base.domain.ErpAppMenu" id="ErpAppMenuResult">
+        <result property="id" column="id"/>
+        <result property="catalogId" column="catalog_id"/>
+        <result property="catalogName" column="catalog_name"/>
+        <result property="menuCode" column="menu_code"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="menuPath" column="menu_path"/>
+        <result property="seqNo" column="seq_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectErpAppMenuVo">
+        select id, catalog_id, catalog_name, menu_code, menu_name, menu_path, seq_no, create_by, create_time, update_by, update_time, del_flag   from erp_app_menu
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpAppMenu" resultMap="ErpAppMenuResult">
+        <include refid="selectErpAppMenuVo"/>
+        <where>  
+            <if test="catalogName != null  and catalogName != ''"> and catalog_name like concat('%', #{catalogName}, '%')</if>
+            <if test="menuCode != null  and menuCode != ''"> and menu_code = #{menuCode}</if>
+            <if test="menuName != null  and menuName != ''"> and menu_name like concat('%', #{menuName}, '%')</if>
+            <if test="menuPath != null  and menuPath != ''"> and menu_path = #{menuPath}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update erp_app_menu set del_flag=1
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>
