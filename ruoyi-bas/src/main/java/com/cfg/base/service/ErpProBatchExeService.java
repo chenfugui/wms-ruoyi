@@ -7,6 +7,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.idgen.service.IdGenService;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,7 @@ public class ErpProBatchExeService {
         erpProBatchExe.setCreateTime(LocalDateTime.now());
         erpProBatchExe.setId(idGenService.getSeqId("exe_id"));
         erpProBatchExe.setEmpId(SecurityUtils.getEmpId());
+        OperatorUtils.setCreateInfo(erpProBatchExe);
         return erpProBatchExeMapper.insert(erpProBatchExe);
     }
 
@@ -114,6 +116,7 @@ public class ErpProBatchExeService {
      * @return 结果
      */
     public int update(ErpProBatchExe erpProBatchExe) {
+        OperatorUtils.setUpdateInfo(erpProBatchExe);
         return erpProBatchExeMapper.updateById(erpProBatchExe);
     }
 

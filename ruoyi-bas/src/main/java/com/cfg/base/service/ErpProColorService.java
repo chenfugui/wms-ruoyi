@@ -5,6 +5,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.idgen.service.IdGenService;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,7 @@ public class ErpProColorService {
         erpProColor.setCreateTime(LocalDateTime.now());
         erpProColor.setId(idGenService.getSeqId("color_id"));
         erpProColor.setEmpId(SecurityUtils.getEmpId());
+        OperatorUtils.setCreateInfo(erpProColor);
         return erpProColorMapper.insert(erpProColor);
     }
 
@@ -92,6 +94,7 @@ public class ErpProColorService {
      * @return 结果
      */
     public int update(ErpProColor erpProColor) {
+        OperatorUtils.setUpdateInfo(erpProColor);
         return erpProColorMapper.updateById(erpProColor);
     }
 

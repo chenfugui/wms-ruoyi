@@ -6,6 +6,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.idgen.service.IdGenService;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,7 @@ public class ErpProcService {
         erpProc.setCreateTime(LocalDateTime.now());
         erpProc.setId(idGenService.getSeqId("proc_id"));
         erpProc.setEmpId(SecurityUtils.getEmpId());
+        OperatorUtils.setCreateInfo(erpProc);
         return erpProcMapper.insert(erpProc);
     }
 
@@ -109,6 +111,7 @@ public class ErpProcService {
      * @return 结果
      */
     public int update(ErpProc erpProc) {
+        OperatorUtils.setUpdateInfo(erpProc);
         return erpProcMapper.updateById(erpProc);
     }
 

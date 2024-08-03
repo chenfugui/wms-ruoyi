@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +47,6 @@ public class ErpAppRoleMenuService {
             PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize());
         }
         QueryWrapper<ErpAppRoleMenu> qw = new QueryWrapper<>();
-        qw.eq("del_flag",0);
         String roleId = query.getRoleId();
         if (!StringUtils.isEmpty(roleId)) {
             qw.eq("role_id", roleId);
@@ -66,6 +66,7 @@ public class ErpAppRoleMenuService {
      */
     public int insert(ErpAppRoleMenu erpAppRoleMenu) {
         erpAppRoleMenu.setCreateTime(LocalDateTime.now());
+        OperatorUtils.setCreateInfo(erpAppRoleMenu);
         return erpAppRoleMenuMapper.insert(erpAppRoleMenu);
     }
 
@@ -76,6 +77,7 @@ public class ErpAppRoleMenuService {
      * @return 结果
      */
     public int update(ErpAppRoleMenu erpAppRoleMenu) {
+        OperatorUtils.setUpdateInfo(erpAppRoleMenu);
         return erpAppRoleMenuMapper.updateById(erpAppRoleMenu);
     }
 
@@ -86,7 +88,7 @@ public class ErpAppRoleMenuService {
      * @return 结果
      */
     public int deleteByIds(Long[] ids) {
-        return erpAppRoleMenuMapper.updateDelFlagByIds(ids);
+        return erpAppRoleMenuMapper.deleteByIds(ids);
     }
 
     /**
@@ -97,6 +99,6 @@ public class ErpAppRoleMenuService {
      */
     public int deleteById(Long id) {
         Long[] ids = {id};
-        return erpAppRoleMenuMapper.updateDelFlagByIds(ids);
+        return erpAppRoleMenuMapper.deleteByIds(ids);
     }
 }

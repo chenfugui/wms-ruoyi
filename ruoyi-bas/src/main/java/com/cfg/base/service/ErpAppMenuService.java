@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -75,6 +76,7 @@ public class ErpAppMenuService {
     public int insert(ErpAppMenu erpAppMenu) {
         erpAppMenu.setDelFlag(0);
         erpAppMenu.setCreateTime(LocalDateTime.now());
+        OperatorUtils.setCreateInfo(erpAppMenu);
         return erpAppMenuMapper.insert(erpAppMenu);
     }
 
@@ -85,6 +87,7 @@ public class ErpAppMenuService {
      * @return 结果
      */
     public int update(ErpAppMenu erpAppMenu) {
+        OperatorUtils.setUpdateInfo(erpAppMenu);
         return erpAppMenuMapper.updateById(erpAppMenu);
     }
 

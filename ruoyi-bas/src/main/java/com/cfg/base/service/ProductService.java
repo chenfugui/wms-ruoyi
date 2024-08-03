@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,7 @@ public class ProductService {
     public int insert(Product product) {
         product.setDelFlag("0");
         product.setCreateTime(LocalDateTime.now());
+        OperatorUtils.setCreateInfo(product);
         return productMapper.insert(product);
     }
 
@@ -99,6 +101,7 @@ public class ProductService {
      */
     public int update(Product product) {
         product.setEmpId(null);
+        OperatorUtils.setUpdateInfo(product);
         return productMapper.updateById(product);
     }
 

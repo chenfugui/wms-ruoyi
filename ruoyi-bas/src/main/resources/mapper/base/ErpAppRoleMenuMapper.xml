@@ -30,10 +30,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <update id="updateDelFlagByIds">
-        update erp_app_role_menu set del_flag=1
+    <delete id="deleteByIds">
+        delete from  erp_app_role_menu
         <where>
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
-    </update>
+    </delete>
 </mapper>

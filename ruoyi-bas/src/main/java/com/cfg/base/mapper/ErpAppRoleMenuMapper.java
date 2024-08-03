@@ -24,5 +24,5 @@ public interface ErpAppRoleMenuMapper extends BaseMapper<ErpAppRoleMenu> {
      * @param ids
      * @return
     */
-    int updateDelFlagByIds(@Param("ids") Long[] ids);
+    int deleteByIds(@Param("ids") Long[] ids);
 }

@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Data
 public class ErpProDTO extends BaseAudit {
-    private Long proId;
+    private Long id;
     private String proCode;
     private String proName;
     private String proDesc;

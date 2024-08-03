@@ -3,6 +3,7 @@ package com.cfg.base.service;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.system.domain.SysPost;
@@ -91,6 +92,7 @@ public class CommonEmpService {
         commonEmp.setDelFlag("0");
         commonEmp.setCreateTime(LocalDateTime.now());
         //return commonEmpMapper.insert(commonEmp);
+        OperatorUtils.setCreateInfo(commonEmp);
         int i = commonEmpMapper.insertEmp(commonEmp);
         if(null==commonEmp.getParentId()||0==commonEmp.getParentId()){
             SysDept dept = new SysDept();
@@ -99,6 +101,7 @@ public class CommonEmpService {
             dept.setOrderNum("0");
             dept.setAncestors("0");
             dept.setDelFlag(commonEmp.getDelFlag());
+            OperatorUtils.setCreateInfo(dept);
             deptMapper.insertDept(dept);
         }
 
@@ -116,6 +119,7 @@ public class CommonEmpService {
      * @return 结果
      */
     public int update(CommonEmp commonEmp) {
+        OperatorUtils.setUpdateInfo(commonEmp);
         return commonEmpMapper.updateById(commonEmp);
     }
 

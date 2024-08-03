@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -84,6 +85,7 @@ public class CommonStepService {
     public int insert(CommonStep commonStep) {
         commonStep.setDelFlag("1");
         commonStep.setCreateTime(LocalDateTime.now());
+        OperatorUtils.setCreateInfo(commonStep);
         return commonStepMapper.insert(commonStep);
     }
 
@@ -94,6 +96,7 @@ public class CommonStepService {
      * @return 结果
      */
     public int update(CommonStep commonStep) {
+        OperatorUtils.setUpdateInfo(commonStep);
         return commonStepMapper.updateById(commonStep);
     }
 

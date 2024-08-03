@@ -7,6 +7,7 @@ import com.cfg.base.pojo.dto.ErpProDTO;
 import com.cfg.base.pojo.query.ErpProQuery;
 import com.cfg.idgen.service.IdGenService;
 import com.cfg.idgen.util.ConvertUtils;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -64,7 +65,7 @@ public class ErpProService {
         ErpPro product =  erpProMapper.selectById(proId);
         ErpProDTO erpProDTO= ConvertUtils.convert(product, ErpProDTO.class);
         if (null != product) {
-            ErpProProcess proProcess = proProcessMapper.selectById(proId);
+            ErpProProcess proProcess = new ErpProProcess();
             proProcess.setProId(proId);
             List<ErpProProcess> proProcesseList = proProcessMapper.selectByEntity(proProcess);
             erpProDTO.setProcList(proProcesseList);
@@ -143,9 +144,10 @@ public class ErpProService {
      * @return 结果
      */
     public int insert(ErpPro erpPro) {
+        OperatorUtils.setCreateInfo(erpPro);
         erpPro.setDelFlag(0);
         erpPro.setCreateTime(LocalDateTime.now());
-        erpPro.setProId(idGenService.getSeqId("pro_id"));
+        erpPro.setId(idGenService.getSeqId("pro_id"));
         erpPro.setEmpId(SecurityUtils.getEmpId());
         return erpProMapper.insert(erpPro);
     }
@@ -160,7 +162,7 @@ public class ErpProService {
         ErpPro erpPro = ConvertUtils.convert(erpProDTO, ErpPro.class);
         erpPro.setDelFlag(0);
         erpPro.setCreateTime(LocalDateTime.now());
-        erpPro.setProId(idGenService.getSeqId("pro_id"));
+        erpPro.setId(idGenService.getSeqId("pro_id"));
         erpPro.setEmpId(SecurityUtils.getEmpId());
         int num =erpProMapper.insert(erpPro);
         List<ErpProColor> proColorList = erpProDTO.getColorList();
@@ -169,7 +171,7 @@ public class ErpProService {
         if(null!=proColorList&& !proColorList.isEmpty()){
             for (int i = 0; i < proColorList.size(); i++) {
                 ErpProColor  proColor = proColorList.get(i);
-                proColor.setProId(erpPro.getProId());
+                proColor.setProId(erpPro.getId());
                 proColor.setSeqno((long) (i + 1));
                 proColorService.insert(proColor);
             }
@@ -177,7 +179,7 @@ public class ErpProService {
         if(null!=proSizeList&& !proSizeList.isEmpty()){
             for (int i = 0; i < proSizeList.size(); i++) {
                 ErpProSize  proSize = proSizeList.get(i);
-                proSize.setProId(erpPro.getProId());
+                proSize.setProId(erpPro.getId());
                 proSize.setSeqNo((long) (i + 1));
                 proSizeService.insert(proSize);
             }
@@ -185,7 +187,7 @@ public class ErpProService {
         if(null!=proProcList&& !proProcList.isEmpty()){
             for (int i = 0; i < proProcList.size(); i++) {
                 ErpProProcess  proProcess = proProcList.get(i);
-                proProcess.setProId(erpPro.getProId());
+                proProcess.setProId(erpPro.getId());
                 proProcess.setSeqNo((long) (i + 1));
                 proProcessService.insert(proProcess);
             }
@@ -201,6 +203,7 @@ public class ErpProService {
      * @return 结果
      */
     public int update(ErpPro erpPro) {
+        OperatorUtils.setUpdateInfo(erpPro);
         return erpProMapper.updateById(erpPro);
     }
 

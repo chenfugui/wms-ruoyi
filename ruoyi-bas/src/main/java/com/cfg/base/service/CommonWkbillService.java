@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -88,6 +89,7 @@ public class CommonWkbillService {
     public int insert(CommonWkbill commonWkbill) {
         commonWkbill.setDelFlag("0");
         commonWkbill.setCreateTime(LocalDateTime.now());
+        OperatorUtils.setCreateInfo(commonWkbill);
         return commonWkbillMapper.insert(commonWkbill);
     }
 
@@ -98,6 +100,7 @@ public class CommonWkbillService {
      * @return 结果
      */
     public int update(CommonWkbill commonWkbill) {
+        OperatorUtils.setUpdateInfo(commonWkbill);
         return commonWkbillMapper.updateById(commonWkbill);
     }
 

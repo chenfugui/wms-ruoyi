@@ -22,7 +22,7 @@ public class ErpPro extends BaseAudit {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("产品id")
-    private Long proId;
+    private Long id;
 
     @ApiModelProperty("产品编码")
     @Excel(name = "产品编码")
