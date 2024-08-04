@@ -25,4 +25,14 @@ public interface ErpAppRoleMenuMapper extends BaseMapper<ErpAppRoleMenu> {
      * @return
     */
     int deleteByIds(@Param("ids") Long[] ids);
+
+
+   /** 
+    * @description:
+    * @author chenf
+    * @date: 2024/8/4 21:52
+    * @param: null 
+    * @return:  
+    */ 
+    int deleteByRoleId(@Param("roleId") Long roleId);
 }

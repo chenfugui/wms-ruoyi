@@ -51,4 +51,9 @@ public class IdGenServiceImpl implements IdGenService {
 	public Long getSnowId() {
 		return idGenBO.getSnowId();
 	}
+
+	@Override
+	public Long getSeqId() {
+		return idGenBO.getSeqId("globalId");
+	}
 }

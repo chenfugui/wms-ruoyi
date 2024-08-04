@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import cn.hutool.core.collection.CollectionUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -291,6 +293,12 @@ public class SysUser extends BaseEntity
 
     public Long[] getRoleIds()
     {
+        if(CollectionUtil.isNotEmpty(roles)&&null==roleIds){
+            roleIds = new Long[roles.size()];
+            for(int i=0;i<roleIds.length;i++){
+                roleIds[i] = roles.get(i).getRoleId();
+            }
+        }
         return roleIds;
     }
 

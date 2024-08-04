@@ -46,4 +46,13 @@ public interface IdGenService {
      * @return
      */
     Long getSnowId();
+
+    /** 
+     * @description: 获取全局id
+     * @author chenf
+     * @date: 2024/8/4 20:45
+     * @param:  
+     * @return:  
+     */ 
+    Long getSeqId();
 }

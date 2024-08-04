@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.cfg.base.dto.AppRoleMenuDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.PageImpl;
@@ -89,5 +90,13 @@ public class ErpAppRoleMenuController extends BaseController {
 	@DeleteMapping("/{ids}")
     public ResponseEntity<Integer> remove(@PathVariable Long[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
+    }
+
+    @ApiOperation("新增角色菜单表")
+    @PreAuthorize("@ss.hasPermi('base:erpAppRoleMenu:add')")
+    @Log(title = "角色菜单表", businessType = BusinessType.INSERT)
+    @PostMapping("saveMenu")
+    public ResponseEntity<Integer> saveAll(@RequestBody AppRoleMenuDTO roleMenuDTO) {
+        return ResponseEntity.ok(service.insertAll(roleMenuDTO));
     }
 }

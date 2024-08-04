@@ -25,8 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpAppRoleMenu" resultMap="ErpAppRoleMenuResult">
         <include refid="selectErpAppRoleMenuVo"/>
         <where>  
-            <if test="roleId != null  and roleId != ''"> and role_id = #{roleId}</if>
-            <if test="menuId != null  and menuId != ''"> and menu_id = #{menuId}</if>
+            <if test="roleId != null "> and role_id = #{roleId}</if>
+            <if test="menuId != null "> and menu_id = #{menuId}</if>
         </where>
     </select>
 
@@ -35,5 +35,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
+    </delete>
+
+<!--  根据角色删除旧数据 -->
+    <delete id="deleteByRoleId">
+        delete from  erp_app_role_menu where role_id = #{roleId}
     </delete>
 </mapper>

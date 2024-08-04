@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.dto.AppMenuGroupDTO;
 import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,27 @@ public class ErpAppMenuService {
         if (!StringUtils.isEmpty(menuPath)) {
             qw.eq("menu_path", menuPath);
         }
+        qw.orderByAsc("catalog_id","id");
         return erpAppMenuMapper.selectList(qw);
+    }
+
+    /**
+     * 根据角色id查询角色菜单
+     * @param roleId
+     * @return
+     */
+    public List<ErpAppMenu> selectListByRoleId(Long roleId){
+        return erpAppMenuMapper.selectByRoleId(roleId);
+    }
+
+    /**
+     * 根据角色id查询角色菜单
+     * @param roleIds
+     * @return
+     */
+    public AppMenuGroupDTO selectListByRoleIdList(List<Long> roleIds){
+        List<ErpAppMenu> menuList =  erpAppMenuMapper.selectByRoleIdList(roleIds);
+        return AppMenuGroupDTO.buildMenuGroupDTO(menuList);
     }
 
     /**

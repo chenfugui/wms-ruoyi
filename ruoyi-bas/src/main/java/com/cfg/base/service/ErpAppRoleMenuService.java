@@ -4,8 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.dto.AppRoleMenuDTO;
+import com.cfg.idgen.service.IdGenService;
+import com.cfg.idgen.service.impl.IdGenServiceImpl;
 import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.cfg.base.mapper.ErpAppRoleMenuMapper;
 import com.cfg.base.domain.ErpAppRoleMenu;
 import com.cfg.base.pojo.query.ErpAppRoleMenuQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 角色菜单表Service业务层处理
@@ -24,6 +29,8 @@ import com.cfg.base.pojo.query.ErpAppRoleMenuQuery;
 public class ErpAppRoleMenuService {
     @Autowired
     private ErpAppRoleMenuMapper erpAppRoleMenuMapper;
+    @Autowired
+    private IdGenService idGenService;
 
     /**
      * 查询角色菜单表
@@ -68,6 +75,29 @@ public class ErpAppRoleMenuService {
         erpAppRoleMenu.setCreateTime(LocalDateTime.now());
         OperatorUtils.setCreateInfo(erpAppRoleMenu);
         return erpAppRoleMenuMapper.insert(erpAppRoleMenu);
+    }
+
+  /**
+   * @description:
+   * @author chenf
+   * @date: 2024/8/4 20:39
+   * @param: roleMenuDTO
+   * @return: int
+   */
+  @Transactional(rollbackFor = Exception.class)
+    public int insertAll(AppRoleMenuDTO roleMenuDTO) {
+        erpAppRoleMenuMapper.deleteByRoleId(roleMenuDTO.getRoleId());
+        List<Long> menuIds = roleMenuDTO.getMenuIdList();
+        if(CollectionUtils.isNotEmpty(menuIds)){
+            for (Long menuId : menuIds) {
+                ErpAppRoleMenu appRoleMenu = new ErpAppRoleMenu();
+                appRoleMenu.setRoleId(roleMenuDTO.getRoleId());
+                appRoleMenu.setMenuId(menuId);
+                OperatorUtils.setCreateInfo(appRoleMenu);
+                erpAppRoleMenuMapper.insert(appRoleMenu);
+            }
+        }
+        return menuIds.size();
     }
 
     /**

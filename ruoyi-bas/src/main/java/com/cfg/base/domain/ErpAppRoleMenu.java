@@ -22,10 +22,10 @@ public class ErpAppRoleMenu extends BaseAudit {
 
     @ApiModelProperty("角色id")
     @Excel(name = "角色id")
-    private String roleId;
+    private Long roleId;
 
     @ApiModelProperty("菜单id")
     @Excel(name = "菜单id")
-    private String menuId;
+    private Long menuId;
 
 }

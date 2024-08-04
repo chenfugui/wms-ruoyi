@@ -44,5 +44,7 @@ public class ErpAppMenu extends BaseAudit {
 
     @ApiModelProperty("删除标志")
     private Integer delFlag;
+    @ApiModelProperty("图标")
+    private String icon;
 
 }

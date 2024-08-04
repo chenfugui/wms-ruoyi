@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="delFlag" column="del_flag"/>
+        <result property="icon" column="icon"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
@@ -24,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectErpAppMenuVo">
-        select id, catalog_id, catalog_name, menu_code, menu_name, menu_path, seq_no, create_by, create_time, update_by, update_time, del_flag   from erp_app_menu
+        select id, catalog_id, catalog_name, menu_code, menu_name, menu_path, seq_no, create_by, create_time, update_by, update_time, del_flag,icon   from erp_app_menu
     </sql>
 
     <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpAppMenu" resultMap="ErpAppMenuResult">
@@ -43,4 +44,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
     </update>
+
+
+    <select id="selectByRoleId"  resultMap="ErpAppMenuResult">
+        select a.id, a.catalog_id, a.catalog_name, a.menu_code, a.menu_name, a.menu_path, a.seq_no, a.create_by, a.create_time, a.update_by, a.update_time, a.del_flag,a.icon
+        from erp_app_menu a,erp_app_role_menu b where a.id=b.menu_id and b.role_id = #{roleId} order by a.id
+    </select>
+
+<!--    根据角色列表查询app功能菜单-->
+    <select id="selectByRoleIdList"  resultMap="ErpAppMenuResult">
+        select distinct a.id, a.catalog_id, a.catalog_name, a.menu_code, a.menu_name, a.menu_path, a.seq_no, a.create_by, a.create_time, a.update_by, a.update_time, a.del_flag,a.icon
+        from erp_app_menu a,erp_app_role_menu b
+        <where>
+            b.role_id in
+            <foreach collection="roleIds" open="(" item="roleId" close=")" separator=",">
+                #{roleId}
+            </foreach>
+        </where>
+        order by a.catalog_id,a.id
+    </select>
 </mapper>

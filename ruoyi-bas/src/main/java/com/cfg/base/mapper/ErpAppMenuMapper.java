@@ -25,4 +25,20 @@ public interface ErpAppMenuMapper extends BaseMapper<ErpAppMenu> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+    /**
+     * 根据角色id查询菜单
+     * @param roleId 角色id
+     * @return
+     */
+    List<ErpAppMenu> selectByRoleId(@Param("roleId") Long roleId);
+
+    /** 
+     * @description: 根据角色查询菜单
+     * @author chenf
+     * @date: 2024/8/4 23:07
+     * @param:  
+     * @return:  
+     */ 
+    List<ErpAppMenu> selectByRoleIdList(@Param("roleIds") List<Long> roleIds);
 }
