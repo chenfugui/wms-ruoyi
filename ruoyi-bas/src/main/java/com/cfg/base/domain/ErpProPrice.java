@@ -45,6 +45,6 @@ public class ErpProPrice extends BaseAudit {
 
     @ApiModelProperty("delFlag 0 正常  1  删除")
     @Excel(name = "delFlag 0 正常  1  删除")
-    private Integer delFlag;
+    private Integer delFlag=0;
 
 }

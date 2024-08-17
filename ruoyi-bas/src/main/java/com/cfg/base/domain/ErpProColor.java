@@ -45,6 +45,6 @@ public class ErpProColor extends BaseAudit {
     private Long seqno;
 
     @ApiModelProperty("del_flag 0 正常  1  删除")
-    private Integer delFlag;
+    private Integer delFlag=0;
 
 }

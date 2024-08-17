@@ -1,6 +1,7 @@
 package com.cfg.base.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.cfg.base.domain.*;
 import com.cfg.base.mapper.*;
 import com.cfg.base.pojo.dto.ErpProDTO;
@@ -54,6 +55,7 @@ public class ErpProService {
     private ErpProPriceService proPriceService;
     @Autowired
     private ErpProProcessService proProcessService;
+    private ErpProcService erpProcService;
 
     /**
      * 查询服装产品管理
@@ -159,8 +161,16 @@ public class ErpProService {
      */
     @Transactional(rollbackFor = Exception.class)
     public int insertAll(ErpProDTO erpProDTO) {
+        ErpPro erpProQuery  = ConvertUtils.convert(erpProDTO, ErpPro.class);
+        erpProQuery.setProCode(erpProDTO.getProCode());
+        erpProQuery.setEmpId(SecurityUtils.getEmpId());
+        List<ErpPro> dbProList = erpProMapper.selectByEntity(erpProQuery);
+        if(CollectionUtils.isNotEmpty(dbProList)){
+            throw new RuntimeException(erpProDTO.getProCode()+"产品编码重复");
+        }
         ErpPro erpPro = ConvertUtils.convert(erpProDTO, ErpPro.class);
         erpPro.setDelFlag(0);
+        erpPro.setStatus("0");
         erpPro.setCreateTime(LocalDateTime.now());
         erpPro.setId(idGenService.getSeqId("pro_id"));
         erpPro.setEmpId(SecurityUtils.getEmpId());
