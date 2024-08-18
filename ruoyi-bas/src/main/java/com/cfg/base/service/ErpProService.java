@@ -174,6 +174,7 @@ public class ErpProService {
         erpPro.setCreateTime(LocalDateTime.now());
         erpPro.setId(idGenService.getSeqId("pro_id"));
         erpPro.setEmpId(SecurityUtils.getEmpId());
+        OperatorUtils.setCreateInfo(erpPro);
         int num =erpProMapper.insert(erpPro);
         List<ErpProColor> proColorList = erpProDTO.getColorList();
         List<ErpProSize> proSizeList = erpProDTO.getSizeList();

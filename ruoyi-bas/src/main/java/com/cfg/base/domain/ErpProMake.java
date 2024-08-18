@@ -45,7 +45,7 @@ public class ErpProMake extends BaseAudit {
 
     @ApiModelProperty("生产状态: 1 正常  2 停止 3 作废")
     @Excel(name = "生产状态: 1 正常  2 停止 3 作废")
-    private String status;
+    private String status="1";
 
     @ApiModelProperty("单位id")
     @Excel(name = "单位id")
@@ -57,6 +57,6 @@ public class ErpProMake extends BaseAudit {
 
     @ApiModelProperty("delFlag 0 正常  1  删除")
     @Excel(name = "delFlag 0 正常  1  删除")
-    private Integer delFlag;
+    private Integer delFlag=0;
 
 }

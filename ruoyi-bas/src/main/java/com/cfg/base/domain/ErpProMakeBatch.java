@@ -63,7 +63,7 @@ public class ErpProMakeBatch extends BaseAudit {
 
     @ApiModelProperty("生产数量")
     @Excel(name = "生产数量")
-    private Long makeNum;
+    private Long makeNum=0L;
 
     @ApiModelProperty("床次")
     @Excel(name = "床次")
@@ -83,7 +83,7 @@ public class ErpProMakeBatch extends BaseAudit {
 
     @ApiModelProperty("delFlag 0 正常  1  删除")
     @Excel(name = "delFlag 0 正常  1  删除")
-    private Integer delFlag;
+    private Integer delFlag=0;
 
     @ApiModelProperty("顺序号")
     @Excel(name = "顺序号")
