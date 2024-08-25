@@ -1,11 +1,16 @@
 package com.ruoyi.framework.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 /**
@@ -27,5 +32,15 @@ public class ApplicationConfig
     public Jackson2ObjectMapperBuilderCustomizer jacksonObjectMapperCustomization()
     {
         return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.timeZone(TimeZone.getDefault());
+    }
+
+    @Bean
+    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
+        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        // 配置日期时间格式
+        javaTimeModule.addSerializer(LocalDateTime.class, new ToStringSerializer());
+        objectMapper.registerModule(javaTimeModule);
+        return objectMapper;
     }
 }

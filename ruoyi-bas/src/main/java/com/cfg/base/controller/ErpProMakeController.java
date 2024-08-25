@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.cfg.base.dto.ProMakeDTO;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -91,5 +92,13 @@ public class ErpProMakeController extends BaseController {
 	@DeleteMapping("/{ids}")
     public ResponseEntity<Integer> remove(@PathVariable Long[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
+    }
+
+    @ApiOperation("新增服装生产管理")
+    @PreAuthorize("@ss.hasPermi('base:erpProMake:add')")
+    @Log(title = "服装生产管理", businessType = BusinessType.INSERT)
+    @PostMapping("addAll")
+    public ResponseEntity<ProMakeDTO> addALL(@RequestBody ProMakeDTO proMakeDTO) {
+        return ResponseEntity.ok(service.insertAll(proMakeDTO));
     }
 }
