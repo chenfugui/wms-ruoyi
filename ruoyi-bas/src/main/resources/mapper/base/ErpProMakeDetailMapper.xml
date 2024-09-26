@@ -25,6 +25,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time" />
+        <result property="sizeCode" column="size_code"/>
+        <result property="sizeName" column="size_name"/>
+        <result property="colorCode" column="color_code"/>
+        <result property="colorName" column="color_name"/>
     </resultMap>
 
     <sql id="selectErpProMakeDetailVo">
