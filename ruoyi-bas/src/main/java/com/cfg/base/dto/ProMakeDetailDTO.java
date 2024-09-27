@@ -64,4 +64,20 @@ public class ProMakeDetailDTO extends BaseAudit {
     @Excel(name = "单位id")
     private Long empId;
 
+    @ApiModelProperty("尺寸编码")
+    @Excel(name = "尺码编码")
+    private String sizeCode;
+
+    @ApiModelProperty("尺寸名称")
+    @Excel(name = "尺码名称")
+    private String sizeName;
+
+    @ApiModelProperty("颜色编码")
+    @Excel(name = "颜色编码")
+    private String colorCode;
+
+    @ApiModelProperty("尺寸名称")
+    @Excel(name = "颜色名称")
+    private String colorName;
+
 }

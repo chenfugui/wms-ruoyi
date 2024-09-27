@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectErpProMakeDetailVo">
-        select id, pro_make_id, pro_make_no, pro_id, size_id, color_id, cloth_id, cloth_code, cloth_name, make_num, create_by, create_time, update_by, update_time, del_flag, emp_id   from erp_pro_make_detail
+        select id, pro_make_id, pro_make_no, pro_id, size_id, color_id, cloth_id, cloth_code, cloth_name, make_num, create_by, create_time, update_by, update_time, del_flag, emp_id,size_code,size_name,color_code,color_name   from erp_pro_make_detail
     </sql>
 
     <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpProMakeDetail" resultMap="ErpProMakeDetailResult">

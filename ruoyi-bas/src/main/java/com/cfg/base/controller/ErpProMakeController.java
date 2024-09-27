@@ -99,8 +99,8 @@ public class ErpProMakeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('base:erpProMake:add')")
     @Log(title = "服装生产管理", businessType = BusinessType.INSERT)
     @PostMapping("/addAll")
-    public ResponseEntity<ProMakeDTO> addALL(@RequestBody ProMakeDTO proMakeDTO) {
+    public WrapperResponse<ProMakeDTO> addALL(@RequestBody ProMakeDTO proMakeDTO) {
         proMakeDTO = service.insertAll(proMakeDTO);
-        return ResponseEntity.ok(proMakeDTO);
+        return WrapperResponse.success(proMakeDTO);
     }
 }
