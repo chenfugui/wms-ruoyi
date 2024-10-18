@@ -3,6 +3,8 @@ package com.cfg.base.service;
 import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
+
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.idgen.service.IdGenService;
 import com.cfg.idgen.util.OperatorUtils;
@@ -145,5 +147,38 @@ public class ErpProMakeDetailService {
     public int deleteById(Long id) {
         Long[] ids = {id};
         return erpProMakeDetailMapper.updateDelFlagByIds(ids);
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/10/16 11:04
+     * @description:  根据产品Id,生产id查询明细列表
+     * @param proMakeId
+     * @param proId
+     * @return: java.util.List<com.cfg.base.domain.ErpProMakeDetail>
+     */
+    public List<ErpProMakeDetail> selectDetailList(Long proMakeId,Long proId) {
+        Assert.isTrue(null!=proMakeId||null!=proId,"参数异常");
+        QueryWrapper<ErpProMakeDetail> qw = new QueryWrapper<>();
+        if (proMakeId != null) {
+            qw.eq("pro_make_id", proMakeId);
+        }
+        if (proId != null) {
+            qw.eq("pro_id", proId);
+        }
+        return erpProMakeDetailMapper.selectList(qw);
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/10/16 11:08
+     * @description:  根据生产id删除明细
+     * @param proMakeId
+     * @return: void
+     */
+    public void deleteByProMakeId(Long proMakeId) {
+        QueryWrapper<ErpProMakeDetail> qw = new QueryWrapper<>();
+        qw.eq("pro_make_id", proMakeId);
+        erpProMakeDetailMapper.delete(qw);
     }
 }

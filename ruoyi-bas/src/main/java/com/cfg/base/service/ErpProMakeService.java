@@ -7,13 +7,16 @@ import java.time.LocalDateTime;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.domain.ErpProMakeBatch;
 import com.cfg.base.domain.ErpProMakeDetail;
 import com.cfg.base.dto.ProMakeDTO;
 import com.cfg.base.dto.ProMakeDetailDTO;
+import com.cfg.base.mapper.ErpProMakeBatchMapper;
 import com.cfg.base.pojo.dto.ErpProMakeDetailDTO;
 import com.cfg.idgen.service.IdGenService;
 import com.cfg.idgen.util.ConvertUtils;
 import com.cfg.idgen.util.OperatorUtils;
+import com.cfg.idgen.util.ReflectUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -42,6 +45,8 @@ public class ErpProMakeService {
 
     @Autowired
     private ErpProMakeDetailService proMakeDetailService;
+    @Autowired
+    private ErpProMakeBatchMapper makeBatchMapper;
 
     /**
      * 查询服装生产管理
@@ -129,23 +134,55 @@ public class ErpProMakeService {
      */
     @Transactional(rollbackFor = Exception.class)
     public ProMakeDTO insertAll(ProMakeDTO proMakeDTO) {
-        //保存生产信息
-        ErpProMake erpProMake = ConvertUtils.convert(proMakeDTO,ErpProMake.class);
-        erpProMake.setProMakeNo(String.valueOf(idGenService.getSeqId("make_no")));
-        insert(erpProMake);
-        //生产明细
-        List<ProMakeDetailDTO> makeDetails =  proMakeDTO.getMakeDetailList();
-        if(CollectionUtils.isNotEmpty(makeDetails)){
-           List<ErpProMakeDetail> details =  ConvertUtils.convert(makeDetails, ErpProMakeDetail.class);
-            for (ErpProMakeDetail detail : details) {
-                detail.setProMakeId(erpProMake.getId());
-                detail.setProId(erpProMake.getProId());
-                Assert.isTrue(null!=detail.getMakeNum()&&detail.getMakeNum()>0,"数量必须大于0");
-                detail.setProMakeNo(erpProMake.getProMakeNo());
-                proMakeDetailService.insert(detail);
+        ErpProMake proMake = null;
+        if(null!=proMakeDTO.getId()){
+            QueryWrapper<ErpProMakeBatch> wrapper = new QueryWrapper<>();
+            wrapper.eq("pro_make_id",proMakeDTO.getId());
+            List<ErpProMakeBatch> batches = makeBatchMapper.selectList(wrapper);
+            if(CollectionUtils.isEmpty(batches)){
+               erpProMakeMapper.deleteById(proMakeDTO.getId());
+               proMakeDetailService.deleteByProMakeId(proMakeDTO.getId());
+
+                proMake = erpProMakeMapper.selectById(proMakeDTO.getId());
+                Assert.isTrue(null!=proMake,"生产信息不存在");
+                ReflectUtils.copyPropertyValue(proMakeDTO,proMake,false);
+                OperatorUtils.setUpdateInfo(proMake);
+                erpProMakeMapper.updateById(proMake);
+
+                //生产明细
+                List<ProMakeDetailDTO> makeDetails = proMakeDTO.getMakeDetailList();
+                if (CollectionUtils.isNotEmpty(makeDetails)) {
+                    List<ErpProMakeDetail> details = ConvertUtils.convert(makeDetails, ErpProMakeDetail.class);
+                    for (ErpProMakeDetail detail : details) {
+                        detail.setProMakeId(proMake.getId());
+                        detail.setProId(proMake.getProId());
+                        Assert.isTrue(null != detail.getMakeNum() && detail.getMakeNum() > 0, "数量必须大于0");
+                        detail.setProMakeNo(proMake.getProMakeNo());
+                        proMakeDetailService.insert(detail);
+                    }
+                }
+            }else{
+                throw new RuntimeException("已存在打菲记录");
+            }
+        }else {
+            //保存生产信息
+            proMake = ConvertUtils.convert(proMakeDTO, ErpProMake.class);
+            proMake.setProMakeNo(String.valueOf(idGenService.getSeqId("make_no")));
+            insert(proMake);
+            //生产明细
+            List<ProMakeDetailDTO> makeDetails = proMakeDTO.getMakeDetailList();
+            if (CollectionUtils.isNotEmpty(makeDetails)) {
+                List<ErpProMakeDetail> details = ConvertUtils.convert(makeDetails, ErpProMakeDetail.class);
+                for (ErpProMakeDetail detail : details) {
+                    detail.setProMakeId(proMake.getId());
+                    detail.setProId(proMake.getProId());
+                    Assert.isTrue(null != detail.getMakeNum() && detail.getMakeNum() > 0, "数量必须大于0");
+                    detail.setProMakeNo(proMake.getProMakeNo());
+                    proMakeDetailService.insert(detail);
+                }
             }
         }
-        return ConvertUtils.convert(erpProMake,ProMakeDTO.class);
+        return ConvertUtils.convert(proMake,ProMakeDTO.class);
     }
 
     /**

@@ -25,4 +25,6 @@ public interface ErpProBatchExeMapper extends BaseMapper<ErpProBatchExe> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+    List<ErpProBatchExe> selectByProMaxkeId(Long proMakeId);
 }

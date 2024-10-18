@@ -50,4 +50,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
     </update>
+
+    <!-- 根据生产id查询扫菲记录 -->
+    <select id="selectByProMakeId" parameterType="com.cfg.base.domain.ErpProBatchExe" resultMap="ErpProBatchExeResult">
+        select a.* from erp_pro_make_batch a, erp_pro_batch_exe b where a.id=b.batch_id and a.pro_make_id=#{proMakeId}
+    </select>
 </mapper>
