@@ -1,13 +1,23 @@
 package com.cfg.base.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.dto.ProMakeDTO;
+import com.cfg.base.dto.ProMakeDetailDTO;
+import com.cfg.base.dto.ProMakePrintDTO;
+import com.cfg.base.pojo.dto.ErpProMakeDTO;
+import com.cfg.base.pojo.dto.ErpProMakeDetailDTO;
 import com.cfg.idgen.service.IdGenService;
+import com.cfg.idgen.util.ConvertUtils;
 import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +39,11 @@ public class ErpProMakeBatchService {
 
     @Autowired
     private IdGenService idGenService;
+
+    @Autowired
+    private ErpProMakeService makeService;
+    @Autowired
+    private ErpProMakeService erpProMakeService;
 
     /**
      * 查询服装生产批次
@@ -169,5 +184,37 @@ public class ErpProMakeBatchService {
     public int deleteById(Long id) {
         Long[] ids = {id};
         return erpProMakeBatchMapper.updateDelFlagByIds(ids);
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/10/21 14:02
+     * @description:  新增生产批次
+     * @param makePrint
+     * @return: java.util.List<com.cfg.base.domain.ErpProMakeBatch>
+     */
+    public List<ErpProMakeBatch> addProMakeBatch(ProMakePrintDTO makePrint){
+        Long makeId = makePrint.getProMakeId();
+        ProMakeDTO makeDTO = erpProMakeService.selectMakeDTOById(makeId);
+        List<ProMakeDetailDTO> makeDetailDTOLst = makeDTO.getMakeDetailList();
+        String makeNo = makeDTO.getProMakeNo();
+        Long startPkgNo = makePrint.getPkgStartNo();
+        Long endPkgNo = makePrint.getPkgEndNo();
+        List<ErpProMakeBatch> makeBatches = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(makeDetailDTOLst)){
+            for (int i = 0; i < makeDetailDTOLst.size(); i++) {
+                ErpProMakeBatch makeBatch = ConvertUtils.convert(makeDetailDTOLst.get(i),ErpProMakeBatch.class);
+                makeBatch.setBedNo(makePrint.getBedNo());
+                makeBatch.setBatchNo(makeNo);
+                int pkgNo = i+1;
+                makeBatch.setSeqNo(Long.parseLong(String.valueOf(pkgNo)));
+                //makeBatch.setPkgStartNo(Long.parseLong(String.valueOf(pkgNo)));
+                makeBatch.setId(null);
+                insert(makeBatch);
+                makeBatches.add(makeBatch);
+            }
+           return makeBatches.stream().filter((x)-> x.getSeqNo()>=startPkgNo&&x.getSeqNo()<=endPkgNo).collect(Collectors.toList());
+        }
+        return makeBatches;
     }
 }

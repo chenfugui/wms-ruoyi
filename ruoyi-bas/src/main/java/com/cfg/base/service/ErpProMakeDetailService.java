@@ -166,9 +166,25 @@ public class ErpProMakeDetailService {
         if (proId != null) {
             qw.eq("pro_id", proId);
         }
+        qw.orderByAsc("id");
         return erpProMakeDetailMapper.selectList(qw);
     }
-
+    /***
+     * @author chenfg
+     * @date: 2024/10/21 14:07
+     * @description:  查询生产明细
+     * @param proMakeId 生产ID
+     * @return: java.util.List<com.cfg.base.domain.ErpProMakeDetail>
+     */
+    public List<ErpProMakeDetail> selectDetailsByMakeId(Long proMakeId) {
+        Assert.isTrue(null!=proMakeId,"参数异常");
+        QueryWrapper<ErpProMakeDetail> qw = new QueryWrapper<>();
+        if (proMakeId != null) {
+            qw.eq("pro_make_id", proMakeId);
+        }
+        qw.orderByAsc("id");
+        return erpProMakeDetailMapper.selectList(qw);
+    }
     /***
      * @author chenfg
      * @date: 2024/10/16 11:08

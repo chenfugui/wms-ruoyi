@@ -47,6 +47,8 @@ public class ErpProMakeService {
     private ErpProMakeDetailService proMakeDetailService;
     @Autowired
     private ErpProMakeBatchMapper makeBatchMapper;
+    @Autowired
+    private ErpProMakeDetailService erpProMakeDetailService;
 
     /**
      * 查询服装生产管理
@@ -156,7 +158,7 @@ public class ErpProMakeService {
                     for (ErpProMakeDetail detail : details) {
                         detail.setProMakeId(proMake.getId());
                         detail.setProId(proMake.getProId());
-                        Assert.isTrue(null != detail.getMakeNum() && detail.getMakeNum() > 0, "数量必须大于0");
+                        Assert.isTrue(null != detail.getMakeNum() && detail.getMakeNum() >= 0, "数量必须大于0");
                         detail.setProMakeNo(proMake.getProMakeNo());
                         proMakeDetailService.insert(detail);
                     }
@@ -216,4 +218,22 @@ public class ErpProMakeService {
         Long[] ids = {id};
         return erpProMakeMapper.updateDelFlagByIds(ids);
     }
+
+    /***
+     * @author chenfg
+     * @date: 2024/10/21 14:05
+     * @description: 根据生产Id查询生产信息
+     * @param makeId 生产Id
+     * @return: com.cfg.base.dto.ProMakeDTO
+     */
+    public ProMakeDTO selectMakeDTOById(Long makeId) {
+        ErpProMake proMake = erpProMakeMapper.selectById(makeId);
+        Assert.notNull(proMake,"未查询到产品生产信息");
+        List<ErpProMakeDetail> makeDetails =  erpProMakeDetailService.selectDetailsByMakeId(makeId);
+        ProMakeDTO makeDTO = ConvertUtils.convert(proMake,ProMakeDTO.class);
+        List<ProMakeDetailDTO> makeDetailDTOLst = ConvertUtils.convert(makeDetails,ProMakeDetailDTO.class);
+        makeDTO.setMakeDetailList(makeDetailDTOLst);
+        return makeDTO;
+    }
+
 }
