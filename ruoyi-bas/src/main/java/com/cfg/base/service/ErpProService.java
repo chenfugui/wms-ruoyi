@@ -1,16 +1,20 @@
 package com.cfg.base.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.cfg.base.domain.*;
 import com.cfg.base.mapper.*;
 import com.cfg.base.pojo.dto.ErpProDTO;
+import com.cfg.base.pojo.query.ErpProColorQuery;
+import com.cfg.base.pojo.query.ErpProProcessQuery;
 import com.cfg.base.pojo.query.ErpProQuery;
+import com.cfg.base.pojo.query.ErpProSizeQuery;
 import com.cfg.idgen.service.IdGenService;
 import com.cfg.idgen.util.ConvertUtils;
 import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
+import io.jsonwebtoken.lang.Assert;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.PropertyResolver;
@@ -19,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服装产品管理Service业务层处理
@@ -237,5 +243,113 @@ public class ErpProService {
     public int deleteByProId(Long proId) {
         Long[] proIds = {proId};
         return erpProMapper.updateDelFlagByIds(proIds);
+    }
+
+    /**
+     * 根据服装产品主键获取颜色列表
+     * @param proId
+     * @return List<ErpProColor>
+     */
+    public List<ErpProColor> getColorList(Long proId){
+        ErpProColorQuery query = new ErpProColorQuery();
+        query.setProId(proId);
+        return proColorService.selectList(query,null);
+    }
+
+    /**
+     * 根据服装产品主键获取尺码列表
+     * @param proId
+     * @return List<ErpProSize>
+     */
+    public List<ErpProSize> getSizeList(Long proId){
+        ErpProSizeQuery query = new ErpProSizeQuery();
+        query.setProId(proId);
+        return proSizeService.selectList(query,null);
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/10/24 9:22
+     * @description:  查询服装产品工序列表
+     * @param proId
+     * @return: java.util.List<com.cfg.base.domain.ErpProProcess>
+     */
+    public List<ErpProProcess> getProcessList(Long proId){
+        ErpProProcessQuery query = new ErpProProcessQuery();
+        query.setProId(proId);
+        return proProcessService.selectList(query,null);
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/10/24 9:23
+     * @description:  获取产品工序Map
+     * @param proId
+     * @return: java.util.Map<java.lang.Long,com.cfg.base.domain.ErpProProcess>
+     */
+    public Map<Long,ErpProProcess> getProProcessMap(Long proId){
+        List<ErpProProcess> proProcList = getProcessList(proId);
+        Map<Long, ErpProProcess> proProcMap=new HashMap<>();
+        if(CollectionUtils.isNotEmpty(proProcList)){
+            for (ErpProProcess proProc : proProcList) {
+                proProcMap.put(proProc.getId(),proProc);
+            }
+        }
+        return proProcMap;
+    }
+
+    /**
+     * 根据服装产品主键获取颜色Map
+     * @param proId
+     * @return Map<Long,ErpProColor>
+     */
+    public Map<Long, ErpProColor> getProColorMap(Long proId){
+        List<ErpProColor> colors = getColorList(proId);
+        Map<Long, ErpProColor> colorMap=new HashMap<>();
+        if(CollectionUtils.isNotEmpty(colors)){
+            for (ErpProColor color : colors) {
+                colorMap.put(color.getId(),color);
+            }
+        }
+        return colorMap;
+    }
+
+    /**
+     * 根据服装产品主键获取尺码Map
+     * @param proId
+     * @return Map<Long,ErpProSize>
+     */
+    public Map<Long, ErpProSize> getProSizeMap(Long proId){
+        List<ErpProSize> sizes = getSizeList(proId);
+        Map<Long, ErpProSize> sizeMap=new HashMap<>();
+        if(CollectionUtils.isNotEmpty(sizes)){
+            for (ErpProSize size : sizes) {
+                sizeMap.put(size.getId(),size);
+            }
+        }
+        return sizeMap;
+    }
+
+    /**
+     * 保存服装工序工价
+     * @param erpProDTO
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void saveProPrice(ErpProDTO erpProDTO) {
+        Long proId = erpProDTO.getId();
+        ErpPro erpPro = erpProMapper.selectById(proId);
+        Assert.notNull(erpPro,"产品不存在");
+        Assert.isTrue(erpPro.getEmpId().equals(SecurityUtils.getEmpId()),"产品不存在");
+        List<ErpProPrice> proPriceList = erpProDTO.getPriceList();
+        Assert.isTrue(CollectionUtils.isNotEmpty(proPriceList),"工价信息不能为空");
+        if(CollectionUtils.isNotEmpty(proPriceList)){
+            proPriceService.deleteByProId(proId);
+        }
+        for (ErpProPrice erpProPrice : proPriceList) {
+            erpProPrice.setProId(proId);
+            erpProPrice.setEmpId(SecurityUtils.getEmpId());
+            Assert.isTrue(erpProPrice.getPrice().doubleValue()>=0,"工价不能小于0");
+            proPriceService.insert(erpProPrice);
+        }
     }
 }

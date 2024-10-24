@@ -3,6 +3,7 @@ package com.cfg.base.controller;
 import java.util.List;
 
 import com.cfg.base.pojo.dto.ErpProDTO;
+import com.cfg.idgen.util.WrapperResponse;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -101,6 +102,16 @@ public class ErpProController extends BaseController {
     @PostMapping("/insertall")
     public ResponseEntity<Integer> addProInfo(@RequestBody ErpProDTO erpProDTO) {
         return ResponseEntity.ok(service.insertAll(erpProDTO));
+    }
+
+
+    @ApiOperation("新增产品工价管理")
+    @PreAuthorize("@ss.hasPermi('base:erpPro:add')")
+    @Log(title = "产品工价设置", businessType = BusinessType.INSERT)
+    @PostMapping("/savePrice")
+    public WrapperResponse<Integer> saveProPrice(@RequestBody ErpProDTO erpProDTO) {
+        service.saveProPrice(erpProDTO);
+        return WrapperResponse.success(erpProDTO.getPriceList().size());
     }
 
 }

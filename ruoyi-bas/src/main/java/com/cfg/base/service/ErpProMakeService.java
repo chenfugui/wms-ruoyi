@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.cfg.base.domain.ErpProMakeBatch;
-import com.cfg.base.domain.ErpProMakeDetail;
+import com.cfg.base.domain.*;
 import com.cfg.base.dto.ProMakeDTO;
 import com.cfg.base.dto.ProMakeDetailDTO;
 import com.cfg.base.mapper.ErpProMakeBatchMapper;
@@ -25,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.cfg.base.mapper.ErpProMakeMapper;
-import com.cfg.base.domain.ErpProMake;
 import com.cfg.base.pojo.query.ErpProMakeQuery;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +48,8 @@ public class ErpProMakeService {
     private ErpProMakeBatchMapper makeBatchMapper;
     @Autowired
     private ErpProMakeDetailService erpProMakeDetailService;
+    @Autowired
+    private ErpProService proService;
 
     /**
      * 查询服装生产管理
@@ -137,7 +138,7 @@ public class ErpProMakeService {
     @Transactional(rollbackFor = Exception.class)
     public ProMakeDTO insertAll(ProMakeDTO proMakeDTO) {
         ErpProMake proMake = null;
-        if(null!=proMakeDTO.getId()){
+        if(null!=proMakeDTO.getId()&&proMakeDTO.getId()>0){
             QueryWrapper<ErpProMakeBatch> wrapper = new QueryWrapper<>();
             wrapper.eq("pro_make_id",proMakeDTO.getId());
             List<ErpProMakeBatch> batches = makeBatchMapper.selectList(wrapper);
@@ -154,10 +155,18 @@ public class ErpProMakeService {
                 //生产明细
                 List<ProMakeDetailDTO> makeDetails = proMakeDTO.getMakeDetailList();
                 if (CollectionUtils.isNotEmpty(makeDetails)) {
+                    Map<Long, ErpProColor> colorMap = proService.getProColorMap(proMake.getProId());
+                    Map<Long, ErpProSize> sizeMap = proService.getProSizeMap(proMake.getProId());
                     List<ErpProMakeDetail> details = ConvertUtils.convert(makeDetails, ErpProMakeDetail.class);
                     for (ErpProMakeDetail detail : details) {
                         detail.setProMakeId(proMake.getId());
                         detail.setProId(proMake.getProId());
+                        ErpProColor proColor = colorMap.get(detail.getColorId());
+                        detail.setColorCode(proColor.getColorCode());
+                        detail.setColorName(proColor.getColorName());
+                        ErpProSize proSize = sizeMap.get(detail.getSizeId());
+                        detail.setSizeCode(proSize.getSizeCode());
+                        detail.setSizeName(proSize.getSizeName());
                         Assert.isTrue(null != detail.getMakeNum() && detail.getMakeNum() >= 0, "数量必须大于0");
                         detail.setProMakeNo(proMake.getProMakeNo());
                         proMakeDetailService.insert(detail);
@@ -174,11 +183,19 @@ public class ErpProMakeService {
             //生产明细
             List<ProMakeDetailDTO> makeDetails = proMakeDTO.getMakeDetailList();
             if (CollectionUtils.isNotEmpty(makeDetails)) {
+                Map<Long, ErpProColor> colorMap = proService.getProColorMap(proMake.getProId());
+                Map<Long, ErpProSize> sizeMap = proService.getProSizeMap(proMake.getProId());
                 List<ErpProMakeDetail> details = ConvertUtils.convert(makeDetails, ErpProMakeDetail.class);
                 for (ErpProMakeDetail detail : details) {
                     detail.setProMakeId(proMake.getId());
                     detail.setProId(proMake.getProId());
-                    Assert.isTrue(null != detail.getMakeNum() && detail.getMakeNum() > 0, "数量必须大于0");
+                    ErpProColor proColor = colorMap.get(detail.getColorId());
+                    detail.setColorCode(proColor.getColorCode());
+                    detail.setColorName(proColor.getColorName());
+                    ErpProSize proSize = sizeMap.get(detail.getSizeId());
+                    detail.setSizeCode(proSize.getSizeCode());
+                    detail.setSizeName(proSize.getSizeName());
+                    Assert.isTrue(null != detail.getMakeNum() && detail.getMakeNum() >= 0, "数量必须大于0");
                     detail.setProMakeNo(proMake.getProMakeNo());
                     proMakeDetailService.insert(detail);
                 }

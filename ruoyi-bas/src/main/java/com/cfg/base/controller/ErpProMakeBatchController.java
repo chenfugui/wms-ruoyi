@@ -98,8 +98,8 @@ public class ErpProMakeBatchController extends BaseController {
     @ApiOperation("生产打菲")
     @PreAuthorize("@ss.hasPermi('base:erpProMakeBatch:add')")
     @Log(title = "服装生产批次", businessType = BusinessType.INSERT)
-    @PostMapping
-    public ResponseEntity<List<ErpProMakeBatch>> add(@RequestBody ProMakePrintDTO makerPrint) {
+    @PostMapping("/addProMakeBatch")
+    public ResponseEntity<List<ErpProMakeBatch>> addMakeBatch(@RequestBody ProMakePrintDTO makerPrint) {
         return ResponseEntity.ok(service.addProMakeBatch(makerPrint));
     }
 }

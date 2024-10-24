@@ -127,4 +127,8 @@ public class ErpProPriceService {
         Long[] ids = {id};
         return erpProPriceMapper.updateDelFlagByIds(ids);
     }
+
+    public int deleteByProId(Long proId) {
+        return erpProPriceMapper.deleteByProId(proId);
+    }
 }
