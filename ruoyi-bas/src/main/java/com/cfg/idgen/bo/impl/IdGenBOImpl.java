@@ -310,7 +310,8 @@ public class IdGenBOImpl implements IdGenBO, InitializingBean {
 	@Override
 	public Long getSnowId() {
 		SnowflakeIdGenerator snowIdGenerator = new SnowflakeIdGenerator(1L, 0L);
-		snowIdGenerator.setWorkerId(getWorkerId());
+		//snowIdGenerator.setWorkerId(getWorkerId());
+		snowIdGenerator.setWorkerId(1L);
 		return snowIdGenerator.nextId();
 	}
 

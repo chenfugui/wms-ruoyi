@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.ErpEmpDicMapper">
+    
+    <resultMap type="com.cfg.base.domain.ErpEmpDic" id="ErpEmpDicResult">
+        <result property="id" column="id"/>
+        <result property="typeCode" column="type_code"/>
+        <result property="typeName" column="type_name"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="itemName" column="item_name"/>
+        <result property="itemValue" column="item_value"/>
+        <result property="empId" column="emp_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectErpEmpDicVo">
+        select id, type_code, type_name, item_code, item_name, item_value, emp_id, create_by, create_time, update_by, update_time   from erp_emp_dic
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpEmpDic" resultMap="ErpEmpDicResult">
+        <include refid="selectErpEmpDicVo"/>
+        <where>  
+            <if test="typeCode != null  and typeCode != ''"> and type_code = #{typeCode}</if>
+            <if test="typeName != null  and typeName != ''"> and type_name like concat('%', #{typeName}, '%')</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="itemValue != null  and itemValue != ''"> and item_value = #{itemValue}</if>
+            <if test="empId != null "> and emp_id = #{empId}</if>
+        </where>
+    </select>
+
+    <delete id="updateDelFlagByIds">
+        delete from erp_emp_dic
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </delete>
+</mapper>
