@@ -1,7 +1,9 @@
 package com.ruoyi.web.controller.system;
 
+import com.cfg.base.service.CommonEmpService;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.CommonEmp;
 import com.ruoyi.common.core.domain.entity.SysMenu;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginBody;
@@ -32,6 +34,8 @@ public class SysLoginController {
     private ISysMenuService menuService;
     @Autowired
     private SysPermissionService permissionService;
+    @Autowired
+    private CommonEmpService commonEmpService;
 
     /**
      * 登录方法
@@ -76,10 +80,16 @@ public class SysLoginController {
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
         Set<String> permissions = permissionService.getMenuPermission(user);
+        CommonEmp emp = null;
+        if(null!=user.getEmpId()) {
+            emp = commonEmpService.selectByEmpId(user.getEmpId());
+            user.setEmp(emp);
+        }
         AjaxResult ajax = AjaxResult.success();
         ajax.put("user", user);
         ajax.put("roles", roles);
         ajax.put("permissions", permissions);
+        ajax.put("emp", emp);
         return ajax;
     }
 
