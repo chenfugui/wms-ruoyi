@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.cfg.base.dto.ErpEmpDicDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.PageImpl;
@@ -89,5 +90,14 @@ public class ErpEmpDicController extends BaseController {
 	@DeleteMapping("/{ids}")
     public ResponseEntity<Integer> remove(@PathVariable Integer[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
+    }
+
+
+    @ApiOperation("保存常用字典")
+    @PreAuthorize("@ss.hasPermi('base:erpEmpDic:add')")
+    @Log(title = "常用字典管理", businessType = BusinessType.INSERT)
+    @PostMapping("/saveDic")
+    public ResponseEntity<Integer> saveDic(@RequestBody ErpEmpDicDTO empDicDTO) {
+        return ResponseEntity.ok(service.insert(empDicDTO));
     }
 }

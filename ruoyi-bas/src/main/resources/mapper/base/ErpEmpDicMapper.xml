@@ -44,4 +44,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
     </delete>
+    <!-- 按名称删除字典项数据 -->
+    <delete id="deleteByItemNameList">
+        delete from erp_emp_dic
+        <where>
+            type_code = #{typeCode}
+            and emp_id = #{empId}
+            and item_name in
+           <foreach collection="itemNames" open="(" item="it" close=")" separator=",">
+               #{it}
+           </foreach>
+        </where>
+    </delete>
 </mapper>

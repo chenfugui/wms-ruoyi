@@ -25,4 +25,15 @@ public interface ErpEmpDicMapper extends BaseMapper<ErpEmpDic> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Integer[] ids);
+
+    /***
+     * @author chenfg
+     * @date: 2024/11/15 14:46
+     * @description:  删除字典项
+     * @param itemNames
+     * @param typeCode
+     * @param empId
+     * @return: void
+     */
+    int deleteByItemNameList(@Param("itemNames") List<String> itemNames,@Param("typeCode") String typeCode,@Param("empId") Integer empId);
 }

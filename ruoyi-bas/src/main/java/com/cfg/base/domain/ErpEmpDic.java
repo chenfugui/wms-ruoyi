@@ -1,5 +1,6 @@
 package com.cfg.base.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,7 +19,8 @@ public class ErpEmpDic extends BaseAudit {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("ID")
-    private Integer id;
+    @TableId
+    private Long id;
 
     @ApiModelProperty("类型编码")
     @Excel(name = "类型编码")
