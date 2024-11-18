@@ -209,7 +209,7 @@ public class ErpProMakeBatchService {
                 int pkgNo = i+1;
                 makeBatch.setSeqNo(Long.parseLong(String.valueOf(pkgNo)));
                 //makeBatch.setPkgStartNo(Long.parseLong(String.valueOf(pkgNo)));
-                makeBatch.setId(null);
+                makeBatch.setId(idGenService.getSeqId("batch_id"));
                 insert(makeBatch);
                 makeBatches.add(makeBatch);
             }
