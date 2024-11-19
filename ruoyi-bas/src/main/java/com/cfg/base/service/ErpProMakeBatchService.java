@@ -201,7 +201,10 @@ public class ErpProMakeBatchService {
         Long startPkgNo = makePrint.getPkgStartNo();
         Long endPkgNo = makePrint.getPkgEndNo();
         List<ErpProMakeBatch> makeBatches = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(makeDetailDTOLst)){
+        QueryWrapper<ErpProMakeBatch> wrapper = new QueryWrapper<>();
+        wrapper.eq("pro_make_id",makeId);
+        List<ErpProMakeBatch> batchList = erpProMakeBatchMapper.selectList(wrapper);
+        if(CollectionUtils.isNotEmpty(makeDetailDTOLst)&& CollectionUtils.isEmpty(batchList)){
             for (int i = 0; i < makeDetailDTOLst.size(); i++) {
                 ErpProMakeBatch makeBatch = ConvertUtils.convert(makeDetailDTOLst.get(i),ErpProMakeBatch.class);
                 makeBatch.setBedNo(makePrint.getBedNo());
@@ -209,11 +212,14 @@ public class ErpProMakeBatchService {
                 int pkgNo = i+1;
                 makeBatch.setSeqNo(Long.parseLong(String.valueOf(pkgNo)));
                 //makeBatch.setPkgStartNo(Long.parseLong(String.valueOf(pkgNo)));
+                makeBatch.setBedNo(makePrint.getBedNo());
                 makeBatch.setId(idGenService.getSeqId("batch_id"));
                 insert(makeBatch);
                 makeBatches.add(makeBatch);
             }
            return makeBatches.stream().filter((x)-> x.getSeqNo()>=startPkgNo&&x.getSeqNo()<=endPkgNo).collect(Collectors.toList());
+        }else if(CollectionUtils.isNotEmpty(batchList)){
+            return batchList.stream().filter((x)-> x.getSeqNo()>=startPkgNo&&x.getSeqNo()<=endPkgNo).collect(Collectors.toList());
         }
         return makeBatches;
     }
