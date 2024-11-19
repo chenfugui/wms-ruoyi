@@ -31,4 +31,8 @@ public class ProMakePrintDTO {
     private String empName;
     //单位ID
     private Long empId;
+    //产品ID
+    private Long proId;
+    //产品名称
+    private String proName;
 }

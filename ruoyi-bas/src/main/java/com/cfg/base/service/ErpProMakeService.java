@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.base.domain.*;
 import com.cfg.base.dto.ProMakeDTO;
 import com.cfg.base.dto.ProMakeDetailDTO;
+import com.cfg.base.dto.ProMakePrintDTO;
 import com.cfg.base.mapper.ErpProMakeBatchMapper;
 import com.cfg.base.pojo.dto.ErpProMakeDetailDTO;
 import com.cfg.idgen.service.IdGenService;
@@ -59,6 +60,22 @@ public class ErpProMakeService {
      */
     public ErpProMake selectById(Long id) {
         return erpProMakeMapper.selectById(id);
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/11/19 16:14
+     * @description:  查询生产详情
+     * @param id 生产Id
+     * @return: com.cfg.base.dto.ProMakeDTO
+     */
+    public ProMakeDTO selectByDetailId(Long id) {
+        ErpProMake promake = erpProMakeMapper.selectById(id);
+        List<ErpProMakeDetail> details = proMakeDetailService.selectDetailsByMakeId(promake.getId());
+        ProMakeDTO proMakeDto = ConvertUtils.convert(promake, ProMakeDTO.class);
+        List<ProMakeDetailDTO> detailDtoList = ConvertUtils.convert(details, ProMakeDetailDTO.class);
+        proMakeDto.setMakeDetailList(detailDtoList);
+        return proMakeDto;
     }
 
     /**
@@ -251,6 +268,20 @@ public class ErpProMakeService {
         List<ProMakeDetailDTO> makeDetailDTOLst = ConvertUtils.convert(makeDetails,ProMakeDetailDTO.class);
         makeDTO.setMakeDetailList(makeDetailDTOLst);
         return makeDTO;
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/11/19 15:08
+     * @description:  查询产品裁床历史记录
+     * @param query
+     * @param page
+     * @return: java.util.List<com.cfg.base.dto.ProMakePrintDTO>
+     */
+    public List<ProMakePrintDTO> selectCutHisList(ErpProMakeQuery query, Pageable page) {
+        String sql ="select e.pro_id ,f.pro_name ,d.*,e.create_time  from erp_pro_make   e,(select b.pro_make_id ,b.bed_no  ,count(b.id) pkg_total_num,sum(b.make_num) mk_total_num from  erp_pro_make a,erp_pro_make_batch b where a.id=b.pro_make_id and a.pro_id ='1' group by b.pro_make_id,b.bed_no) d ,erp_pro f where e.id=d.pro_make_id and e.pro_id =f.id order by e.create_time desc";
+        //return erpProMakeMapper.selectByEntity(query);
+        return null;
     }
 
 }
