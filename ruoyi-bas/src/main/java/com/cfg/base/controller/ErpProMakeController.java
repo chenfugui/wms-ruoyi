@@ -3,6 +3,7 @@ package com.cfg.base.controller;
 import java.util.List;
 
 import com.cfg.base.dto.ProMakeDTO;
+import com.cfg.base.dto.ProMakePrintDTO;
 import com.cfg.idgen.util.WrapperResponse;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
@@ -103,5 +104,13 @@ public class ErpProMakeController extends BaseController {
     public ResponseEntity<ProMakeDTO> getMakeDetail(@RequestParam("makeId") Long makeId) {
         ProMakeDTO proMakeDTO = service.selectByDetailId(makeId);
         return ResponseEntity.ok(proMakeDTO);
+    }
+
+    @ApiOperation("查询服装生产历史记录")
+    @PreAuthorize("@ss.hasPermi('base:erpProMake:query')")
+    @PostMapping("/proMakeHis")
+    public ResponseEntity<Page<ProMakePrintDTO>> getProMakeHis(@RequestBody ErpProMakeQuery query, Pageable page) {
+        List<ProMakePrintDTO> mkPrintList= service.selectCutHisList(query,page);
+        return ResponseEntity.ok(new PageImpl<>(mkPrintList, page, ((com.github.pagehelper.Page)mkPrintList).getTotal()));
     }
 }

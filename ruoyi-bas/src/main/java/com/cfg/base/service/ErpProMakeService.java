@@ -279,9 +279,10 @@ public class ErpProMakeService {
      * @return: java.util.List<com.cfg.base.dto.ProMakePrintDTO>
      */
     public List<ProMakePrintDTO> selectCutHisList(ErpProMakeQuery query, Pageable page) {
-        String sql ="select e.pro_id ,f.pro_name ,d.*,e.create_time  from erp_pro_make   e,(select b.pro_make_id ,b.bed_no  ,count(b.id) pkg_total_num,sum(b.make_num) mk_total_num from  erp_pro_make a,erp_pro_make_batch b where a.id=b.pro_make_id and a.pro_id ='1' group by b.pro_make_id,b.bed_no) d ,erp_pro f where e.id=d.pro_make_id and e.pro_id =f.id order by e.create_time desc";
-        //return erpProMakeMapper.selectByEntity(query);
-        return null;
+        if (page != null) {
+            PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize());
+        }
+        return erpProMakeMapper.selectMakeListByProId(query);
     }
 
 }

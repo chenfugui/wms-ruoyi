@@ -2,6 +2,8 @@ package com.cfg.base.mapper;
 
 import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cfg.base.dto.ProMakePrintDTO;
+import com.cfg.base.pojo.query.ErpProMakeQuery;
 import org.apache.ibatis.annotations.Param;
 import com.cfg.base.domain.ErpProMake;
 
@@ -25,4 +27,14 @@ public interface ErpProMakeMapper extends BaseMapper<ErpProMake> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+
+    /***
+     * @author chenfg
+     * @date: 2024/11/20 13:12
+     * @description:  根据产品id查询生产记录
+     * @param makeQuery
+     * @return: java.util.List<com.cfg.base.dto.ProMakePrintDTO>
+     */
+    List<ProMakePrintDTO> selectMakeListByProId(ErpProMakeQuery makeQuery);
 }
