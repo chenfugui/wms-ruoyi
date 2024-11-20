@@ -197,4 +197,15 @@ public class ErpProMakeDetailService {
         qw.eq("pro_make_id", proMakeId);
         erpProMakeDetailMapper.delete(qw);
     }
+
+    /***
+     * @author chenfg
+     * @date: 2024/10/21 14:10
+     * @description:  根据生产id批量删除明细
+     * @param ids
+     * @return: void
+     */
+    public void deleteByMakeIds(List<Long> ids) {
+        erpProMakeDetailMapper.deleteByMakeIds(ids);
+    }
 }

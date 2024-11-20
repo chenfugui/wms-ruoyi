@@ -51,6 +51,10 @@ public class ErpProMakeService {
     private ErpProMakeDetailService erpProMakeDetailService;
     @Autowired
     private ErpProService proService;
+    @Autowired
+    private ErpProBatchExeService exeService;
+    @Autowired
+    private ErpProMakeBatchService batchService;
 
     /**
      * 查询服装生产管理
@@ -240,6 +244,23 @@ public class ErpProMakeService {
      */
     public int deleteByIds(Long[] ids) {
         return erpProMakeMapper.updateDelFlagByIds(ids);
+    }
+
+    /**
+     * 批量删除服装生产管理
+     *
+     * @param ids 需要删除的服装生产管理主键
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public int deleteMakeByIds(List<Long> ids) {
+        List<ErpProBatchExe> exeList =  exeService.selectByMakeIds(ids);
+        if(CollectionUtils.isNotEmpty(exeList)){
+            throw new RuntimeException("存在扫菲记录,不能删除");
+        }
+        proMakeDetailService.deleteByMakeIds(ids);
+        batchService.deleteByMakeIds(ids);
+        return erpProMakeMapper.deleteProMakeByIds(ids);
     }
 
     /**

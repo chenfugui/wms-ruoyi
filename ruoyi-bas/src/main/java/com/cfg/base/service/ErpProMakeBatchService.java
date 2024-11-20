@@ -223,4 +223,13 @@ public class ErpProMakeBatchService {
         }
         return makeBatches;
     }
+
+    /**
+     * 根据生产id删除生产批次
+     * @param ids
+     * @return
+     */
+    public int deleteByMakeIds(List<Long> ids) {
+        return erpProMakeBatchMapper.deleteByMakeIds(ids);
+    }
 }

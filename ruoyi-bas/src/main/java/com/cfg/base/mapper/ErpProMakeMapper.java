@@ -37,4 +37,11 @@ public interface ErpProMakeMapper extends BaseMapper<ErpProMake> {
      * @return: java.util.List<com.cfg.base.dto.ProMakePrintDTO>
      */
     List<ProMakePrintDTO> selectMakeListByProId(ErpProMakeQuery makeQuery);
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    int deleteProMakeByIds(@Param("ids") List<Long>  ids);
 }

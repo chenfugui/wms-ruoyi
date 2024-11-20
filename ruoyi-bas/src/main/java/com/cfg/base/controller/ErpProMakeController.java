@@ -113,4 +113,12 @@ public class ErpProMakeController extends BaseController {
         List<ProMakePrintDTO> mkPrintList= service.selectCutHisList(query,page);
         return ResponseEntity.ok(new PageImpl<>(mkPrintList, page, ((com.github.pagehelper.Page)mkPrintList).getTotal()));
     }
+
+    @ApiOperation("删除服装生产记录")
+    @PreAuthorize("@ss.hasPermi('base:erpProMake:remove')")
+    @Log(title = "服装生产管理", businessType = BusinessType.DELETE)
+    @PostMapping("/del")
+    public ResponseEntity<Integer> deleteByIds(@RequestBody List<Long> ids) {
+        return ResponseEntity.ok(service.deleteMakeByIds(ids));
+    }
 }

@@ -26,5 +26,23 @@ public interface ErpProBatchExeMapper extends BaseMapper<ErpProBatchExe> {
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
 
-    List<ErpProBatchExe> selectByProMaxkeId(Long proMakeId);
+    /**
+     * @author chenfg
+     * @date: 2024/11/20 16:54
+     * @description:  根据生产生产id查询扫菲记录
+     * @param proMakeId 生产id
+     * @return: java.util.List<com.cfg.base.domain.ErpProBatchExe>
+     */
+    List<ErpProBatchExe> selectByProMakeId(@Param("proMakeId") Long proMakeId);
+
+    /**
+     * @author chenfg
+     * @date: 2024/11/20 16:55
+     * @description:  根据生产生产id集合查询扫菲记录
+     * @param proMakeIds
+     * @return: java.util.List<com.cfg.base.domain.ErpProBatchExe>
+     */
+    List<ErpProBatchExe> selectByProMakeIds(@Param("proMakeIds") List<Long> proMakeIds);
+
+
 }

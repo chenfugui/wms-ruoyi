@@ -25,4 +25,10 @@ public interface ErpProMakeDetailMapper extends BaseMapper<ErpProMakeDetail> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+    */
+    int deleteByMakeIds(@Param("ids") List<Long> ids);
 }

@@ -3,6 +3,7 @@ package com.cfg.base.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -10,6 +11,7 @@ import com.cfg.idgen.service.IdGenService;
 import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.apache.commons.lang3.StringUtils;
@@ -139,5 +141,34 @@ public class ErpProBatchExeService {
     public int deleteById(Long id) {
         Long[] ids = {id};
         return erpProBatchExeMapper.updateDelFlagByIds(ids);
+    }
+
+    /**
+     * 根据makeId查询生产进度
+     * @param makeId
+     * @return
+     */
+    public List<ErpProBatchExe> selectByMakeId(Long makeId) {
+        return erpProBatchExeMapper.selectByProMakeIds(Collections.singletonList(makeId));
+    }
+
+    /**
+     * 根据makeIds查询生产进度
+     * @param makeIds
+     * @return List<ErpProBatchExe>
+     */
+    public List<ErpProBatchExe> selectByMakeIds(List<Long> makeIds) {
+        return erpProBatchExeMapper.selectByProMakeIds(makeIds);
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/11/20 17:33
+     * @description:  根据生产id删除批次数据
+     * @param makeIds 生产id
+     * @return: int
+     */
+    public int deleteByMakeIds(List<Long> makeIds) {
+        return 0;
     }
 }

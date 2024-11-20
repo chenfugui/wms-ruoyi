@@ -25,4 +25,11 @@ public interface ErpProMakeBatchMapper extends BaseMapper<ErpProMakeBatch> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+    /**
+     * 根据生产管理id批量删除
+     * @param ids
+     * @return
+     */
+    int deleteByMakeIds(@Param("ids") List<Long> ids);
 }
