@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.cfg.base.pojo.dto.ErpProMakeBatchDTO;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -92,4 +93,13 @@ public class ErpProBatchExeController extends BaseController {
     public ResponseEntity<Integer> remove(@PathVariable Long[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
     }
+
+    @ApiOperation("新增服装生产进度")
+    @PreAuthorize("@ss.hasPermi('base:erpProBatchExe:add')")
+    @Log(title = "服装生产进度", businessType = BusinessType.INSERT)
+    @PostMapping("/reg/makeRcd")
+    public ResponseEntity<Integer> insertBatch(@RequestBody List<ErpProMakeBatchDTO> makeBatchDTOList) {
+        return ResponseEntity.ok(service.insertBatch(makeBatchDTOList));
+    }
+
 }

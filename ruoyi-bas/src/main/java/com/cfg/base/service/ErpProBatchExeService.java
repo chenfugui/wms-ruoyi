@@ -2,15 +2,23 @@ package com.cfg.base.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
+
+import cn.hutool.Hutool;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.thread.lock.LockUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.pojo.dto.ErpProMakeBatchDTO;
 import com.cfg.idgen.service.IdGenService;
+import com.cfg.idgen.util.CommonUtils;
 import com.cfg.idgen.util.OperatorUtils;
+import com.cfg.idgen.util.RedisUtilContext;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.uuid.IdUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +27,7 @@ import org.springframework.stereotype.Service;
 import com.cfg.base.mapper.ErpProBatchExeMapper;
 import com.cfg.base.domain.ErpProBatchExe;
 import com.cfg.base.pojo.query.ErpProBatchExeQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服装生产进度Service业务层处理
@@ -30,9 +39,13 @@ import com.cfg.base.pojo.query.ErpProBatchExeQuery;
 public class ErpProBatchExeService {
     @Autowired
     private ErpProBatchExeMapper erpProBatchExeMapper;
+    @Autowired
+    private ErpProMakeBatchService makeBatchService;
 
     @Autowired
     private IdGenService idGenService;
+    @Autowired
+    private RedisUtilContext redisUtilContext;
 
     /**
      * 查询服装生产进度
@@ -98,7 +111,6 @@ public class ErpProBatchExeService {
 
     /**
      * 新增服装生产进度
-     *
      * @param erpProBatchExe 服装生产进度
      * @return 结果
      */
@@ -170,5 +182,47 @@ public class ErpProBatchExeService {
      */
     public int deleteByMakeIds(List<Long> makeIds) {
         return 0;
+    }
+
+    /**
+     * 新增服装生产进度
+     * @param batchDTOS 服装生产进度
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public int insertBatch(List<ErpProMakeBatchDTO> batchDTOS) {
+        Assert.isTrue(CollectionUtils.isNotEmpty(batchDTOS), "扫菲录入数据为空");
+        ErpProMakeBatchDTO proMakeBatchDTO =batchDTOS.get(0);
+        String key = "lock:batch:"+proMakeBatchDTO.getProId();
+        String reqId = CommonUtils.getUUID();
+       boolean lock = redisUtilContext.lock(key, reqId, 10, 10);
+       if(lock){
+           try {
+               List<ErpProMakeBatchDTO> dbMakeBatchDTOList = makeBatchService.selectItemMakeInfoById(batchDTOS.get(0).getId());
+               Map<Long,ErpProMakeBatchDTO> stepBatchDTOMap = new HashMap<>();
+               for (ErpProMakeBatchDTO erpProMakeBatchDTO : dbMakeBatchDTOList) {
+                   stepBatchDTOMap.put(erpProMakeBatchDTO.getStepId(), erpProMakeBatchDTO);
+               }
+               for (ErpProMakeBatchDTO batchDTO : batchDTOS) {
+                   Long stepId = batchDTO.getStepId();
+                   Long regNum = batchDTO.getRegNum();
+                   ErpProMakeBatchDTO dbBatchDTO = stepBatchDTOMap.get(stepId);
+                   if(regNum>(dbBatchDTO.getMakeNum() - dbBatchDTO.getCompleteNum()) || regNum<0){
+                       throw new RuntimeException("工序完成数量不能大于剩余数量");
+                   }
+                   ErpProBatchExe erpProBatchExe = new ErpProBatchExe();
+                   erpProBatchExe.setDelFlag(0);
+                   erpProBatchExe.setCreateTime(LocalDateTime.now());
+                   erpProBatchExe.setId(idGenService.getSeqId("exe_id"));
+                   erpProBatchExe.setEmpId(SecurityUtils.getEmpId());
+                   OperatorUtils.setCreateInfo(erpProBatchExe);
+                   erpProBatchExeMapper.insert(erpProBatchExe);
+               }
+           }finally {
+               redisUtilContext.unLock(key, reqId);
+           }
+       }
+       return 1;
+
     }
 }

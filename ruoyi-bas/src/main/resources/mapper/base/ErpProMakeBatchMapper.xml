@@ -74,4 +74,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             pro_make_id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
     </delete>
+
+    <!-- 扫菲查询生产明细 -->
+    <select id="selectItemMakeInfoById" parameterType="java.lang.Long" resultType="com.cfg.base.pojo.dto.ErpProMakeBatchDTO">
+        select d.*,IFNULL(f.complete_num, 0) AS complete_num from (
+                select a.*,c.id step_id,c.step_code ,c.step_name  from erp_pro_make_batch a ,erp_pro_process c where a.pro_id  =c.pro_id and a.id =#{id} order by c.id
+            ) d left join (
+                select batch_id ,step_id ,sum(real_make_num) complete_num from erp_pro_batch_exe where batch_id=#{id} group by batch_id ,step_id
+          ) f on d.id=f.batch_id and d.step_id = f.step_id
+    </select>
 </mapper>

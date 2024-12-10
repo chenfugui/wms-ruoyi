@@ -3,6 +3,7 @@ package com.cfg.base.controller;
 import java.util.List;
 
 import com.cfg.base.dto.ProMakePrintDTO;
+import com.cfg.base.pojo.dto.ErpProMakeBatchDTO;
 import com.cfg.base.service.ErpProMakeService;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
@@ -13,14 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.enums.BusinessType;
@@ -101,5 +95,13 @@ public class ErpProMakeBatchController extends BaseController {
     @PostMapping("/addProMakeBatch")
     public ResponseEntity<List<ErpProMakeBatch>> addMakeBatch(@RequestBody ProMakePrintDTO makerPrint) {
         return ResponseEntity.ok(service.addProMakeBatch(makerPrint));
+    }
+
+
+    @ApiOperation("扫菲获取生产详情")
+    @PreAuthorize("@ss.hasPermi('base:erpProMakeBatch:query')")
+    @GetMapping(value = "/item/makeInfo")
+    public ResponseEntity<List<ErpProMakeBatchDTO>> getItemMakeInfo(@RequestParam("id") Long id) {
+        return ResponseEntity.ok(service.selectItemMakeInfoById(id));
     }
 }

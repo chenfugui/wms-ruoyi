@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.base.dto.ProMakeDTO;
 import com.cfg.base.dto.ProMakeDetailDTO;
 import com.cfg.base.dto.ProMakePrintDTO;
+import com.cfg.base.pojo.dto.ErpProMakeBatchDTO;
 import com.cfg.base.pojo.dto.ErpProMakeDTO;
 import com.cfg.base.pojo.dto.ErpProMakeDetailDTO;
 import com.cfg.idgen.service.IdGenService;
@@ -231,5 +232,17 @@ public class ErpProMakeBatchService {
      */
     public int deleteByMakeIds(List<Long> ids) {
         return erpProMakeBatchMapper.deleteByMakeIds(ids);
+    }
+
+    /***
+     * @author chenfg
+     * @date: 2024/12/10 19:20
+     * @description:  获取菲码各工序生产信息
+     * @param id
+     * @return: java.util.List<com.cfg.base.pojo.dto.ErpProMakeBatchDTO>
+     */
+    public List<ErpProMakeBatchDTO> selectItemMakeInfoById(Long id){
+
+        return erpProMakeBatchMapper.selectItemMakeInfoById(id);
     }
 }

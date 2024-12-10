@@ -2,6 +2,7 @@ package com.cfg.base.mapper;
 
 import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cfg.base.pojo.dto.ErpProMakeBatchDTO;
 import org.apache.ibatis.annotations.Param;
 import com.cfg.base.domain.ErpProMakeBatch;
 
@@ -32,4 +33,12 @@ public interface ErpProMakeBatchMapper extends BaseMapper<ErpProMakeBatch> {
      * @return
      */
     int deleteByMakeIds(@Param("ids") List<Long> ids);
+
+
+    /**
+     * 根据生产管理id查询生产信息列表
+     * @param id
+     * @return
+     */
+    List<ErpProMakeBatchDTO> selectItemMakeInfoById(@Param("id") Long id);
 }

@@ -27,4 +27,10 @@ public class ErpProMakeBatchDTO extends BaseAudit {
     private Long empId;
     private Integer delFlag;
     private Long seqNo;
+    private Long stepId;
+    private String stepName;
+    private String stepCode;
+    private Long completeNum;
+    // 登记数量
+    private Long regNum;
 }
