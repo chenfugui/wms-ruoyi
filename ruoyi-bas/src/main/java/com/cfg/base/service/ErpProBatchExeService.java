@@ -10,7 +10,9 @@ import cn.hutool.Hutool;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.thread.lock.LockUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.pojo.dto.ErpProBatchExeDTO;
 import com.cfg.base.pojo.dto.ErpProMakeBatchDTO;
+import com.cfg.idgen.enums.SalaryTypeEnum;
 import com.cfg.idgen.service.IdGenService;
 import com.cfg.idgen.util.CommonUtils;
 import com.cfg.idgen.util.OperatorUtils;
@@ -195,7 +197,7 @@ public class ErpProBatchExeService {
         ErpProMakeBatchDTO proMakeBatchDTO =batchDTOS.get(0);
         String key = "lock:batch:"+proMakeBatchDTO.getProId();
         String reqId = CommonUtils.getUUID();
-       boolean lock = redisUtilContext.lock(key, reqId, 10, 10);
+       boolean lock = redisUtilContext.lock(key, reqId, 20, 20);
        if(lock){
            try {
                List<ErpProMakeBatchDTO> dbMakeBatchDTOList = makeBatchService.selectItemMakeInfoById(batchDTOS.get(0).getId());
@@ -215,6 +217,11 @@ public class ErpProBatchExeService {
                    erpProBatchExe.setCreateTime(LocalDateTime.now());
                    erpProBatchExe.setId(idGenService.getSeqId("exe_id"));
                    erpProBatchExe.setEmpId(SecurityUtils.getEmpId());
+                   erpProBatchExe.setBatchId(batchDTO.getId());
+                   erpProBatchExe.setStepId(stepId);
+                   erpProBatchExe.setRealMakeNum(regNum);
+                   erpProBatchExe.setScanBy(SecurityUtils.getUserId());
+                   erpProBatchExe.setScanTime(LocalDateTime.now());
                    OperatorUtils.setCreateInfo(erpProBatchExe);
                    erpProBatchExeMapper.insert(erpProBatchExe);
                }
@@ -224,5 +231,31 @@ public class ErpProBatchExeService {
        }
        return 1;
 
+    }
+
+    /**
+     * @author chenfg
+     * @date: 2024/12/11 11:17
+     * @description:  查询扫菲记录
+     * @param batchExeDTO
+     * @return: java.util.List<com.cfg.base.pojo.dto.ErpProBatchExeDTO>
+     */
+    public List<ErpProBatchExeDTO> selectScanRcdList(ErpProBatchExeDTO batchExeDTO) {
+        return erpProBatchExeMapper.selectScanRcdList(batchExeDTO);
+    }
+
+
+    /**
+     * @author chenfg
+     * @date: 2024/12/11 11:17
+     * @description:  工资查询
+     * @param batchExeDTO
+     * @return: java.util.List<com.cfg.base.pojo.dto.ErpProBatchExeDTO>
+     */
+    public List<ErpProBatchExeDTO> selectSalaryList(ErpProBatchExeDTO batchExeDTO) {
+        if(SalaryTypeEnum.SALARY_MONTH.getCode().equals(batchExeDTO.getSalaryType())){
+            return erpProBatchExeMapper.selectSalaryMonth(batchExeDTO);
+        }
+        return erpProBatchExeMapper.selectSalaryDay(batchExeDTO);
     }
 }

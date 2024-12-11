@@ -2,6 +2,7 @@ package com.cfg.base.controller;
 
 import java.util.List;
 
+import com.cfg.base.pojo.dto.ErpProBatchExeDTO;
 import com.cfg.base.pojo.dto.ErpProMakeBatchDTO;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
@@ -100,6 +101,21 @@ public class ErpProBatchExeController extends BaseController {
     @PostMapping("/reg/makeRcd")
     public ResponseEntity<Integer> insertBatch(@RequestBody List<ErpProMakeBatchDTO> makeBatchDTOList) {
         return ResponseEntity.ok(service.insertBatch(makeBatchDTOList));
+    }
+
+
+    @ApiOperation("获取服装生产进度详细信息")
+    @PreAuthorize("@ss.hasPermi('base:erpProBatchExe:query')")
+    @PostMapping(value = "/scan/rcd")
+    public ResponseEntity<List<ErpProBatchExeDTO>> getScanRcdList(ErpProBatchExeDTO batchExeDTO) {
+        return ResponseEntity.ok(service.selectScanRcdList(batchExeDTO));
+    }
+
+    @ApiOperation("工资查询")
+    @PreAuthorize("@ss.hasPermi('base:erpProBatchExe:query')")
+    @PostMapping(value = "/salary")
+    public ResponseEntity<List<ErpProBatchExeDTO>> getSalaryList(ErpProBatchExeDTO batchExeDTO) {
+        return ResponseEntity.ok(service.selectSalaryList(batchExeDTO));
     }
 
 }

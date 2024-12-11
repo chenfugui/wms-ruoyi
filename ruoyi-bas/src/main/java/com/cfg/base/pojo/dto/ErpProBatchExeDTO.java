@@ -21,4 +21,19 @@ public class ErpProBatchExeDTO extends BaseAudit {
     private LocalDateTime scanTime;
     private BigDecimal salary;
     private Integer delFlag;
+    private Long proId;
+    private Long sizeId;
+    private Long colorId;
+    private String sizeName;
+    private String colorName;
+    private String stepName;
+    private BigDecimal wkSalary;
+    private String scanDay;
+    private String scanMonth;
+    private String scanYear;
+    private String userName;
+    private String startDay;
+    private String endDay;
+    // 1 月  2 日
+    private String salaryType;
 }
