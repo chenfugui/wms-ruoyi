@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 根据产品id 查询生产历史记录-->
     <select id="selectMakeListByProId" parameterType="com.cfg.base.pojo.query.ErpProMakeQuery" resultType="com.cfg.base.dto.ProMakePrintDTO">
-        select e.pro_id ,f.pro_name ,d.*,e.create_time  from erp_pro_make   e,(select b.pro_make_id ,b.bed_no  ,count(b.id) pkg_total_num,sum(b.make_num) mk_total_num from  erp_pro_make a,erp_pro_make_batch b where a.id=b.pro_make_id and a.pro_id = #{proId} group by b.pro_make_id,b.bed_no) d ,erp_pro f where e.id=d.pro_make_id and e.pro_id =f.id order by e.create_time desc
+        select e.pro_id ,d.id pro_make_id,f.pro_name ,d.*,e.create_time  from erp_pro_make   e,(select a.id ,b.bed_no  ,count(b.id) pkg_total_num,sum(b.make_num) mk_total_num from  erp_pro_make a left join erp_pro_make_batch b on a.id=b.pro_make_id and a.pro_id = #{proId} group by a.id,b.bed_no) d ,erp_pro f where e.id=d.id and e.pro_id =f.id order by d.id desc
     </select>
 
     <!-- 根据生产id删除生产记录 -->
