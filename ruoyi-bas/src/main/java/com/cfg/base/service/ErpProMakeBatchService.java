@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cfg.base.domain.ErpPro;
 import com.cfg.base.dto.ProMakeDTO;
 import com.cfg.base.dto.ProMakeDetailDTO;
 import com.cfg.base.dto.ProMakePrintDTO;
+import com.cfg.base.pojo.dto.ErpProDTO;
 import com.cfg.base.pojo.dto.ErpProMakeBatchDTO;
 import com.cfg.base.pojo.dto.ErpProMakeDTO;
 import com.cfg.base.pojo.dto.ErpProMakeDetailDTO;
@@ -45,6 +47,8 @@ public class ErpProMakeBatchService {
     private ErpProMakeService makeService;
     @Autowired
     private ErpProMakeService erpProMakeService;
+    @Autowired
+    private ErpProService proService;
 
     /**
      * 查询服装生产批次
@@ -242,7 +246,15 @@ public class ErpProMakeBatchService {
      * @return: java.util.List<com.cfg.base.pojo.dto.ErpProMakeBatchDTO>
      */
     public List<ErpProMakeBatchDTO> selectItemMakeInfoById(Long id){
-
-        return erpProMakeBatchMapper.selectItemMakeInfoById(id);
+        List<ErpProMakeBatchDTO> batchDTOS = erpProMakeBatchMapper.selectItemMakeInfoById(id);
+        if(CollectionUtils.isNotEmpty(batchDTOS)){
+           ErpProDTO erpPro = proService.selectByProId(batchDTOS.get(0).getProId());
+           if(null!=erpPro){
+               batchDTOS.forEach((x)->{
+                   x.setProName(erpPro.getProName());
+               });
+           }
+        }
+        return batchDTOS;
     }
 }

@@ -206,6 +206,9 @@ public class ErpProBatchExeService {
                    stepBatchDTOMap.put(erpProMakeBatchDTO.getStepId(), erpProMakeBatchDTO);
                }
                for (ErpProMakeBatchDTO batchDTO : batchDTOS) {
+                   if(batchDTO.getRegNum()==null||batchDTO.getRegNum()<=0) {
+                       continue;
+                   }
                    Long stepId = batchDTO.getStepId();
                    Long regNum = batchDTO.getRegNum();
                    ErpProMakeBatchDTO dbBatchDTO = stepBatchDTOMap.get(stepId);

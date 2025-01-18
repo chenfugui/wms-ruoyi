@@ -33,4 +33,5 @@ public class ErpProMakeBatchDTO extends BaseAudit {
     private Long completeNum;
     // 登记数量
     private Long regNum;
+    private String proName;
 }
