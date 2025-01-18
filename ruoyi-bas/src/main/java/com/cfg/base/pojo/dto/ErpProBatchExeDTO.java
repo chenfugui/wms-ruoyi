@@ -38,6 +38,8 @@ public class ErpProBatchExeDTO extends BaseAudit {
     private String endDay;
     // 1 月  2 日
     private String salaryType;
+    private String proName;
+    private BigDecimal price;
 
     public static void main(String[] args) {
         ErpProBatchExeDTO batchExeDTO = new ErpProBatchExeDTO();
