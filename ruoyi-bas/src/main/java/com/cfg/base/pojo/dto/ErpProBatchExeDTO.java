@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseAudit;
 import lombok.Data;
 /**
@@ -20,6 +23,7 @@ public class ErpProBatchExeDTO extends BaseAudit {
     private Long realMakeNum;
     private Long empId;
     private Long scanBy;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private LocalDateTime scanTime;
     private BigDecimal salary;
     private Integer delFlag;
@@ -52,7 +56,6 @@ public class ErpProBatchExeDTO extends BaseAudit {
         batchExeDTO.setRealMakeNum(1L);
         batchExeDTO.setScanBy(1L);
         batchExeDTO.setScanTime(LocalDateTime.now());
-        batchExeDTO.setSalary(new BigDecimal(100));
         batchExeDTO.setDelFlag(0);
         batchExeDTO.setProId(1L);
         batchExeDTO.setSizeId(1L);
@@ -70,7 +73,10 @@ public class ErpProBatchExeDTO extends BaseAudit {
         batchExeDTO.setSizeName("XL");
         batchExeDTO.setStepName("生产");
         batchExeDTO.setUserName("张三");
-        System.out.println(JSON.toJSONString(batchExeDTO));
+        batchExeDTO.setProName("T恤");
+        batchExeDTO.setPrice(new BigDecimal(100));
+        String makeJson = JSONObject.toJSONString(batchExeDTO, SerializerFeature.WriteDateUseDateFormat);
+        System.out.println(makeJson);
     }
 }
 

@@ -37,6 +37,7 @@ server:
 logging:
   level:
     com.ruoyi: debug
+    com.cfg.base.mapper: debug
     org.springframework: warn
 
 # Spring配置

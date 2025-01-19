@@ -114,7 +114,7 @@ public class ErpProBatchExeController extends BaseController {
     @ApiOperation("工资查询")
     @PreAuthorize("@ss.hasPermi('base:erpProBatchExe:query')")
     @PostMapping(value = "/salary")
-    public ResponseEntity<List<ErpProBatchExeDTO>> getSalaryList(ErpProBatchExeDTO batchExeDTO) {
+    public ResponseEntity<List<ErpProBatchExeDTO>> getSalaryList(@RequestBody ErpProBatchExeDTO batchExeDTO) {
         return ResponseEntity.ok(service.selectSalaryList(batchExeDTO));
     }
 
