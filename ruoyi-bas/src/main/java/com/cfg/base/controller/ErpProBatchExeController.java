@@ -107,7 +107,7 @@ public class ErpProBatchExeController extends BaseController {
     @ApiOperation("获取服装生产进度详细信息")
     @PreAuthorize("@ss.hasPermi('base:erpProBatchExe:query')")
     @PostMapping(value = "/scan/rcd")
-    public ResponseEntity<List<ErpProBatchExeDTO>> getScanRcdList(ErpProBatchExeDTO batchExeDTO) {
+    public ResponseEntity<List<ErpProBatchExeDTO>> getScanRcdList(@RequestBody ErpProBatchExeDTO batchExeDTO) {
         return ResponseEntity.ok(service.selectScanRcdList(batchExeDTO));
     }
 

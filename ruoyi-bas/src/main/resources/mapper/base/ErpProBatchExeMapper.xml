@@ -68,10 +68,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 查询扫菲记录并计算工资 -->
     <select id="selectScanRcdList" parameterType="com.cfg.base.pojo.dto.ErpProBatchExeDTO" resultType="com.cfg.base.pojo.dto.ErpProBatchExeDTO">
-        select m.*,n.user_name ,k.step_name,t.proName  from (
-                                                      select d.*,e.price,d.real_make_num * ifnull(e.price,0) wksalary,DATE_FORMAT(d.scan_time,'%Y%m%d') scan_day ,DATE_FORMAT(d.scan_time,'%Y%m') scan_month, DATE_FORMAT(d.scan_time,'%Y') scan_year from (
+        select m.*,n.user_name ,k.step_name,t.pro_name  from (
+                                                      select d.*,e.price,d.real_make_num * ifnull(e.price,0) wksalary,DATE_FORMAT(d.scan_time,'%Y-%m-%d') scan_day ,DATE_FORMAT(d.scan_time,'%Y-%m') scan_month, DATE_FORMAT(d.scan_time,'%Y') scan_year from (
                                                                select b.*,a.pro_id ,a.size_id,a.size_name,a.color_id,a.color_name  from  erp_pro_make_batch a,erp_pro_batch_exe b where a.id =b.batch_id and a.emp_id=#{batchExeDTO.empId}
-                                                                    <if test="scanBy != null "> and b.scan_by = #{batchExeDTO.scanBy}</if>                                                                                                                                                                                                                                                                                                               ) d left join erp_pro_price e on d.pro_id=e.pro_id and d.size_id=e.size_id  and d.step_id=e.step_id
+                                                                    <if test="batchExeDTO.scanBy != null "> and b.scan_by = #{batchExeDTO.scanBy}</if>                                                                                                                                                                                                                                                                                                               ) d left join erp_pro_price e on d.pro_id=e.pro_id and d.size_id=e.size_id  and d.step_id=e.step_id
                                                   ) m left join sys_user n on m.scan_by=n.user_id left join erp_pro_process k on m.step_id =k.id left join erp_pro t on m.pro_id=t.id
         <where>
             <if test="batchExeDTO.scanDay != null "> and m.scan_day = #{batchExeDTO.scanDay}</if>
