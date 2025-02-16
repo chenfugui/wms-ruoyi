@@ -1,5 +1,6 @@
 package com.cfg.idgen.util;
 
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.UUID;
 
@@ -66,5 +67,35 @@ public class CommonUtils {
             ch[0] = (char) (ch[0] - 32);
         }
         return new String(ch);
+    }
+
+    public static BigDecimal getFinalScore(BigDecimal evalScore){
+        if(null==evalScore){
+            return evalScore;
+        }
+        if(evalScore.compareTo(BigDecimal.ZERO)<0){
+            return new BigDecimal(0);
+        }
+        if(evalScore.compareTo(new BigDecimal(100))>0){
+            return new BigDecimal(100);
+        }
+        return evalScore;
+    }
+
+    public static void main(String[] args) {
+        BigDecimal score1 = new BigDecimal("1.00");
+        BigDecimal score2 = new BigDecimal("-3.00");
+        BigDecimal score3 = new BigDecimal("3.00");
+        BigDecimal score4 = new BigDecimal("103.00");
+        BigDecimal resData = score1.add(score2);
+        System.out.println(score1+" + "+score2+"="+resData);
+        resData = score1.subtract(score2);
+        System.out.println(score1+" - "+score2+"="+resData);
+        int scale = score2.divide(score1).intValue();
+        resData = new BigDecimal(scale).multiply(score3);
+        System.out.println("("+score2+" / "+score1+")*"+score3+"="+resData);
+        System.out.println(score2+"> getFinal="+getFinalScore(score2));
+        System.out.println(score1+"> getFinal="+getFinalScore(score1));
+        System.out.println(score4+"> getFinal="+getFinalScore(score4));
     }
 }
