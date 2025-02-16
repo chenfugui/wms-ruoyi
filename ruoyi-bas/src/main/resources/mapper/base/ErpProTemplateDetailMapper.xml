@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.ErpProTemplateDetailMapper">
+    
+    <resultMap type="com.cfg.base.domain.ErpProTemplateDetail" id="ErpProTemplateDetailResult">
+        <result property="id" column="id"/>
+        <result property="tmpId" column="tmp_id"/>
+        <result property="tmpCode" column="tmp_code"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="itemName" column="item_name"/>
+        <result property="itemMemo" column="item_memo"/>
+        <result property="seqNo" column="seq_no"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="empId" column="emp_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectErpProTemplateDetailVo">
+        select id, tmp_id, tmp_code, item_code, item_name, item_memo, seq_no, create_by, create_time, del_flag, update_by, update_time, emp_id   from erp_pro_template_detail
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpProTemplateDetail" resultMap="ErpProTemplateDetailResult">
+        <include refid="selectErpProTemplateDetailVo"/>
+        <where>  
+            <if test="tmpId != null "> and tmp_id = #{tmpId}</if>
+            <if test="tmpCode != null  and tmpCode != ''"> and tmp_code = #{tmpCode}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="itemMemo != null  and itemMemo != ''"> and item_memo = #{itemMemo}</if>
+        </where>
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update erp_pro_template_detail set del_flag=1
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+
+    <delete id="deleteErpProTemplateDetailByTmpId">
+        delete from erp_pro_template_detail where tmp_id=#{tmpId};
+    </delete>
+</mapper>
