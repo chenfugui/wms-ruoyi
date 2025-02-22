@@ -9,10 +9,12 @@ import com.cfg.base.domain.ErpProTemplateDetail;
 import com.cfg.base.mapper.ErpProTemplateDetailMapper;
 import com.cfg.base.pojo.dto.ErpProTemplateDTO;
 import com.cfg.base.pojo.dto.ErpProTemplateDetailDTO;
+import com.cfg.enums.DrFlag;
 import com.cfg.idgen.service.IdGenService;
 import com.cfg.idgen.util.ConvertUtils;
 import com.cfg.idgen.util.OperatorUtils;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,7 @@ import com.cfg.base.mapper.ErpProTemplateMapper;
 import com.cfg.base.domain.ErpProTemplate;
 import com.cfg.base.pojo.query.ErpProTemplateQuery;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 模板表Service业务层处理
@@ -60,6 +63,10 @@ public class ErpProTemplateService {
             PageHelper.startPage(page.getPageNumber() + 1, page.getPageSize());
         }
         QueryWrapper<ErpProTemplate> qw = new QueryWrapper<>();
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(!loginUser.getUser().isAdmin()){
+            qw.eq("emp_id",loginUser.getUser().getEmpId());
+        }
         qw.eq("del_flag",0);
         String tmpCode = query.getTmpCode();
         if (!StringUtils.isEmpty(tmpCode)) {
@@ -110,7 +117,10 @@ public class ErpProTemplateService {
         ErpProTemplate erpProTemplate = ConvertUtils.convert(erpProTemplateDTO, ErpProTemplate.class);
         templateDetailMapper.deleteErpProTemplateDetailByTmpId(erpProTemplate.getId());
         OperatorUtils.setUpdateInfo(erpProTemplate);
-        insertErpProTemplateDetail(erpProTemplateDTO);
+        erpProTemplate.setDelFlag(DrFlag.NORMAL.getCode());
+        if(!CollectionUtils.isEmpty(erpProTemplateDTO.getErpProTemplateDetailList())) {
+            insertErpProTemplateDetail(erpProTemplateDTO);
+        }
         return templateMapper.updateById(erpProTemplate);
     }
 
