@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     public AjaxResult handleAccessDeniedException(AccessDeniedException e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.warn("请求地址'{}',权限校验失败'{}'", requestURI, e.getMessage());
-        return AjaxResult.error(HttpStatus.FORBIDDEN, "没有权限，请联系管理员授权");
+        return AjaxResult.error(HttpStatus.FORBIDDEN, "没有权限，请联系管理员授权").put("errorFlag", 1) ;
     }
 
     /**
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
                                                           HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.warn("请求地址'{}',不支持'{}'请求", requestURI, e.getMethod());
-        return AjaxResult.error(e.getMessage());
+        return AjaxResult.error(e.getMessage()).put("errorFlag", 1);
     }
 
     /**
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
     public Object handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
         String message = e.getBindingResult().getFieldError().getDefaultMessage();
-        return AjaxResult.error(message);
+        return AjaxResult.error(message).put("errorFlag", 1);
     }
 
     /**
@@ -65,35 +65,28 @@ public class GlobalExceptionHandler {
     public AjaxResult handleBindException(BindException e) {
         log.error(e.getMessage(), e);
         String message = e.getAllErrors().get(0).getDefaultMessage();
-        return AjaxResult.error(message);
+        return AjaxResult.error(message).put("errorFlag", 1);
     }
 
-    /**
-     * 业务异常
-     */
-    @ExceptionHandler(ServiceException.class)
-    public AjaxResult handleServiceException(ServiceException e, HttpServletRequest request) {
-        log.error(e.getMessage(), e);
-        Integer code = e.getCode();
-        return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage()) : AjaxResult.error(e.getMessage());
+    @ExceptionHandler(BaseException.class)
+    public AjaxResult handleBaseException(BaseException e, HttpServletRequest request) {
+        log.warn("请求地址'{}',发生已知异常.", request.getRequestURI(), e);
+        return AjaxResult.error(e.getMessage(), e.getCode()).put("errorFlag", 1) ;
     }
 
-    /**
-     * wms业务异常
-     */
     @ExceptionHandler(WmsServiceException.class)
     public AjaxResult handleWmsServiceException(WmsServiceException e, HttpServletRequest request) {
         log.warn(e.getMessage(), e);
         Integer code = e.getCode();
         Object data = e.getData();
-        return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage(), data) : AjaxResult.error(e.getMessage(), data);
+        return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage(), data).put("errorFlag", 1) : AjaxResult.error(e.getMessage(), data).put("exception", true);
     }
 
-
-    @ExceptionHandler(BaseException.class)
-    public AjaxResult handleBaseException(BaseException e, HttpServletRequest request) {
-        log.warn("请求地址'{}',发生已知异常.", request.getRequestURI(), e);
-        return AjaxResult.error(e.getMessage(), e.getCode());
+    @ExceptionHandler(ServiceException.class)
+    public AjaxResult handleServiceException(ServiceException e, HttpServletRequest request) {
+        log.error(e.getMessage(), e);
+        Integer code = e.getCode();
+        return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage()).put("errorFlag", 1) : AjaxResult.error(e.getMessage()).put("errorFlag", 1);
     }
 
     /**
@@ -101,7 +94,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DemoModeException.class)
     public AjaxResult handleDemoModeException(DemoModeException e) {
-        return AjaxResult.error("演示模式，不允许操作");
+        return AjaxResult.error("演示模式，不允许操作").put("errorFlag", 1);
     }
 
     /**
@@ -111,7 +104,7 @@ public class GlobalExceptionHandler {
     public AjaxResult handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生未知异常.", requestURI, e);
-        return AjaxResult.error(e.getMessage());
+        return AjaxResult.error(e.getMessage()).put("errorFlag", 1);
     }
 
     /**
@@ -121,6 +114,6 @@ public class GlobalExceptionHandler {
     public AjaxResult handleException(Exception e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生系统异常.", requestURI, e);
-        return AjaxResult.error(e.getMessage());
+        return AjaxResult.error(e.getMessage()).put("errorFlag", 1);
     }
 }

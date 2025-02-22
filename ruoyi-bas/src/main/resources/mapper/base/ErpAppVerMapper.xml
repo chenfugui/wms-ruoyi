@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfg.base.mapper.ErpAppVerMapper">
+    
+    <resultMap type="com.cfg.base.domain.ErpAppVer" id="ErpAppVerResult">
+        <result property="id" column="id"/>
+        <result property="appVersion" column="app_version"/>
+        <result property="releaseNum" column="release_num"/>
+        <result property="appInfo" column="app_info"/>
+        <result property="iosUrl" column="ios_url"/>
+        <result property="androidUrl" column="android_url"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectErpAppVerVo">
+        select id, app_version, release_num, app_info, ios_url, android_url, create_by, create_time, update_by, update_time, del_flag   from erp_app_ver
+    </sql>
+
+    <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpAppVer" resultMap="ErpAppVerResult">
+        <include refid="selectErpAppVerVo"/>
+        <where>  
+            <if test="appVersion != null  and appVersion != ''"> and app_version = #{appVersion}</if>
+            <if test="releaseNum != null "> and release_num = #{releaseNum}</if>
+            <if test="appInfo != null  and appInfo != ''"> and app_info = #{appInfo}</if>
+            <if test="iosUrl != null  and iosUrl != ''"> and ios_url = #{iosUrl}</if>
+            <if test="androidUrl != null  and androidUrl != ''"> and android_url = #{androidUrl}</if>
+        </where>
+    </select>
+
+    <select id="selectByMaxReleaseNum" resultType="com.cfg.base.domain.ErpAppVer">
+        SELECT *
+        FROM erp_app_ver
+        WHERE del_flag = 0
+        ORDER BY release_num DESC
+        LIMIT 1
+    </select>
+
+    <update id="updateDelFlagByIds">
+        update erp_app_ver set del_flag=1
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </update>
+</mapper>
