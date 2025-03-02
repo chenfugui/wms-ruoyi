@@ -252,15 +252,25 @@ public class ErpProService {
      * @param proIds 服装产品管理主键
      * @return 结果
      */
+    @Transactional(rollbackFor = Exception.class)
     public int deleteByProIds(List<Long> proIds) {
         List<ErpProMake> makeList = proMakeService.selectMakeListByProIds(proIds);
         if(CollectionUtils.isNotEmpty(makeList)){
             throw new RuntimeException("存在裁床记录，不能删除");
         }else{
+            if(null!=SecurityUtils.getEmpId()) {
+                QueryWrapper<ErpPro> qw = new QueryWrapper<>();
+                qw.in("id", proIds);
+                qw.notIn("emp_id", SecurityUtils.getEmpId());
+                Integer integer = erpProMapper.selectCount(qw);
+                if (integer > 0) {
+                    throw new RuntimeException("删除失败");
+                }
+            }
             //删除产品信息
             erpProMapper.deleteByProIds(proIds.toArray(new Long[0]));
             //删除产品工序
-            erpProcService.deleteByProIds(proIds);
+            proProcessService.deleteByProIds(proIds);
             //删除产品颜色
             proColorService.deleteByProIds(proIds);
             //删除产品尺寸

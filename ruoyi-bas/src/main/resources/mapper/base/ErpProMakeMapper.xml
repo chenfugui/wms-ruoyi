@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!--根据产品id列表查询生产信息-->
     <select id="selectMakeListByProIds" parameterType="java.util.List" resultType="com.cfg.base.domain.ErpProMake">
         select * from erp_pro_make where pro_id in
-        <foreach collection="list" item="item" open="(" close=")" separator=",">
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </select>

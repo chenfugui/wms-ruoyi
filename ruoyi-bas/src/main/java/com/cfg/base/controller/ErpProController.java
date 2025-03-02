@@ -117,7 +117,7 @@ public class ErpProController extends BaseController {
     @ApiOperation("删除服装产品管理")
     @PreAuthorize("@ss.hasPermi('base:erpPro:remove')")
     @Log(title = "服装产品管理", businessType = BusinessType.DELETE)
-    @DeleteMapping("/del")
+    @PostMapping("/del")
     public ResponseEntity<Integer> removeBatch(@RequestBody List<Long> proIds) {
         return ResponseEntity.ok(service.deleteByProIds(proIds));
     }

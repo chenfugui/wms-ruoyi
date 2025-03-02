@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="colorId" column="color_id"/>
         <result property="colorCode" column="color_code"/>
         <result property="colorName" column="color_name"/>
-        <result property="seqno" column="seqNo"/>
+        <result property="seqno" column="seq_no"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectErpProColorVo">
-        select id, pro_id, emp_id, color_id, color_code, color_name, seqNo, create_by, create_time, update_by, update_time, del_flag   from erp_pro_color
+        select id, pro_id, emp_id, color_id, color_code, color_name, seq_no, create_by, create_time, update_by, update_time, del_flag   from erp_pro_color
     </sql>
 
     <select id="selectByEntity" parameterType="com.cfg.base.domain.ErpProColor" resultMap="ErpProColorResult">

@@ -187,4 +187,8 @@ public class ErpProProcessService {
         Long[] ids = {id};
         return erpProProcessMapper.updateDelFlagByIds(ids);
     }
+
+    public void deleteByProIds(List<Long> proIds) {
+        erpProProcessMapper.deleteByProIds(proIds);
+    }
 }

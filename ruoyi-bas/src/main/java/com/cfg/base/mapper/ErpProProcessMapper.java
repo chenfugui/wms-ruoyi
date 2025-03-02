@@ -37,4 +37,11 @@ public interface ErpProProcessMapper extends BaseMapper<ErpProProcess> {
      * @return: java.util.List<java.lang.String>
      */
     List<String> selectProcessNameList(@Param("ew") Wrapper<String> queryWrapper);
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+    */
+    void deleteByProIds(@Param("ids") List<Long> ids);
 }

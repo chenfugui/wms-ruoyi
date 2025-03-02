@@ -68,4 +68,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by step_name
     </select>
+    <!--根据产品id列表批量删除-->
+    <delete id="deleteByProIds">
+        delete from erp_pro_process
+        <where>
+            pro_id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </delete>
 </mapper>
