@@ -32,4 +32,10 @@ public interface ErpProPriceMapper extends BaseMapper<ErpProPrice> {
      * @return
      */
     int deleteByProId(@Param("proId") Long proId);
+    /**
+     * 根据产品id列表批量删除
+     * @param proIds
+     * @return
+     */
+    void deleteByProIds(@Param("ids") List<Long> proIds);
 }

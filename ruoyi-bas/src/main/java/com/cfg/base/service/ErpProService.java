@@ -61,7 +61,10 @@ public class ErpProService {
     private ErpProPriceService proPriceService;
     @Autowired
     private ErpProProcessService proProcessService;
+    @Autowired
     private ErpProcService erpProcService;
+    @Autowired
+    private ErpProMakeService proMakeService;
 
     /**
      * 查询服装产品管理
@@ -236,13 +239,36 @@ public class ErpProService {
 
     /**
      * 删除服装产品管理信息
-     *
      * @param proId 服装产品管理主键
      * @return 结果
      */
     public int deleteByProId(Long proId) {
         Long[] proIds = {proId};
         return erpProMapper.updateDelFlagByIds(proIds);
+    }
+
+    /**
+     * 删除服装产品管理信息
+     * @param proIds 服装产品管理主键
+     * @return 结果
+     */
+    public int deleteByProIds(List<Long> proIds) {
+        List<ErpProMake> makeList = proMakeService.selectMakeListByProIds(proIds);
+        if(CollectionUtils.isNotEmpty(makeList)){
+            throw new RuntimeException("存在裁床记录，不能删除");
+        }else{
+            //删除产品信息
+            erpProMapper.deleteByProIds(proIds.toArray(new Long[0]));
+            //删除产品工序
+            erpProcService.deleteByProIds(proIds);
+            //删除产品颜色
+            proColorService.deleteByProIds(proIds);
+            //删除产品尺寸
+            proSizeService.deleteByProIds(proIds);
+            //删除产品价格
+            proPriceService.deleteByProIds(proIds);
+        }
+        return proIds.size();
     }
 
     /**

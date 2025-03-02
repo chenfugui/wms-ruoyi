@@ -102,6 +102,7 @@ public class ErpProTemplateService {
         erpProTemplate.setEmpId(SecurityUtils.getEmpId());
         OperatorUtils.setCreateInfo(erpProTemplate);
         int rows = templateMapper.insert(erpProTemplate);
+        erpProTemplateDtO.setId(erpProTemplate.getId());
         insertErpProTemplateDetail(erpProTemplateDtO);
         return rows;
     }
@@ -132,7 +133,10 @@ public class ErpProTemplateService {
      */
     @Transactional
     public int deleteByIds(Long[] ids) {
-        return templateMapper.updateDelFlagByIds(ids);
+       // return templateMapper.updateDelFlagByIds(ids);
+        templateDetailMapper.deleteByTmpIds(ids);
+        templateMapper.deleteByIds(ids);
+        return ids.length;
     }
 
     /**
@@ -155,6 +159,9 @@ public class ErpProTemplateService {
             for(ErpProTemplateDetailDTO erpProTemplateDetail:erpProTemplate.getErpProTemplateDetailList()){
                 erpProTemplateDetail.setTmpId(erpProTemplate.getId());
                 ErpProTemplateDetail tmpDetail = ConvertUtils.convert(erpProTemplateDetail,ErpProTemplateDetail.class);
+                tmpDetail.setDelFlag(DrFlag.NORMAL.getCode());
+                OperatorUtils.setCreateInfo(tmpDetail);
+                OperatorUtils.setUpdateInfo(tmpDetail);
                 templateDetailMapper.insert(tmpDetail);
             }
         }

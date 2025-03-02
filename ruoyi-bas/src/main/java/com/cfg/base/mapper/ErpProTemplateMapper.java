@@ -26,4 +26,11 @@ public interface ErpProTemplateMapper extends BaseMapper<ErpProTemplate> {
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
 
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+    */
+    void deleteByIds(@Param("ids") Long[] ids);
+
 }

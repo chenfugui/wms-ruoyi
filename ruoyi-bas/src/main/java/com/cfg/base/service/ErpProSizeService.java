@@ -130,4 +130,8 @@ public class ErpProSizeService {
         Long[] ids = {id};
         return erpProSizeMapper.updateDelFlagByIds(ids);
     }
+
+    public int deleteByProIds(List<Long> proIds) {
+        return erpProSizeMapper.deleteByProIds(proIds);
+    }
 }

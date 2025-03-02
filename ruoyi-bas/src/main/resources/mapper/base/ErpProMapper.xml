@@ -50,4 +50,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
         </where>
     </update>
+    <!-- 批量删除产品信息 -->
+    <delete id="deleteByProIds">
+        delete from erp_pro
+        <where>
+            id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </delete>
+
 </mapper>

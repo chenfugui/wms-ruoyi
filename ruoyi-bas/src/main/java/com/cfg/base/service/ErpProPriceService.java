@@ -131,4 +131,12 @@ public class ErpProPriceService {
     public int deleteByProId(Long proId) {
         return erpProPriceMapper.deleteByProId(proId);
     }
+
+    /**
+     * 批量删除服装工价信息
+     * @param proIds 需要删除的
+     * */
+    public void deleteByProIds(List<Long> proIds) {
+         erpProPriceMapper.deleteByProIds(proIds);
+    }
 }

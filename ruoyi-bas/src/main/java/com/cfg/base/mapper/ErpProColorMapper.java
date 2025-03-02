@@ -25,4 +25,11 @@ public interface ErpProColorMapper extends BaseMapper<ErpProColor> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    void deleteByProIds(@Param("ids") List<Long> ids);
 }

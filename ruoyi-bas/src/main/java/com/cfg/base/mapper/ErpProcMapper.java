@@ -25,4 +25,11 @@ public interface ErpProcMapper extends BaseMapper<ErpProc> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+    /**
+     * 批量删除服装工序管理
+     * @param ids 需要删除的数据主键集合
+     * @return 结果
+     */
+    void deleteByProIds(@Param("ids") List<Long> ids);
 }

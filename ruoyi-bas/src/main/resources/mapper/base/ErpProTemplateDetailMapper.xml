@@ -49,4 +49,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteErpProTemplateDetailByTmpId">
         delete from erp_pro_template_detail where tmp_id=#{tmpId};
     </delete>
+
+    <!-- 批量删除模板项目 -->
+    <delete id="deleteByTmpIds">
+        delete from erp_pro_template_detail where tmp_id in
+        <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+    </delete>
 </mapper>

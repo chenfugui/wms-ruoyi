@@ -306,4 +306,9 @@ public class ErpProMakeService {
         return erpProMakeMapper.selectMakeListByProId(query);
     }
 
+    //根据产品id列表查询生产信息
+    public List<ErpProMake> selectMakeListByProIds(List<Long> proIds) {
+        return  erpProMakeMapper.selectMakeListByProIds(proIds);
+    }
+
 }

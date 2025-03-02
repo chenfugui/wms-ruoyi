@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import com.cfg.base.mapper.ErpProTemplateDetailMapper;
 import com.cfg.base.domain.ErpProTemplateDetail;
 import com.cfg.base.pojo.query.ErpProTemplateDetailQuery;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * 模板项目明细管理Service业务层处理
@@ -88,6 +90,21 @@ public class ErpProTemplateDetailService {
         erpProTemplateDetail.setEmpId(SecurityUtils.getEmpId());
         OperatorUtils.setCreateInfo(erpProTemplateDetail);
         return erpProTemplateDetailMapper.insert(erpProTemplateDetail);
+    }
+
+    /**
+     * 新增模板项目明细管理
+     *
+     * @param erpProTemplateDetails 模板项目明细管理
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public int insertList(List<ErpProTemplateDetail> erpProTemplateDetails){
+        Assert.notEmpty(erpProTemplateDetails, "模板项目明细管理为空");
+        for (ErpProTemplateDetail erpProTemplateDetail : erpProTemplateDetails) {
+            insert(erpProTemplateDetail);
+        }
+        return erpProTemplateDetails.size();
     }
 
     /**

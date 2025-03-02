@@ -92,4 +92,12 @@ public class ErpProTemplateController extends BaseController {
     public ResponseEntity<Integer> remove(@PathVariable Long[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
     }
+
+    @ApiOperation("删除模板")
+    @PreAuthorize("@ss.hasPermi('base:erpProTemplate:remove')")
+    @Log(title = "模板表", businessType = BusinessType.DELETE)
+    @PostMapping("/del")
+    public ResponseEntity<Integer> removeTmp(@RequestBody Long[] ids) {
+        return ResponseEntity.ok(service.deleteByIds(ids));
+    }
 }

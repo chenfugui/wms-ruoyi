@@ -90,4 +90,12 @@ public class ErpProTemplateDetailController extends BaseController {
     public ResponseEntity<Integer> remove(@PathVariable Long[] ids) {
         return ResponseEntity.ok(service.deleteByIds(ids));
     }
+
+    @ApiOperation("新增模板项目明细")
+    @PreAuthorize("@ss.hasPermi('base:erpProTemplateDetail:add')")
+    @Log(title = "模板项目明细管理", businessType = BusinessType.INSERT)
+    @PostMapping("/batch/add")
+    public ResponseEntity<Integer> addList(@RequestBody List<ErpProTemplateDetail> erpProTemplateDetails) {
+        return ResponseEntity.ok(service.insertList(erpProTemplateDetails));
+    }
 }

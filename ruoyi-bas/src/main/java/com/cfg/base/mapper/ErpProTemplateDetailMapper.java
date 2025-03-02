@@ -33,4 +33,11 @@ public interface ErpProTemplateDetailMapper extends BaseMapper<ErpProTemplateDet
      */
     void deleteErpProTemplateDetailByTmpId(@Param("tmpId") Long tmpId);
 
+    /**
+     * 批量删除模板表
+     * @param ids 根据模板ID删除模板明细
+     * @return 结果
+     */
+    void deleteByTmpIds(@Param("ids") Long[] ids);
+
 }

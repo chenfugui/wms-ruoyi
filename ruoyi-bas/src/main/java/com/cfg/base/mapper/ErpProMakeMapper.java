@@ -44,4 +44,7 @@ public interface ErpProMakeMapper extends BaseMapper<ErpProMake> {
      * @return
      */
     int deleteProMakeByIds(@Param("ids") List<Long>  ids);
+
+    //根据产品id列表查询生产信息
+    List<ErpProMake> selectMakeListByProIds(@Param("ids") List<Long>  ids);
 }

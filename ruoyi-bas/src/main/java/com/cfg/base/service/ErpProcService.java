@@ -135,4 +135,9 @@ public class ErpProcService {
         Long[] ids = {id};
         return erpProcMapper.updateDelFlagByIds(ids);
     }
+
+    //根据产品id列表删除服装工序管理信息
+    public void deleteByProIds(List<Long> proIds) {
+        erpProcMapper.deleteByProIds(proIds);
+    }
 }

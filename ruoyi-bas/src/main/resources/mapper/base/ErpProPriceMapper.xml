@@ -48,4 +48,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteByProId">
             delete from erp_pro_price where pro_id=#{proId}
     </delete>
+    <delete id="deleteByProIds">
+        delete from erp_pro_price
+        <where>
+            pro_id in <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+        </where>
+    </delete>
 </mapper>

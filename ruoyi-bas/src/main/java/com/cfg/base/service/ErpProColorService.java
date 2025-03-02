@@ -118,4 +118,8 @@ public class ErpProColorService {
         Long[] ids = {id};
         return erpProColorMapper.updateDelFlagByIds(ids);
     }
+
+    public void deleteByProIds(List<Long> proIds) {
+        erpProColorMapper.deleteByProIds(proIds);
+    }
 }
