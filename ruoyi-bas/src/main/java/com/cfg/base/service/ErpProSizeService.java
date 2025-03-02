@@ -131,7 +131,7 @@ public class ErpProSizeService {
         return erpProSizeMapper.updateDelFlagByIds(ids);
     }
 
-    public int deleteByProIds(List<Long> proIds) {
-        return erpProSizeMapper.deleteByProIds(proIds);
+    public void deleteByProIds(List<Long> proIds) {
+         erpProSizeMapper.deleteByProIds(proIds);
     }
 }

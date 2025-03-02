@@ -49,4 +49,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteByProId">
             delete from erp_pro_size where pro_id=#{proId}
     </delete>
+    <!-- 根据产品id列表删除 -->
+    <delete id="deleteByProIds">
+        delete from erp_pro_size where pro_id in
+        <foreach collection="ids" open="(" item="it" close=")" separator=",">#{it}</foreach>
+    </delete>
 </mapper>

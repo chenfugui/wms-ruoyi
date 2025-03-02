@@ -25,4 +25,11 @@ public interface ErpProSizeMapper extends BaseMapper<ErpProSize> {
      * @return
     */
     int updateDelFlagByIds(@Param("ids") Long[] ids);
+
+    /**
+     * 根据产品id批量删除
+     * @param ids
+     * @return
+    */
+    void deleteByProIds(@Param("ids") List<Long> ids);
 }
