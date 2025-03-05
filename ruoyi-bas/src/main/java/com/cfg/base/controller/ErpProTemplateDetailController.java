@@ -98,4 +98,12 @@ public class ErpProTemplateDetailController extends BaseController {
     public ResponseEntity<Integer> addList(@RequestBody List<ErpProTemplateDetail> erpProTemplateDetails) {
         return ResponseEntity.ok(service.insertList(erpProTemplateDetails));
     }
+
+    @ApiOperation("删除模板项目明细")
+    @PreAuthorize("@ss.hasPermi('base:erpProTemplateDetail:remove')")
+    @Log(title = "模板项目明细管理", businessType = BusinessType.DELETE)
+    @DeleteMapping("/batch/del")
+    public ResponseEntity<Integer> deleteBatch(@RequestBody List<ErpProTemplateDetail> itemList) {
+        return ResponseEntity.ok(service.deleteTmpItems(itemList));
+    }
 }

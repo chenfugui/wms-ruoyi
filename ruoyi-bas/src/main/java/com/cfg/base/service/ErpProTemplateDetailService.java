@@ -3,6 +3,8 @@ package com.cfg.base.service;
 import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cfg.idgen.service.IdGenService;
 import com.cfg.idgen.util.OperatorUtils;
@@ -138,4 +140,26 @@ public class ErpProTemplateDetailService {
         Long[] ids = {id};
         return erpProTemplateDetailMapper.updateDelFlagByIds(ids);
     }
+
+    //根据模板ID,项目名称列表删除模板项目
+    public int deleteByTmpIdAndItemCodes(Long tmpId, List<String> itemNames) {
+        QueryWrapper<ErpProTemplateDetail> qw = new QueryWrapper<>();
+        qw.eq("tmp_id", tmpId);
+        qw.in("item_name", Arrays.asList(itemNames));
+        return erpProTemplateDetailMapper.delete(qw);
+    }
+
+    /**
+     * 批量删除模板项目明细
+     * @param items 需要删除的模板项目
+     * @return 结果
+     */
+    public int deleteTmpItems(List<ErpProTemplateDetail> items){
+        Assert.notEmpty(items, "模板项目为空");
+        Long tmpId = items.get(0).getTmpId();
+        Assert.notNull(tmpId, "模板ID为空");
+        List<String> itemNames = items.stream().map(ErpProTemplateDetail::getItemName).collect(Collectors.toList());
+        return deleteByTmpIdAndItemCodes(tmpId, itemNames);
+    };
+
 }
