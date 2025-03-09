@@ -145,7 +145,7 @@ public class ErpProTemplateDetailService {
     public int deleteByTmpIdAndItemCodes(Long tmpId, List<String> itemNames) {
         QueryWrapper<ErpProTemplateDetail> qw = new QueryWrapper<>();
         qw.eq("tmp_id", tmpId);
-        qw.in("item_name", Arrays.asList(itemNames));
+        qw.in("item_name", itemNames);
         return erpProTemplateDetailMapper.delete(qw);
     }
 
