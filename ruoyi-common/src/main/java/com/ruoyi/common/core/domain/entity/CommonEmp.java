@@ -41,4 +41,11 @@ public class CommonEmp extends BaseAudit {
 
     private String delFlag;
 
+    /** 行政区划编码 */
+    private String xzqhCode;
+    /** 详细地址 */
+    private String addr;
+    /** 邀请码 */
+    private String inviteCode;
+
 }
