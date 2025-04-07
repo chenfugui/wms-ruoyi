@@ -21,10 +21,10 @@ ruoyi:
 server:
   # 服务器的HTTP端口，默认为8080
   #port: 8080
-  port: 6080
+  port: 7098
   servlet:
     # 应用的访问路径
-    context-path: /wms
+    context-path: /ruoyi-admin
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8

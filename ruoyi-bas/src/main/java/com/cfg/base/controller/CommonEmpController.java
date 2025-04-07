@@ -3,6 +3,7 @@ package com.cfg.base.controller;
 import java.util.List;
 
 import com.cfg.base.dto.EmpDTO;
+import com.cfg.base.dto.EmpUserDTO;
 import com.cfg.idgen.util.ConvertUtils;
 import com.cfg.idgen.util.TreeNodeUtils;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -106,4 +108,12 @@ public class CommonEmpController extends BaseController {
     public ResponseEntity<Integer> remove(@PathVariable Long[] empIds) {
         return ResponseEntity.ok(service.deleteByEmpIds(empIds));
     }
+
+    @ApiOperation("用户注册")
+    @Log(title = "用户信息", businessType = BusinessType.INSERT)
+    @PostMapping
+    public ResponseEntity<Integer> regUser(@RequestBody @Validated EmpUserDTO empUserDTO) {
+        return ResponseEntity.ok(service.insertRegUser(empUserDTO));
+    }
+
 }
